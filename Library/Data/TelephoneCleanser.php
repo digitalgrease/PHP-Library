@@ -1,0 +1,39 @@
+<?php
+
+/*
+ * Copyright (c) 2015 Greasy Lab.
+ * 
+ * Tom Gray
+ * 
+ * Date: 9th October 2015
+ */
+
+namespace GreasyLab\Library;
+
+/**
+ * Data cleanser that cleans telephone numbers.
+ * 
+ * @version 1.0 9th October 2015
+ * @author Tom Gray
+ * @copyright 2015 Greasy Lab
+ */
+class TelephoneCleanser implements DataCleanserInterface
+{
+    /**
+     * Currently strips spaces from telephone numbers.
+     * 
+     * DO TG Implement: Cleanse phone numbers:
+     * - 11 digits?
+     * - no +
+     * - no ()
+     * - no / and aplit multi numbers
+     * 
+     * @param string $number
+     * 
+     * @return array
+     */
+    public function cleanse($number)
+    {
+        return preg_replace('/\s+/', '', $number);
+    }
+}

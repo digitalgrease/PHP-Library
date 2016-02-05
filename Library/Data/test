@@ -1,0 +1,30 @@
+#!/usr/bin/env php
+<?php
+
+require_once 'MySqlDatabase.php';
+require_once 'MySqlDumpFile.php';
+
+use GreasyLab\Library\MySqlDatabase;
+use GreasyLab\DataLib\MySqlTableDumpFile;
+
+$dev = new MySqlDatabase(
+    '134.213.169.18',
+    'lairdassessors',
+    '8CLL_vYNvBsmRF2',
+    'dev2_lairdassessors'
+);
+
+$dumpFile = new MySqlTableDumpFile('/home/tom/Desktop/temp-accounts/reports_case_files.sql');
+$dataSet = $dumpFile->readFromFile();
+
+for ($i = 0; $i < 10; ++$i) {
+    var_dump($dataSet->getRow($i));
+}
+
+$dataSet->prependValues('case_file_id', '1');
+
+for ($i = 0; $i < 10; ++$i) {
+    var_dump($dataSet->getRow($i));
+}
+
+//$dev->insertUpdate('case_files', $dataSet->getRows());
