@@ -8,7 +8,7 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Cli;
+namespace GreasyLab\Library\Cli;
 
 /**
  * Defines a set of parameter types a CLI command can have.

@@ -4,7 +4,7 @@
  * Copyright (c) 2015 Greasy Lab.
  */
 
-namespace GreasyLab\Library;
+namespace GreasyLab\Library\Utils;
 
 /**
  * Formatting and string utilities.
@@ -302,20 +302,6 @@ class StringUtils
     public static function minutes(\DateTime $dateTime)
     {
         return $dateTime->format('i');
-    }
-    
-    /**
-     * Strip any trailing characters of the given type from the given string.
-     *
-     * @param string $string
-     * @param char   $char
-     */
-    public static function stripTrailingChars(&$string, $char)
-    {
-        if ($string[strlen($string) - 1] === $char) {
-            $string = substr($string, 0, strlen($string) - 1);
-            StringUtils::stripTrailingChars($string, $char);
-        }
     }
     
     /**

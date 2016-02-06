@@ -4,7 +4,7 @@
  * Copyright (c) 2014 Greasy Labs.
  */
 
-namespace GreasyLabs;
+namespace GreasyLab\Library\Utils;
 
 /**
  * Simple log file for logging.

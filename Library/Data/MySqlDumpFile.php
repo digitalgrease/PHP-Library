@@ -8,7 +8,7 @@
  * Tom Gray
  */
 
-namespace GreasyLab\DataLib;
+namespace GreasyLab\Library\Data;
 
 require_once 'DataSet.php';
 

@@ -4,6 +4,8 @@
  * Copyright (c) 2015 Greasy Lab.
  */
 
+namespace GreasyLab\Library\Utils;
+
 /**
  * File utility functions.
  * 

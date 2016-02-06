@@ -8,7 +8,7 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Cli;
+namespace GreasyLab\Library\Cli;
 
 /**
  * Defines a command line flag.

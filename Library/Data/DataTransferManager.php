@@ -8,10 +8,7 @@
  * Tom Gray
  */
 
-namespace GreasyLab\DataLib;
-
-use GreasyLab\Library\AbstractDatabase;
-use GreasyLab\Library\DataSet;
+namespace GreasyLab\Library\Data;
 
 /**
  * Perform tasks facilitating the transfer of data between databases.

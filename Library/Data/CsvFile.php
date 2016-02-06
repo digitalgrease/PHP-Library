@@ -13,7 +13,7 @@
  * Copyright (c) 2013-2015 Greasy Lab.
  */
 
-namespace GreasyLab\Library;
+namespace GreasyLab\Library\Data;
 
 require_once 'DataSet.php';
 

@@ -4,7 +4,7 @@
  * Copyright (c) 2015 Greasy Labs.
  */
 
-namespace AppBundle\Library;
+namespace GreasyLab\Library\Utils;
 
 /**
  * Defines a library function to repeatedly attempt to call a function that

@@ -8,7 +8,7 @@
  * Date: 25th September 2015
  */
 
-namespace GreasyLab\Library;
+namespace GreasyLab\Library\Test;
 
 require '../src/DataSet.php';
 

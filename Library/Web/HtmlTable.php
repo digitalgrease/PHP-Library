@@ -4,7 +4,7 @@
  * Copyright (c) 2015 Greasy Lab.
  */
 
-namespace GreasyLab\Library;
+namespace GreasyLab\Library\Web;
 
 /**
  * Represents a parsed HTML table.

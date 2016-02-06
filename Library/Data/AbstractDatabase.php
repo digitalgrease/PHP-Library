@@ -8,7 +8,7 @@
  * Date: 8th October 2015
  */
 
-namespace GreasyLab\Library;
+namespace GreasyLab\Library\Data;
 
 /**
  * API for a repository.

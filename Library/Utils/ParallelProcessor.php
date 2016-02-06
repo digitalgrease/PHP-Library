@@ -4,7 +4,7 @@
  * Copyright (c) 2015 Greasy Labs.
  */
 
-namespace GreasyLabs;
+namespace GreasyLab\Library\Utils;
 
 /**
  * Executes a command multiple times in parallel processes with different

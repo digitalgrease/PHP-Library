@@ -4,7 +4,7 @@
  * Copyright (c) 2015 Greasy Lab.
  */
 
-namespace GreasyLab;
+namespace GreasyLab\Library\Utils;
 
 include 'Net/SFTP.php';
 

@@ -8,7 +8,7 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Cli;
+namespace GreasyLab\Library\Cli;
 
 require_once __DIR__.'/Flag.php';
 
