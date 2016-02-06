@@ -10,9 +10,9 @@
 
 namespace GreasyLab\Library\Cli;
 
-require_once __DIR__.'/../../../Library/src/StringUtils.php';
+require_once 'GreasyLab/Library/Utils/StringUtils.php';
 
-use GreasyLab\Library\StringUtils;
+use GreasyLab\Library\Utils\StringUtils;
 
 /**
  * Defines a parameter for a CLI command.

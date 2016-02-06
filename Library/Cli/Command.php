@@ -10,13 +10,13 @@
 
 namespace GreasyLab\Library\Cli;
 
-require_once 'Parameters.php';
 require_once 'Flags.php';
-require_once __DIR__.'/../../../Library/src/Timer.php';
+require_once 'Parameters.php';
+require_once 'GreasyLab/Library/Utils/Timer.php';
 
-use GreasyLab\Cli\Parameters;
-use GreasyLab\Cli\Flags;
-use GreasyLab\Library\Timer;
+use GreasyLab\Library\Cli\Flags;
+use GreasyLab\Library\Cli\Parameters;
+use GreasyLab\Library\Utils\Timer;
 
 /**
  * Defines an abstract command run from the CLI.

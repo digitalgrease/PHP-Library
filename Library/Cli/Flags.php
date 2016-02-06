@@ -10,9 +10,9 @@
 
 namespace GreasyLab\Library\Cli;
 
-require_once __DIR__.'/Flag.php';
+require_once 'Flag.php';
 
-use GreasyLab\Cli\Flag;
+use GreasyLab\Library\Cli\Flag;
 
 /**
  * Defines a collection of command line flags.

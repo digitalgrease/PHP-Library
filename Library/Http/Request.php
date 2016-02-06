@@ -10,8 +10,8 @@
 
 namespace GreasyLab\Library\Http;
 
-require_once __DIR__.'/../../../Library/src/Http/Response.php';
-require_once __DIR__.'/../../../Library/src/Http/Url.php';
+require_once 'Response.php';
+require_once 'Url.php';
 
 use GreasyLab\Library\Http\Response;
 use GreasyLab\Library\Http\Url;

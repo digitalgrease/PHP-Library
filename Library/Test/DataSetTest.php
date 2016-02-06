@@ -10,7 +10,7 @@
 
 namespace GreasyLab\Library\Test;
 
-require '../src/DataSet.php';
+require_once '../Data/DataSet.php';
 
 /**
  * Test cases for DataSet.php

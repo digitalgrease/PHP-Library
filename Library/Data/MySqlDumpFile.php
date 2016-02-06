@@ -12,7 +12,7 @@ namespace GreasyLab\Library\Data;
 
 require_once 'DataSet.php';
 
-use GreasyLab\Library\DataSet;
+use GreasyLab\Library\Data\DataSet;
 
 /**
  * Represents a file produced by the mysqldump command of a single table.

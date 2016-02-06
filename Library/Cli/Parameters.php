@@ -10,9 +10,9 @@
 
 namespace GreasyLab\Library\Cli;
 
-require_once __DIR__.'/Parameter.php';
+require_once 'Parameter.php';
 
-use GreasyLab\Cli\Parameter;
+use GreasyLab\Library\Cli\Parameter;
 
 /**
  * Defines a collection of command line parameters.

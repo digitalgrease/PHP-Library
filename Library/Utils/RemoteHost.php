@@ -6,7 +6,7 @@
 
 namespace GreasyLab\Library\Utils;
 
-include 'Net/SFTP.php';
+require_once 'Net/SFTP.php';
 
 /**
  * Connection to a remote host.
