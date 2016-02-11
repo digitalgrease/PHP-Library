@@ -38,7 +38,7 @@ class Request
         $response = $this->sendRequest($url, $referer);
         if ($response->isRedirect() && $redirect) {
             var_dump('Redirecting to '.$response->redirectUrl());
-            $response = $this->sendRequest($response->redirectUrl());
+            $response = $this->sendRequest($response->redirectUrl(), $url);
         }
         return $response;
     }

@@ -92,11 +92,13 @@ class CsvFile
      *  values.
      */
     public function __construct(
+        array $data,
         $filePath = null,
         $headings = 0,
         $fieldDelimiter = ',',
         $textDelimiter = '"'
     ) {
+        $this->data = $data;
         $this->_filePath = $filePath;
         $this->_fieldDelimiter = $fieldDelimiter;
         $this->_textDelimiter = $textDelimiter;

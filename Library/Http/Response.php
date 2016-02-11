@@ -95,7 +95,13 @@ class Response
      */
     public function isRedirect()
     {
-        return $this->status == ResponseStatusCode::REDIRECT;
+        switch ($this->status) {
+            case ResponseStatusCode::REDIRECT:
+            case ResponseStatusCode::PERMANENTLY_MOVED:
+                return true;
+            default:
+                return false;
+        }
     }
     
     /**

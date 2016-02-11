@@ -56,6 +56,48 @@ class StringUtils
     }
     
     /**
+     * Get the value of an attribute if found in a string.
+     * 
+     * GL IMPROVEMENT: Implement with Moore pattern matching algorithm and
+     * native regex and perform benchmarking.
+     * 
+     * @param string $attribute The name of the attribute to search the string
+     *  for.
+     * @param string $string The string to search for the attribute and value.
+     * 
+     * @return string The value of the attribute if found. Returns an empty
+     *  string if the attribute is not in the string.
+     */
+    public static function getAttributeValue($attribute, $string)
+    {
+        $value = '';
+        $attributeLength = strlen($attribute);
+        $maxI = strlen($string) - $attributeLength + 1;
+        $i = 0;
+        $isMatch = false;
+        while ($i < $maxI && !$isMatch) {
+            $k = 0;
+            $isMatch = $attribute[$k++] == $string[$i++];
+            while ($isMatch && $k < $attributeLength) {
+                $isMatch = $attribute[$k++] == $string[$i++];
+            }
+            
+            if ($isMatch) {
+                // DO TG Implement: Add proper search and error checking here.
+                // Assume that there is a value for the attribute and that there
+                // are no spaces between the attribute, the '=' and the quoted
+                // value.
+                $i = $i + 2;
+                $value = $string[$i++];
+                while ($string[$i] != ' ' && $string[$i] != '"') {
+                    $value .= $string[$i++];
+                }
+            }
+        }
+        return $value;
+    }
+    
+    /**
      * Get the blocks of the string that are enclosed in the given markers,
      * inclusively.
      * Returns an empty array if there are no blocks with the given markers.

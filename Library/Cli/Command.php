@@ -14,8 +14,6 @@ require_once 'Flags.php';
 require_once 'Parameters.php';
 require_once 'GreasyLab/Library/Utils/Timer.php';
 
-use GreasyLab\Library\Cli\Flags;
-use GreasyLab\Library\Cli\Parameters;
 use GreasyLab\Library\Utils\Timer;
 
 /**

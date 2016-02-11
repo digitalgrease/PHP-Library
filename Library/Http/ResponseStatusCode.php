@@ -18,4 +18,5 @@ namespace GreasyLab\Library\Http;
 interface ResponseStatusCode
 {
     const REDIRECT = 302;
+    const PERMANENTLY_MOVED = 301;
 }

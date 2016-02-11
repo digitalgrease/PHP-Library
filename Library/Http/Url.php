@@ -54,7 +54,7 @@ class Url
         $isNoPathElement = strpos($url, '/') == false;
         $isDomainBeforePathElement = strpos($url, '.') < strpos($url, '/');
         if ($isNoPathElement || $isDomainBeforePathElement) {
-            preg_match('/[\w]+\.[\w]+(\.[\w]+)*/', $url, $domain);
+            preg_match('/[-\w]+\.[-\w]+(\.[-\w]+)*/', $url, $domain);
             $this->domain = $domain ? $domain[0] : '';
             $url = substr($url, strlen($this->domain));
         }

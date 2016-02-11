@@ -6,6 +6,8 @@
 
 namespace GreasyLab\Library\Web;
 
+use GreasyLab\Library\Utils\StringUtils;
+
 /**
  * Represents a parsed HTML table.
  * 
@@ -108,6 +110,16 @@ class HtmlTable
         if ($this->headings) {
             foreach ($this->headings as $heading) {
                 $headings[] = trim(strip_tags($heading));
+                
+                // If this heading spans multiple columns then the data array
+                // requires padding to keep the number of columns consistent on
+                // all rows.
+                $nCols = StringUtils::getAttributeValue('colspan', $heading);
+                if ($nCols) {
+                    for ($i = 1; $i < $nCols; ++$i) {
+                        $headings[] = '';
+                    }
+                }
             }
             $this->data[] = $headings;
         }
