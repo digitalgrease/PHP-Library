@@ -123,7 +123,11 @@ class CsvFile
      */
     public function getNumberOfColumns()
     {
-        return count( $this->data[0] );
+        if ($this->getNumberOfRows()) {
+            return count( $this->data[0] );
+        } else {
+            return 0;
+        }
     }
     
     /**

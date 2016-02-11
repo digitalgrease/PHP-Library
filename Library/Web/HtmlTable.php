@@ -71,8 +71,6 @@ class HtmlTable
     
     protected $rows;
     
-    protected $headings;
-    
     protected $data;
     
     /**
@@ -100,39 +98,48 @@ class HtmlTable
             self::OPEN_TR_TAG,
             self::CLOSE_TR_TAG
         );
-        $this->headings = StringUtils::getBlocks(
-            $html,
-            self::OPEN_TH_TAG,
-            self::CLOSE_TH_TAG
-        );
         
-        // Build the table headings from the HTML.
-        if ($this->headings) {
-            foreach ($this->headings as $heading) {
-                $headings[] = trim(strip_tags($heading));
+        // Build the table data from the HTML.
+        $this->data = [];
+        foreach ($this->rows as $rowHtml) {
+            $row = [];
+            
+            // Extract any table headings from the row.
+            foreach (StringUtils::getBlocks(
+                $rowHtml,
+                self::OPEN_TH_TAG,
+                self::CLOSE_TH_TAG
+            ) as $dataHtml) {
+                $row[] = html_entity_decode(strip_tags(trim($dataHtml)));
                 
                 // If this heading spans multiple columns then the data array
                 // requires padding to keep the number of columns consistent on
                 // all rows.
-                $nCols = StringUtils::getAttributeValue('colspan', $heading);
+                $nCols = StringUtils::getAttributeValue('colspan', $dataHtml);
                 if ($nCols) {
                     for ($i = 1; $i < $nCols; ++$i) {
-                        $headings[] = '';
+                        $row[] = '';
                     }
                 }
             }
-            $this->data[] = $headings;
-        }
-        
-        // Build the table data from the HTML.
-        foreach ($this->rows as $rowHtml) {
-            $row = [];
+            
+            // Extract any table data from the row.
             foreach (StringUtils::getBlocks(
                 $rowHtml,
                 self::OPEN_TD_TAG,
                 self::CLOSE_TD_TAG
             ) as $dataHtml) {
-                $row[] = trim(strip_tags($dataHtml));
+                $row[] = html_entity_decode(strip_tags(trim($dataHtml)));
+                
+                // If this element spans multiple columns then the data array
+                // requires padding to keep the number of columns consistent on
+                // all rows.
+                $nCols = StringUtils::getAttributeValue('colspan', $dataHtml);
+                if ($nCols) {
+                    for ($i = 1; $i < $nCols; ++$i) {
+                        $row[] = '';
+                    }
+                }
             }
             $this->data[] = $row;
         }
@@ -174,15 +181,6 @@ class HtmlTable
     public function getRows()
     {
         return $this->rows;
-    }
-    
-    /**
-     * 
-     * @return array
-     */
-    public function getHeadings()
-    {
-        return $this->headings;
     }
     
     /**
