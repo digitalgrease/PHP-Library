@@ -83,6 +83,7 @@ class CsvFile
     /**
      * Construct a CSV file.
      * 
+     * @param array $data
      * @param string $filePath Full path to the CSV file to open and read in the
      *  data from.
      * @param int $headings The type of headings that the CSV file contains.
@@ -339,7 +340,7 @@ class CsvFile
                 );
             }
         }
-        return new DataSet($this->data);
+//        return new DataSet($this->data);
     }
 
     /**
