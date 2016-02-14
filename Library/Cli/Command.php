@@ -46,13 +46,6 @@ abstract class Command
     protected $description = '';
     
     /**
-     * Times the execution of this command.
-     * 
-     * @var Timer
-     */
-    protected $timer;
-    
-    /**
      * Construct and configure a command.
      */
     public final function __construct()
@@ -105,7 +98,7 @@ abstract class Command
         $exitStatus = 1;
         
         try {
-            $this->timer = new Timer();
+            $timer = new Timer();
             if ($this->areValidArgs(array_slice($args, 1))) {
                 $exitStatus = $this->run();
             } else {
@@ -116,11 +109,7 @@ abstract class Command
         }
         
         $this->println();
-        $this->println(
-            $this->timer->formatSeconds(
-                $this->timer->getElapsedTime()
-            )
-        );
+        $this->println($timer->formatSeconds($timer->getElapsedTime()));
         
         return $exitStatus;
     }
@@ -140,7 +129,7 @@ abstract class Command
         $name,
         $description,
         $type,
-        $isRequired,
+        $isRequired = true,
         $defaultValue = ''
     ) {
         $this->definedParams->add(
