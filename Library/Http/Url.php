@@ -60,7 +60,7 @@ class Url
         }
         
         // Extract any path.
-        $this->path = '/' . trim($url, '/');
+        $this->path = $url;
     }
     
     /**
