@@ -18,7 +18,8 @@ class FileUtils
      * 
      * @param string $dir
      * 
-     * @return array
+     * @return array Array of strings which are the file and directory names
+     *  within $dir.
      */
     public static function getDirectoryContents($dir)
     {
