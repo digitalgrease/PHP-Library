@@ -32,4 +32,18 @@ class MathUtils
         }
         return number_format($percentage, 2, '.', ',') . '%';
     }
+    
+    /**
+     * Compare two floating point numbers for equality.
+     * 
+     * @param float $a
+     * @param float $b
+     * @param float $epsilon
+     * 
+     * @return bool
+     */
+    public static function areFloatsEqual($a, $b, $epsilon = 0.00001)
+    {
+        return abs($a - $b) < $epsilon;
+    }
 }
