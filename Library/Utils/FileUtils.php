@@ -14,6 +14,18 @@ namespace GreasyLab\Library\Utils;
 class FileUtils
 {
     /**
+     * Get the contents of a directory without the dots.
+     * 
+     * @param string $dir
+     * 
+     * @return array
+     */
+    public static function getDirectoryContents($dir)
+    {
+        return array_splice(scandir($dir), 2);
+    }
+    
+    /**
      * Get a list of all the files and directories modified between the given
      * timestamps, inclusive.
      * DO TG FURTHER DEVELOPMENT: Add a recursive flag.
