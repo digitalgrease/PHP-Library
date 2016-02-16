@@ -76,11 +76,19 @@ class DataSet
             // Check each row has the same number of fields as the first row.
             if ($iRow > 0 && count($row) > count($fields)) {
                 throw new \InvalidArgumentException(
-                    'Row index '.$iRow.' has more fields than the first row'
+                    'Row index '.$iRow.' has more fields than the first row.'
+                    .PHP_EOL.'First row: '
+                    .print_r($data[0], true)
+                    .'Row '.$iRow.': '
+                    .print_r($data[$iRow], true)
                 );
             } elseif ($iRow > 0 && count($row) < count($fields)) {
                 throw new \InvalidArgumentException(
-                    'Row index '.$iRow.' has less fields than the first row'
+                    'Row index '.$iRow.' has less fields than the first row.'
+                    .PHP_EOL.'First row: '
+                    .print_r($data[0], true)
+                    .'Row '.$iRow.': '
+                    .print_r($data[$iRow], true)
                 );
             }
             
@@ -92,7 +100,11 @@ class DataSet
                 } elseif (!in_array($field, $fields)) {
                     throw new \InvalidArgumentException(
                         'Row index '.$iRow.' has a field "'.$field.'" that does'
-                        . ' not appear in the first row'
+                        . ' not appear in the first row.'
+                        .PHP_EOL.'First row: '
+                        .print_r($data[0], true)
+                        .'Row '.$iRow.': '
+                        .print_r($data[$iRow], true)
                     );
                 }
             }
