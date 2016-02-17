@@ -66,11 +66,14 @@ class DataLog
             !isset($this->data[$collection])
             || !in_array($data, $this->data[$collection])
         ) {
-            $this->data[$collection][] = $data;
-            file_put_contents(
-                $this->dataDirectory . $collection . '.log',
-                implode(PHP_EOL, $this->data[$collection])
-            );
+            $this->data[$collection][$data] = 1;
+        } else {
+            ++$this->data[$collection][$data];
         }
+        
+        file_put_contents(
+            $this->dataDirectory . $collection . '.log',
+            implode(PHP_EOL, $this->data[$collection])
+        );
     }
 }
