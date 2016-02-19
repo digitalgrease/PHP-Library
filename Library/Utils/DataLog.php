@@ -64,16 +64,21 @@ class DataLog
     {
         if (
             !isset($this->data[$collection])
-            || !in_array($data, $this->data[$collection])
+            || !isset($this->data[$collection][$data])
         ) {
             $this->data[$collection][$data] = 1;
         } else {
             ++$this->data[$collection][$data];
         }
         
+        ksort($this->data[$collection]);
+        $output = '';
+        foreach ($this->data[$collection] as $value => $count) {
+            $output .= $value . ' ' . $count . PHP_EOL;
+        }
         file_put_contents(
             $this->dataDirectory . $collection . '.log',
-            implode(PHP_EOL, $this->data[$collection])
+            $output
         );
     }
 }
