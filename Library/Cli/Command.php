@@ -108,7 +108,6 @@ abstract class Command
             $this->println('An exception has been thrown: '.$ex->getMessage());
         }
         
-        $this->println();
         $this->println($timer->formatSeconds($timer->getElapsedTime()));
         
         return $exitStatus;
