@@ -17,7 +17,7 @@ namespace GreasyLab\Library\Data;
 
 require_once 'DataSet.php';
 
-use GreasyLab\Library\DataSet;
+use GreasyLab\Library\Data\DataSet;
 
 /**
  * Represent, manipulate and create a file of comma-separated values.
