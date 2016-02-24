@@ -13,6 +13,7 @@ namespace GreasyLab\Library\Utils;
  */
 class LogFile
 {
+    
     /**
      * The full path of the log file.
      * 

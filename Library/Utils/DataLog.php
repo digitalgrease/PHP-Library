@@ -13,10 +13,13 @@ namespace GreasyLab\Library\Utils;
 /**
  * Collects collections of distinct data and writes them to disk.
  * 
+ * DO TG DataLog::Feature: Don't auto write to disk - add method to do this.
+ * 
  * @author Tom Gray
  */
 class DataLog
 {
+    
     /**
      * Collection of the data.
      * 

@@ -24,6 +24,7 @@ use GreasyLab\Library\Utils\Timer;
  */
 abstract class Command
 {
+    
     /**
      * The command line parameters defined for this command.
      * 
@@ -284,12 +285,17 @@ abstract class Command
      * Display the given text and start a new line.
      *
      * @param string $text
+     * @param bool $log
      * 
      * @return void
      */
-    protected final function println($text = null)
+    protected final function println($text = null, $log = false)
     {
         fwrite(STDOUT, $text . PHP_EOL);
+        if ($log) {
+            // DO TG * Implement logging here and in a separate method.
+            $logFile = new LogFile(getcwd());
+        }
     }
     
     /**
