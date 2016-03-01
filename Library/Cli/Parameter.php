@@ -22,6 +22,7 @@ use GreasyLab\Library\Utils\StringUtils;
  */
 class Parameter
 {
+    
     /**
      * A default value to use for this parameter if none is provided.
      * 
@@ -72,6 +73,8 @@ class Parameter
      * @param int $type
      * @param boolean $isRequired
      * @param string $defaultValue
+     * 
+     * @throws \Exception
      */
     public function __construct(
         $name,
@@ -84,7 +87,15 @@ class Parameter
         $this->isRequired = $isRequired;
         $this->name = $name;
         $this->type = $type;
-        $this->value = $this->defaultValue = $defaultValue;
+        
+        if ($this->isValidArg($defaultValue)) {
+            $this->value = $this->defaultValue = $defaultValue;
+        } else {
+            throw new \Exception(
+                'The default value "' . $defaultValue . '" provided for "'
+                . $name . '" is invalid'
+            );
+        }
     }
     
     /**

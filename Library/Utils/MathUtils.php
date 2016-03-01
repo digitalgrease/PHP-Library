@@ -13,6 +13,7 @@ namespace GreasyLab\Library\Utils;
  */
 class MathUtils
 {
+    
     /**
      * Compute and return a formatted percentage from the given values.
      * 
