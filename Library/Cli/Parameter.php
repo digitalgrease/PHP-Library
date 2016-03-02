@@ -88,13 +88,13 @@ class Parameter
         $this->name = $name;
         $this->type = $type;
         
-        if ($this->isValidArg($defaultValue)) {
-            $this->value = $this->defaultValue = $defaultValue;
-        } else {
+        if ($defaultValue && !$this->isValidArg($defaultValue)) {
             throw new \Exception(
                 'The default value "' . $defaultValue . '" provided for "'
                 . $name . '" is invalid'
             );
+        } else {
+            $this->value = $this->defaultValue = $defaultValue;
         }
     }
     
