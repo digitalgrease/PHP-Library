@@ -69,6 +69,11 @@ class HtmlTable
     
     protected $tbody;
     
+    /**
+     * Array of the HTML that defines the table rows.
+     * 
+     * @var array
+     */
     protected $rows;
     
     protected $data;
