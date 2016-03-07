@@ -65,13 +65,15 @@ class DataLog
      */
     public function add($collection, $data)
     {
+        $value = (string) $data;
+        
         if (
             !isset($this->data[$collection])
-            || !isset($this->data[$collection][$data])
+            || !isset($this->data[$collection][$value])
         ) {
-            $this->data[$collection][$data] = 1;
+            $this->data[$collection][$value] = 1;
         } else {
-            ++$this->data[$collection][$data];
+            ++$this->data[$collection][$value];
         }
         
         ksort($this->data[$collection]);
