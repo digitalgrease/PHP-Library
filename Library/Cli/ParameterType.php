@@ -87,4 +87,12 @@ class ParameterType
      * @var int
      */
     const OUTPUT_DIR = 10;
+    
+    /**
+     * The argument must be a valid date and time in the ISO format
+     * "Y-m-d H:i:s".
+     * 
+     * @var int
+     */
+    const DATE_TIME = 11;
 }

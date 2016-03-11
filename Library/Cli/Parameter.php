@@ -198,6 +198,11 @@ class Parameter
                 // DO TG Implement: Validate a real number here.
                 $isValid = true;
                 break;
+            case ParameterType::DATE_TIME:
+                if (\DateTime::createFromFormat('Y-m-d H:i', $value)) {
+                    $isValid = true;
+                }
+                break;
             default:
                 throw new \Exception(
                     'Unrecognised parameter type in Parameter.php.'
