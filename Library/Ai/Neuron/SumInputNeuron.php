@@ -10,6 +10,8 @@
 
 namespace GreasyLab\Library\Ai\Neuron;
 
+require_once 'AbstractNeuron.php';
+
 /**
  * A single neuron in an artificial neural network that sums its inputs.
  * 
