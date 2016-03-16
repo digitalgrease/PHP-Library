@@ -185,6 +185,18 @@ abstract class Command
     }
     
     /**
+     * Display text without a new line.
+     * 
+     * @param string $text
+     * 
+     * @return void
+     */
+    protected function display($text)
+    {
+        fwrite(STDOUT, $text);
+    }
+    
+    /**
      * Display the command help.
      * 
      * @param string $commandPath The first command line argument that is the
