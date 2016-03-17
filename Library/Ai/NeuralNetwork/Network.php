@@ -45,45 +45,56 @@ class Network
      */
     public function run(array $inputs)
     {
-        
+        if (count($inputs) == count($this->neurons[0])) {
+            return $this->processHiddenLayers(
+                $this->processFirstLayer($inputs)
+            );
+        } else {
+            throw new Exception(
+                'The number of inputs does not match the number of neurons in '
+                . 'the first layer of the network.'
+            );
+        }
     }
     
-    // DO TG ANN: Implement the training of a network.
+    /**
+     * DO TG ANN: Implement the training of a network.
+     */
     public function train() {}
     
     /**
-     * DO TG *
+     * Process the inputs through the first layer of neutrons in the network.
+     * 
+     * @param array $inputs
+     * 
+     * @return array
      */
-    private function processFirstLayer()
+    private function processFirstLayer(array $inputs)
     {
-        
-        // Pass the inputs through the first layer.
         $outputs = [];
-        foreach ($neurons[0] as $i => $neuron) {
-            $this->println('Firing Layer #0');
-            $outputs[] = $output = $neuron->fire([$inputs[$i]]);
-            $this->println('Neuron #' . $i . ': ' . $inputs[$i] . ' => ' . $output);
+        foreach ($this->neurons[0] as $i => $neuron) {
+            $outputs[] = $neuron->fire([$inputs[$i]]);
         }
+        return $outputs;
     }
     
     /**
-     * DO TG **
+     * Process the outputs of the first layer of neutrons through the hidden
+     * layers of the network.
+     * 
+     * @param array $inputs
+     * 
+     * @return array
      */
-    private function processHiddenLayers()
+    private function processHiddenLayers(array $inputs)
     {
-        
-        // Pass the inputs through the hidden layers of the network.
-        $inputs = $outputs;
-        $this->println('Outputs and inputs for next layer are: ' . implode(', ', $inputs));
-        for ($i = 1; $i < count($neurons); ++$i) {
-            $this->println('Firing Layer #' . $i);
+        for ($i = 1; $i < count($this->neurons); ++$i) {
             $outputs = [];
-            foreach ($neurons[$i] as $n => $neuron) {
-                $outputs[] = $output = $neuron->fire($inputs);
-                $this->println('Neuron #' . $i . ' ' . $n . ': ' . implode(', ', $inputs) . ' => ' . $output);
+            foreach ($this->neurons[$i] as $neuron) {
+                $outputs[] = $neuron->fire($inputs);
             }
             $inputs = $outputs;
-            $this->println('Outputs and inputs for next layer are: ' . implode(', ', $inputs));
         }
+        return $outputs;
     }
 }
