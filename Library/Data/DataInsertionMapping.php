@@ -270,8 +270,8 @@ $dataMapping = [
             )
         ],
         2 => [
-            event, criteria set and this criteria need configuring for a button.
-            a:1:{s:5:"value";s:15:"report_complete";}
+            //event, criteria set and this criteria need configuring for a button.
+            //a:1:{s:5:"value";s:15:"report_complete";}
         ]
     ],
     'scheduled events incl. rag'

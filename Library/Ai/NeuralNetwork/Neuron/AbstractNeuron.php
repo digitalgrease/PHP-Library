@@ -8,7 +8,7 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\Ai\Neuron;
+namespace GreasyLab\Library\Ai\NeuralNetwork\Neuron;
 
 /**
  * Provides basic functionality for a single neuron in an artificial neural

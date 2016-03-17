@@ -8,7 +8,7 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\Ai\Neuron;
+namespace GreasyLab\Library\Ai\NeuralNetwork\Neuron;
 
 require_once 'AbstractNeuron.php';
 

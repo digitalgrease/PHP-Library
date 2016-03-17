@@ -305,7 +305,7 @@ abstract class Command
     {
         fwrite(STDOUT, $text . PHP_EOL);
         if ($log) {
-            // DO TG * Implement logging here and in a separate method.
+            // DO TG Cli: Implement logging here and in a separate method.
             $logFile = new LogFile(getcwd());
         }
     }
