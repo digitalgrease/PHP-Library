@@ -65,7 +65,7 @@ abstract class AbstractNeuron
      */
     public function fire(array $inputs)
     {
-        if (count($this->weights == count($inputs))) {
+        if (count($this->weights) == count($inputs)) {
             return $this->outputFunction(
                 $this->activationFunction(
                     $this->applyWeights($inputs)
