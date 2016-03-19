@@ -50,7 +50,7 @@ class Network
                 $this->processFirstLayer($inputs)
             );
         } else {
-            throw new Exception(
+            throw new \Exception(
                 'The number of inputs does not match the number of neurons in '
                 . 'the first layer of the network.'
             );
@@ -71,10 +71,18 @@ class Network
      */
     private function processFirstLayer(array $inputs)
     {
+        //echo 'First layer inputs = '.implode(',', $inputs).PHP_EOL;
+        
         $outputs = [];
         foreach ($this->neurons[0] as $i => $neuron) {
+            
+            //echo 'Firing neuron '.$i.PHP_EOL;
+            
             $outputs[] = $neuron->fire([$inputs[$i]]);
         }
+        
+        //echo 'First layer outputs = '.implode(',', $outputs).PHP_EOL;
+        
         return $outputs;
     }
     
@@ -88,13 +96,31 @@ class Network
      */
     private function processHiddenLayers(array $inputs)
     {
+        $outputs = $inputs;
+        
+        //echo 'Hidden layer inputs = '.implode(',', $inputs).PHP_EOL;
+        
         for ($i = 1; $i < count($this->neurons); ++$i) {
+            
+            //echo 'Processing hidden layer #'.$i.PHP_EOL;
+            
             $outputs = [];
-            foreach ($this->neurons[$i] as $neuron) {
+            
+            foreach ($this->neurons[$i] as $n => $neuron) {
+                
+                //echo 'Firing neuron '.$n.PHP_EOL;
+                
                 $outputs[] = $neuron->fire($inputs);
             }
+            
+            //echo 'Hidden layer #' .$i . ' outputs = '
+            //.implode(',', $outputs).PHP_EOL;
+            
             $inputs = $outputs;
         }
+        
+        //echo 'Final layer outputs = '.implode(',', $outputs).PHP_EOL;
+        
         return $outputs;
     }
 }
