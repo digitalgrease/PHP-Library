@@ -13,8 +13,6 @@ namespace GreasyLab\Library\Utils;
 /**
  * Collects collections of distinct data and writes them to disk.
  * 
- * DO TG DataLog::Feature: Don't auto write to disk - add method to do this.
- * 
  * @author Tom Gray
  */
 class DataLog
@@ -56,7 +54,7 @@ class DataLog
     }
     
     /**
-     * Add data to a collection and update the collection on disk.
+     * Add data to a collection.
      * 
      * @param string $collection
      * @param string $data
@@ -77,13 +75,40 @@ class DataLog
         }
         
         ksort($this->data[$collection]);
-        $output = '';
-        foreach ($this->data[$collection] as $value => $count) {
-            $output .= $value . ' ' . $count . PHP_EOL;
+    }
+    
+    /**
+     * Get a collection of data.
+     * 
+     * @param string $collection The name of the collection.
+     * 
+     * @return array The data in the collection.
+     */
+    public function get($collection)
+    {
+        if (isset($this->data[$collection])) {
+            return $this->data[$collection];
+        } else {
+            return [];
         }
-        file_put_contents(
-            $this->dataDirectory . $collection . '.log',
-            $output
-        );
+    }
+    
+    /**
+     * Write the collections to disk.
+     * 
+     * @return void
+     */
+    public function save()
+    {
+        foreach ($this->data as $collection => $data) {
+            $output = '';
+            foreach ($data as $value => $count) {
+                $output .= $value . ' ' . $count . PHP_EOL;
+            }
+            file_put_contents(
+                $this->dataDirectory . $collection . '.log',
+                $output
+            );
+        }
     }
 }
