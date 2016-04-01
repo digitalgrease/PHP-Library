@@ -10,6 +10,8 @@
 
 namespace GreasyLab\Library\Ai\NeuralNetwork;
 
+require_once 'NetworkInterface.php';
+
 /**
  * Provides basic functionality for a single perceptron in an artificial neural
  * network.
@@ -17,7 +19,7 @@ namespace GreasyLab\Library\Ai\NeuralNetwork;
  * @version 1.0
  * @author Tom Gray
  */
-class Perceptron
+class Perceptron implements NetworkInterface
 {
     
     /**
@@ -26,6 +28,17 @@ class Perceptron
      * @var float
      */
     protected $bias;
+    
+    /**
+     * Value that controls the learning rate. A high value will change the
+     * weights more drastically and may result in a solution faster but may
+     * also overshoot the optimal weights. A lower value will adjust the weights
+     * slower and require more training time but may improve the network's
+     * accuracy.
+     * 
+     * @var float
+     */
+    protected $learningConstant;
     
     /**
      * Multiplying the inputs by these weights gives the strengths of the
@@ -39,10 +52,31 @@ class Perceptron
      * Construct the perceptron with the supplied weights.
      * 
      * @param array $weights
+     * @param float $learningConstant
+     * @param float $bias
      */
-    public function __construct(array $weights)
-    {
+    public function __construct(
+        array $weights,
+        $learningConstant = 0.05,
+        $bias = null
+    ) {
         $this->weights = $weights;
+        $this->learningConstant = $learningConstant;
+        if ($bias) {
+            $this->bias = $bias;
+        } else {
+            $this->bias = mt_rand(-100, 100) / 100;
+        }
+    }
+    
+    /**
+     * Get the bias weight of this perceptron.
+     * 
+     * @return float
+     */
+    public function bias()
+    {
+        return $this->bias;
     }
     
     /**
@@ -61,6 +95,33 @@ class Perceptron
                 'The number of inputs does not match the number of weights.'
             );
         }
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function train(array $inputs, $output)
+    {
+        $guess = $this->feedForward($inputs);
+        $error = $output - $guess;
+        
+        $this->bias += $error * $this->learningConstant;
+        for ($i = 0; $i < count($this->weights); ++$i) {
+            $this->weights[$i] +=
+                $error * $inputs[$i] * $this->learningConstant;
+        }
+        
+        return $error == 0;
+    }
+    
+    /**
+     * Get the weights of this perceptron.
+     * 
+     * @return array
+     */
+    public function weights()
+    {
+        return $this->weights;
     }
     
     /**

@@ -10,13 +10,15 @@
 
 namespace GreasyLab\Library\Ai\NeuralNetwork;
 
+require_once 'NetworkInterface.php';
+
 /**
  * An artificial neural network.
  *
  * @version 1.0
  * @author Tom Gray
  */
-class Network
+class Network implements NetworkInterface
 {
     
     /**
@@ -41,9 +43,9 @@ class Network
      * 
      * @param array $inputs
      * 
-     * @return float
+     * @return mixed
      */
-    public function run(array $inputs)
+    public function feedForward(array $inputs)
     {
         if (count($inputs) == count($this->neurons[0])) {
             return $this->processHiddenLayers(
@@ -58,9 +60,9 @@ class Network
     }
     
     /**
-     * DO TG ANN: Implement the training of a network.
+     * {@inheritdoc}
      */
-    public function train() {}
+    public function train(array $inputs, $output) {}
     
     /**
      * Process the inputs through the first layer of neutrons in the network.
