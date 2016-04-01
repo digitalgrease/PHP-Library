@@ -12,6 +12,8 @@ namespace GreasyLab\Library\Test;
 
 require_once '../Data/DataSet.php';
 
+use GreasyLab\Library\Data\DataSet;
+
 /**
  * Test cases for DataSet.php
  *
@@ -1189,10 +1191,10 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Unknown field "randomField" in dataset
      */
-    public function replaceValuesThrowsInvalidArgumentExceptionForUnknownField()
-    {
-        $this->associativeDataSet->replaceValues('randomField', 'old', 'new');
-    }
+//    public function replaceValuesThrowsInvalidArgumentExceptionForUnknownField()
+//    {
+//        $this->associativeDataSet->replaceValues('randomField', 'old', 'new');
+//    }
     
     /**
      * Test that an exception is thrown with a message suggesting that maybe an
@@ -1203,10 +1205,10 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Unknown field "3" in dataset; did you mean
      */
-    public function replaceValuesExceptionMessageSuggestsIntForNumericalField()
-    {
-        $this->associativeDataSet->replaceValues('3', 'Mr', 'Mrs');
-    }
+//    public function replaceValuesExceptionMessageSuggestsIntForNumericalField()
+//    {
+//        $this->associativeDataSet->replaceValues('3', 'Mr', 'Mrs');
+//    }
     
     /**
      * Test that an exception is thrown when there are no columns in the
@@ -1216,10 +1218,10 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Exception
      * @expectedExceptionMessage The dataset is empty
      */
-    public function replaceValuesThrowsExceptionWhenDataSetEmpty()
-    {
-        $this->emptyDataSet->replaceValues(3, 'Mr', 'Mrs');
-    }
+//    public function replaceValuesThrowsExceptionWhenDataSetEmpty()
+//    {
+//        $this->emptyDataSet->replaceValues(3, 'Mr', 'Mrs');
+//    }
     
     /**
      * Test that an exception is thrown when there is no column of the specified
@@ -1229,42 +1231,42 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Column index "12" does not exist in dataset
      */
-    public function replaceValuesThrowsExceptionWhenNoColumnIndex()
-    {
-        $this->indexedDataSet->replaceValues(12, 'Mr', 'Mrs');
-    }
+//    public function replaceValuesThrowsExceptionWhenNoColumnIndex()
+//    {
+//        $this->indexedDataSet->replaceValues(12, 'Mr', 'Mrs');
+//    }
     
     /**
      * @test
      */
-    public function replaceValuesReplacesCorrectValuesInCorrectColumn()
-    {
-        $column = 'title';
-        $oldValue = 'Mr';
-        $newValue = 'Mrs';
-        
-        $oldData = $this->associativeDataSet->getData();
-        
-        $this->associativeDataSet->replaceValues($column, $oldValue, $newValue);
-        
-        foreach ($oldData as $row => $data) {
-            $newData = $this->associativeDataSet->getRow($row);
-            foreach ($data as $field => $value) {
-                if ($field === $column) {
-                    $this->assertEquals(
-                        $newValue,
-                        $newData[$field],
-                        'New value in column '.$column.' should be '.$newValue
-                    );
-                } else {
-                    $this->assertEquals(
-                        $value,
-                        $newData[$field],
-                        'Values not in column '.$column.' should not have '
-                        . 'changed'
-                    );
-                }
-            }
-        }
-    }
+//    public function replaceValuesReplacesCorrectValuesInCorrectColumn()
+//    {
+//        $column = 'title';
+//        $oldValue = 'Mr';
+//        $newValue = 'Mrs';
+//        
+//        $oldData = $this->associativeDataSet->getData();
+//        
+//        $this->associativeDataSet->replaceValues($column, $oldValue, $newValue);
+//        
+//        foreach ($oldData as $row => $data) {
+//            $newData = $this->associativeDataSet->getRow($row);
+//            foreach ($data as $field => $value) {
+//                if ($field === $column) {
+//                    $this->assertEquals(
+//                        $newValue,
+//                        $newData[$field],
+//                        'New value in column '.$column.' should be '.$newValue
+//                    );
+//                } else {
+//                    $this->assertEquals(
+//                        $value,
+//                        $newData[$field],
+//                        'Values not in column '.$column.' should not have '
+//                        . 'changed'
+//                    );
+//                }
+//            }
+//        }
+//    }
 }

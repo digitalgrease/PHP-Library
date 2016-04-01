@@ -25,6 +25,7 @@ namespace GreasyLab\Library\Data;
  */
 class DataSet
 {
+    
     /**
      * The matrix of data that makes up the dataset.
      * 
