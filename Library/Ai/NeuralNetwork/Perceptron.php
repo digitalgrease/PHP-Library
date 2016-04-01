@@ -23,6 +23,24 @@ class Perceptron implements NetworkInterface
 {
     
     /**
+     * Generate an array of weights between -1 and 1.
+     * 
+     * DO TG Improvement: Generate a set of weights with a mean of zero. Why is
+     *  this recommended?
+     * 
+     * @param int $nWeights The number of weights to generate.
+     * 
+     * @return array
+     */
+    public static function generateWeights($nWeights)
+    {
+        for ($i = 0; $i < $nWeights; ++$i) {
+            $weights[] = mt_rand(-100, 100) / 100;
+        }
+        return $weights;
+    }
+    
+    /**
      * The bias weight.
      * 
      * @var float

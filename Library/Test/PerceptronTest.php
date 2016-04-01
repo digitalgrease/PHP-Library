@@ -33,12 +33,7 @@ class PerceptronTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->perceptron = new Perceptron(
-            [
-                mt_rand(-100, 100) / 100,
-                mt_rand(-100, 100) / 100
-            ]
-        );
+        $this->perceptron = new Perceptron(Perceptron::generateWeights(2));
     }
     
     /**
@@ -46,18 +41,98 @@ class PerceptronTest extends \PHPUnit_Framework_TestCase
      */
     public function correctlyGuessesAllPointLocationsForStraightLine()
     {
-        $this->trainPerceptronStraightLine(10000);
-        $this->testPerceptronStraightLine();
+        $this->trainStraightLine(100000);
+        $this->testStraightLine();
+    }
+    
+    /**
+     * @test
+     */
+    public function correctlyGuessesAndOfTwoInputs()
+    {
+        $this->trainAnd(10000);
+        $this->testAnd();
+    }
+    
+    /**
+     * @test
+     */
+    public function correctlyGuessesOrOfTwoInputs()
+    {
+        $this->trainOr(10000);
+        $this->testOr();
     }
     
     /**
      * @test
      * @expectedException \Exception
      */
-    public function throwsExceptionWhenPointIsGuessedWrong()
+    public function throwsExceptionWhenAndOfTwoInputsIsWrong()
     {
-        $this->trainPerceptronStraightLine(100);
-        $this->testPerceptronStraightLine();
+        $this->trainAnd(1);
+        $this->testAnd();
+    }
+    
+    /**
+     * @test
+     * @expectedException \Exception
+     */
+    public function throwsExceptionWhenOrOfTwoInputsIsWrong()
+    {
+        $this->trainOr(1);
+        $this->testOr();
+    }
+    
+    /**
+     * @test
+     * @expectedException \Exception
+     */
+    public function throwsExceptionWhenPointLocationForStraightLineIsWrong()
+    {
+        $this->trainStraightLine(1);
+        $this->testStraightLine();
+    }
+    
+    /**
+     * 
+     * @throws \Exception
+     */
+    private function testAnd()
+    {
+        for ($x = 0; $x < 2; ++$x) {
+            for ($y = 0; $y < 2; ++$y) {
+                if (1 == $x && 1 == $y) {
+                    $output = 1;
+                } else {
+                    $output = -1;
+                }
+                
+                if ($this->perceptron->feedForward([$x, $y]) != $output) {
+                    throw new \Exception('Failed for input ('.$x.','.$y.')');
+                }
+            }
+        }
+    }
+    
+    /**
+     * 
+     * @throws \Exception
+     */
+    private function testOr()
+    {
+        for ($x = 0; $x < 2; ++$x) {
+            for ($y = 0; $y < 2; ++$y) {
+                if (1 == $x || 1 == $y) {
+                    $output = 1;
+                } else {
+                    $output = -1;
+                }
+                
+                if ($this->perceptron->feedForward([$x, $y]) != $output) {
+                    throw new \Exception('Failed for input ('.$x.','.$y.')');
+                }
+            }
+        }
     }
     
     /**
@@ -65,7 +140,7 @@ class PerceptronTest extends \PHPUnit_Framework_TestCase
      * 
      * @throws \Exception
      */
-    private function testPerceptronStraightLine()
+    private function testStraightLine()
     {
         for ($x = 0; $x <= self::MAX_X_Y; ++$x) {
             for ($y = 0; $y <= self::MAX_X_Y; ++$y) {
@@ -85,12 +160,54 @@ class PerceptronTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
+     * Train the perceptron to learn the outcome of AND.
+     * 
+     * @param int $iterations
+     */
+    private function trainAnd($iterations)
+    {
+        for ($i = 0; $i < $iterations; ++$i) {
+            $x = mt_rand(0, 1);
+            $y = mt_rand(0, 1);
+            
+            if (1 == $x && 1 == $y) {
+                $output = 1;
+            } else {
+                $output = -1;
+            }
+            
+            $this->perceptron->train([$x, $y], $output);
+        }
+    }
+    
+    /**
+     * Train the perceptron to learn the outcome of OR.
+     * 
+     * @param int $iterations
+     */
+    private function trainOr($iterations)
+    {
+        for ($i = 0; $i < $iterations; ++$i) {
+            $x = mt_rand(0, 1);
+            $y = mt_rand(0, 1);
+            
+            if (1 == $x || 1 == $y) {
+                $output = 1;
+            } else {
+                $output = -1;
+            }
+            
+            $this->perceptron->train([$x, $y], $output);
+        }
+    }
+    
+    /**
      * Train the perceptron to guess whether points are above or below a
      * straight line.
      * 
      * @param int $iterations
      */
-    private function trainPerceptronStraightLine($iterations)
+    private function trainStraightLine($iterations)
     {
         for ($i = 0; $i < $iterations; ++$i) {
             
