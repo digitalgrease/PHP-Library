@@ -13,6 +13,7 @@ namespace GreasyLab\Library\Utils;
  */
 class FileUtils
 {
+    
     /**
      * Get the contents of a directory without the dots.
      * 
@@ -76,24 +77,32 @@ class FileUtils
     }
     
     /**
-     * Get a list of all the files and directories in the given directory.
+     * Get a list of all the files in a directory.
      * 
      * @param string $directory The top level directory to search in.
      * @param bool   $recurse   True to recurse through all the sub-directories.
      *                          False to just return files and directories in
      *                          the given directory.
+     * @param bool $filesOnly Only return files if true or return files and
+     *  directories if false.
      * 
      * @return array Collection of strings which are the paths to the files and
      *               directories.
      */
-    public static function getFiles($directory, $recurse = false)
-    {
+    public static function getFiles(
+        $directory,
+        $recurse = false,
+        $filesOnly = true
+    ) {
         $files = [];
 
         $dirListing = glob($directory . '*', GLOB_MARK);
 
         foreach ($dirListing as $path) {
-            $files[] = $path;
+            
+            if (is_file($path) || !$filesOnly) {
+                $files[] = $path;
+            }
             
             if ($recurse && is_dir($path)) {
                 $files = array_merge(
