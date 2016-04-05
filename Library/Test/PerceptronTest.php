@@ -10,12 +10,14 @@
 
 namespace GreasyLab\Library\Test;
 
-require_once '../Ai/NeuralNetwork/Perceptron.php';
+require_once '../Ai/NeuralNetwork/Neuron.php';
+require_once '../Ai/NeuralNetwork/SimplePerceptron.php';
 
-use GreasyLab\Library\Ai\NeuralNetwork\Perceptron;
+use GreasyLab\Library\Ai\NeuralNetwork\Neuron;
+use GreasyLab\Library\Ai\NeuralNetwork\SimplePerceptron;
 
 /**
- * Tests for the perceptron.
+ * Tests for the perceptrons.
  *
  * @author Tom Gray
  */
@@ -24,16 +26,18 @@ class PerceptronTest extends \PHPUnit_Framework_TestCase
     
     const MAX_X_Y = 100;
     
-    protected $perceptron;
+    protected $simplePerceptron;
     
     /**
-     * Create a new perceptron with random weights.
+     * Create the perceptrons with random weights.
      * 
      * @before
      */
     public function setUp()
     {
-        $this->perceptron = new Perceptron(Perceptron::generateWeights(2));
+        $this->simplePerceptron = new SimplePerceptron(
+            Neuron::generateWeights(2)
+        );
     }
     
     /**
@@ -107,7 +111,7 @@ class PerceptronTest extends \PHPUnit_Framework_TestCase
                     $output = -1;
                 }
                 
-                if ($this->perceptron->feedForward([$x, $y]) != $output) {
+                if ($this->simplePerceptron->feedForward([$x, $y]) != $output) {
                     throw new \Exception('Failed for input ('.$x.','.$y.')');
                 }
             }
@@ -128,7 +132,7 @@ class PerceptronTest extends \PHPUnit_Framework_TestCase
                     $output = -1;
                 }
                 
-                if ($this->perceptron->feedForward([$x, $y]) != $output) {
+                if ($this->simplePerceptron->feedForward([$x, $y]) != $output) {
                     throw new \Exception('Failed for input ('.$x.','.$y.')');
                 }
             }
@@ -152,7 +156,7 @@ class PerceptronTest extends \PHPUnit_Framework_TestCase
                     $output = 1;
                 }
                 
-                if ($this->perceptron->feedForward([$x, $y]) != $output) {
+                if ($this->simplePerceptron->feedForward([$x, $y]) != $output) {
                     throw new \Exception('Failed for ('.$x.','.$y.')');
                 }
             }
@@ -176,7 +180,7 @@ class PerceptronTest extends \PHPUnit_Framework_TestCase
                 $output = -1;
             }
             
-            $this->perceptron->train([$x, $y], $output);
+            $this->simplePerceptron->train([$x, $y], $output);
         }
     }
     
@@ -197,7 +201,7 @@ class PerceptronTest extends \PHPUnit_Framework_TestCase
                 $output = -1;
             }
             
-            $this->perceptron->train([$x, $y], $output);
+            $this->simplePerceptron->train([$x, $y], $output);
         }
     }
     
@@ -222,7 +226,7 @@ class PerceptronTest extends \PHPUnit_Framework_TestCase
                 $output = 1;
             }
             
-            $this->perceptron->train([$x, $y], $output);
+            $this->simplePerceptron->train([$x, $y], $output);
         }
     }
 }
