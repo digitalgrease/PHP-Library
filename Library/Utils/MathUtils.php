@@ -15,6 +15,20 @@ class MathUtils
 {
     
     /**
+     * Compare two floating point numbers for equality.
+     * 
+     * @param float $a
+     * @param float $b
+     * @param float $epsilon
+     * 
+     * @return bool
+     */
+    public static function areFloatsEqual($a, $b, $epsilon = 0.00001)
+    {
+        return abs($a - $b) < $epsilon;
+    }
+    
+    /**
      * Compute and return a formatted percentage from the given values.
      * 
      * @param integer|float $value
@@ -35,16 +49,15 @@ class MathUtils
     }
     
     /**
-     * Compare two floating point numbers for equality.
+     * Sigmoid function that describes an 'S' curve and normalises values to a
+     * value between 0 and 1.
      * 
-     * @param float $a
-     * @param float $b
-     * @param float $epsilon
+     * @param float $x
      * 
-     * @return bool
+     * @return float A value between 0 and 1.
      */
-    public static function areFloatsEqual($a, $b, $epsilon = 0.00001)
+    public function sigmoid($x)
     {
-        return abs($a - $b) < $epsilon;
+        return 1 / (1 + pow(M_EULER, -$x));
     }
 }
