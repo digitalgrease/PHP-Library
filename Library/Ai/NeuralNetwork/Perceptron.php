@@ -11,6 +11,7 @@
 namespace GreasyLab\Library\Ai\NeuralNetwork;
 
 require_once 'NetworkInterface.php';
+require_once 'NeuronInterface.php';
 
 /**
  * Provides basic functionality for a single perceptron in an artificial neural
@@ -19,14 +20,14 @@ require_once 'NetworkInterface.php';
  * @version 1.0
  * @author Tom Gray
  */
-class Perceptron implements NetworkInterface
+class Perceptron implements NeuronInterface, NetworkInterface
 {
     
     /**
      * Generate an array of weights between -1 and 1.
      * 
      * DO TG Improvement: Generate a set of weights with a mean of zero. Why is
-     *  this recommended?
+     *  this recommended? Does that generally include the bias weight too?
      * 
      * @param int $nWeights The number of weights to generate.
      * 
@@ -122,14 +123,22 @@ class Perceptron implements NetworkInterface
     {
         $guess = $this->feedForward($inputs);
         $error = $output - $guess;
+        $delta = $error * $this->learningConstant;
         
-        $this->bias += $error * $this->learningConstant;
-        for ($i = 0; $i < count($this->weights); ++$i) {
-            $this->weights[$i] +=
-                $error * $inputs[$i] * $this->learningConstant;
-        }
+        $this->updateWeightsAndBias($inputs, $delta);
         
         return $error == 0;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function updateWeightsAndBias(array $inputs, $delta)
+    {
+        $this->bias += $delta;
+        for ($i = 0; $i < count($this->weights); ++$i) {
+            $this->weights[$i] += $inputs[$i] * $delta;
+        }
     }
     
     /**

@@ -21,6 +21,10 @@ require_once 'NetworkInterface.php';
 class Network implements NetworkInterface
 {
     
+    protected $layerInputs;
+    
+    protected $learningConstant;
+    
     /**
      * 
      * 
@@ -33,9 +37,10 @@ class Network implements NetworkInterface
      * 
      * @param array $neurons
      */
-    public function __construct(array $neurons)
+    public function __construct(array $neurons, $learningConstant = 0.05)
     {
         $this->neurons = $neurons;
+        $this->learningConstant = $learningConstant;
     }
     
     /**
@@ -47,82 +52,77 @@ class Network implements NetworkInterface
      */
     public function feedForward(array $inputs)
     {
-        if (count($inputs) == count($this->neurons[0])) {
-            return $this->processHiddenLayers(
-                $this->processFirstLayer($inputs)
-            );
-        } else {
-            throw new \Exception(
-                'The number of inputs does not match the number of neurons in '
-                . 'the first layer of the network.'
-            );
-        }
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function train(array $inputs, $output) {}
-    
-    /**
-     * Process the inputs through the first layer of neutrons in the network.
-     * 
-     * @param array $inputs
-     * 
-     * @return array
-     */
-    private function processFirstLayer(array $inputs)
-    {
-        //echo 'First layer inputs = '.implode(',', $inputs).PHP_EOL;
-        
-        $outputs = [];
-        foreach ($this->neurons[0] as $i => $neuron) {
-            
-            //echo 'Firing neuron '.$i.PHP_EOL;
-            
-            $outputs[] = $neuron->fire([$inputs[$i]]);
-        }
-        
-        //echo 'First layer outputs = '.implode(',', $outputs).PHP_EOL;
-        
-        return $outputs;
-    }
-    
-    /**
-     * Process the outputs of the first layer of neutrons through the hidden
-     * layers of the network.
-     * 
-     * @param array $inputs
-     * 
-     * @return array
-     */
-    private function processHiddenLayers(array $inputs)
-    {
+        $this->layerInputs = [$inputs];
         $outputs = $inputs;
         
         //echo 'Hidden layer inputs = '.implode(',', $inputs).PHP_EOL;
         
-        for ($i = 1; $i < count($this->neurons); ++$i) {
+        for ($layer = 0; $layer < count($this->neurons); ++$layer) {
             
             //echo 'Processing hidden layer #'.$i.PHP_EOL;
             
             $outputs = [];
             
-            foreach ($this->neurons[$i] as $n => $neuron) {
+            foreach ($this->neurons[$layer] as $neuron) {
                 
                 //echo 'Firing neuron '.$n.PHP_EOL;
                 
-                $outputs[] = $neuron->fire($inputs);
+                $outputs[] = $neuron->feedForward($inputs);
             }
             
             //echo 'Hidden layer #' .$i . ' outputs = '
             //.implode(',', $outputs).PHP_EOL;
             
-            $inputs = $outputs;
+            $this->layerInputs[] = $inputs = $outputs;
         }
         
         //echo 'Final layer outputs = '.implode(',', $outputs).PHP_EOL;
         
         return $outputs;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function train(array $inputs, $output)
+    {
+        
+        // Compute the overall network error.
+        $guess = $this->feedForward($inputs);
+        $error = $output - $guess[0];
+        $delta = $error * $this->learningConstant;
+        
+        // Adjust the weights for the last layer.
+        $lastLayer = count($this->neurons) - 1;
+        foreach ($this->neurons[$lastLayer] as $neuron) {
+            $neuron->updateWeightsAndBias(
+                $this->layerInputs[$lastLayer],
+                $delta
+            );
+        }
+        
+        // Perform the back propagation across the layers.
+        for ($layer = $lastLayer - 1; $layer > -1; --$layer) {
+            
+            // Compute the error and delta for the layer.
+            $error = 0;
+            foreach ($this->neurons[$layer + 1] as $neuron) {
+                $error += $neuron->bias() * $delta;
+                foreach ($neuron->weights() as $weight) {
+                    $error += $weight * $delta;
+                }
+            }
+            $delta = $error * $this->learningConstant;
+            
+            // Update the weights of the neurons in the layer.
+            foreach ($this->neurons[$layer] as $neuron) {
+                $neuron->updateWeightsAndBias(
+                    $this->layerInputs[$layer],
+                    $delta
+                );
+            }
+        }
+        
+        return $error == 0;
     }
 }
