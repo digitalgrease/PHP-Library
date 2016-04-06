@@ -561,7 +561,7 @@ class MySqlDatabase extends AbstractDatabase
                             var_dump($query);
                             $this->execQuery($query);
                             
-                            // DO TG * Needs another exception catch here for cyclic
+                            // DO TG Implement: Needs another exception catch here for cyclic
                             // referencing rows to de-reference a second time as this
                             // delete throws an exception.
                             // Delete all the de-referenced rows.

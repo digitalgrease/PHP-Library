@@ -56,8 +56,8 @@ class MathUtils
      * 
      * @return float A value between 0 and 1.
      */
-    public function sigmoid($x)
+    public static function sigmoid($x)
     {
-        return 1 / (1 + pow(M_EULER, -$x));
+        return 1 / (1 + exp(-$x));
     }
 }
