@@ -60,4 +60,17 @@ class MathUtils
     {
         return 1 / (1 + exp(-$x));
     }
+    
+    /**
+     * The derivative of the Sigmoid function.
+     * This is the gradient of the Sigmoid curve.
+     * 
+     * @param float $x
+     * 
+     * @return float The gradient of the curve.
+     */
+    public static function sigmoidDerivative($x)
+    {
+        return $x * (1 - $x);
+    }
 }
