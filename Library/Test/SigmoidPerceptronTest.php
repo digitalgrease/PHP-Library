@@ -26,7 +26,7 @@ use GreasyLab\Library\Utils\MathUtils;
 class SigmoidPerceptronTest extends \PHPUnit_Framework_TestCase
 {
     
-    const MAX_X_Y = 10;
+    const MAX_X_Y = 5;
     
     const NUM_OF_TRAINING_ITERATIONS = 100000;
     

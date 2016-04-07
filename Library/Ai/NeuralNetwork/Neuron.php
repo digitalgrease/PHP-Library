@@ -24,6 +24,13 @@ abstract class Neuron implements NeuronInterface, NetworkInterface
 {
     
     /**
+     * Default learning constant for training a neuron.
+     * 
+     * @var float
+     */
+    const LEARNING_CONSTANT = 0.05;
+    
+    /**
      * Generate an array of weights between -1 and 1.
      * 
      * DO TG Improvement: Generate a set of weights with a mean of zero. Why is
@@ -76,7 +83,7 @@ abstract class Neuron implements NeuronInterface, NetworkInterface
      */
     public function __construct(
         array $weights,
-        $learningConstant = 0.05,
+        $learningConstant = self::LEARNING_CONSTANT,
         $bias = null
     ) {
         $this->weights = $weights;
