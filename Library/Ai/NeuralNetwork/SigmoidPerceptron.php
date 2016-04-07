@@ -30,6 +30,8 @@ class SigmoidPerceptron extends Neuron
      */
     protected function activationFunction($input)
     {
-        return MathUtils::sigmoid($input);
+        $output = MathUtils::sigmoid($input);
+        $this->learningConstant = MathUtils::sigmoidDerivative($output);
+        return $output;
     }
 }
