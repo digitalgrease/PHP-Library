@@ -24,7 +24,7 @@ interface NetworkInterface
      * 
      * @param array $inputs
      * 
-     * @return mixed
+     * @return array
      */
     public function feedForward(array $inputs);
     
@@ -32,10 +32,9 @@ interface NetworkInterface
      * Train this network.
      * 
      * @param array $inputs
-     * @param int $output The desired output.
+     * @param array $outputs The desired output.
      * 
-     * @return bool True if the perceptron made a correct guess. False if an
-     *  incorrect guess was made and the weights were adjusted.
+     * @return void
      */
-    public function train(array $inputs, $output);
+    public function train(array $inputs, array $outputs);
 }

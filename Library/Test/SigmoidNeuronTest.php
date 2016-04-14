@@ -3,7 +3,7 @@
 /*
  * Copyright (c) 2016 Greasy Lab.
  * 
- * Friday 1st April 2016
+ * Wednesday 6th April 2016
  * 
  * Tom Gray
  */
@@ -11,24 +11,26 @@
 namespace GreasyLab\Library\Test;
 
 require_once '../Ai/NeuralNetwork/Neuron.php';
-require_once '../Ai/NeuralNetwork/SimplePerceptron.php';
+require_once '../Ai/NeuralNetwork/SigmoidNeuron.php';
+require_once '../Utils/MathUtils.php';
 
 use GreasyLab\Library\Ai\NeuralNetwork\Neuron;
-use GreasyLab\Library\Ai\NeuralNetwork\SimplePerceptron;
+use GreasyLab\Library\Ai\NeuralNetwork\SigmoidNeuron;
+use GreasyLab\Library\Utils\MathUtils;
 
 /**
- * Tests for the SimplePerceptron.
+ * Tests for the SigmoidNeuron.
  *
  * @author Tom Gray
  */
-class SimplePerceptronTest extends \PHPUnit_Framework_TestCase
+class SigmoidNeuronTest extends \PHPUnit_Framework_TestCase
 {
     
-    const MAX_X_Y = 100;
+    const MAX_X_Y = 5;
     
     const NUM_OF_TRAINING_ITERATIONS = 100000;
     
-    protected $simplePerceptron;
+    protected $sigmoidNeuron;
     
     /**
      * Create the perceptron with random weights.
@@ -37,9 +39,7 @@ class SimplePerceptronTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->simplePerceptron = new SimplePerceptron(
-            Neuron::generateWeights(2)
-        );
+        $this->sigmoidNeuron = new SigmoidNeuron(Neuron::generateWeights(2));
     }
     
     /**
@@ -47,7 +47,7 @@ class SimplePerceptronTest extends \PHPUnit_Framework_TestCase
      */
     public function correctlyGuessesAllPointLocationsForStraightLine()
     {
-        $this->trainStraightLine(self::NUM_OF_TRAINING_ITERATIONS);
+        $this->trainStraightLine(10000);
         $this->runStraightLine();
     }
     
@@ -110,12 +110,10 @@ class SimplePerceptronTest extends \PHPUnit_Framework_TestCase
                 if (1 == $x && 1 == $y) {
                     $output = 1;
                 } else {
-                    $output = -1;
+                    $output = 0;
                 }
                 
-                if ($this->simplePerceptron->feedForward([$x, $y]) != $output) {
-                    throw new \Exception('Failed for input ('.$x.','.$y.')');
-                }
+                $this->verifyOutput($x, $y, $output);
             }
         }
     }
@@ -131,12 +129,10 @@ class SimplePerceptronTest extends \PHPUnit_Framework_TestCase
                 if (1 == $x || 1 == $y) {
                     $output = 1;
                 } else {
-                    $output = -1;
+                    $output = 0;
                 }
                 
-                if ($this->simplePerceptron->feedForward([$x, $y]) != $output) {
-                    throw new \Exception('Failed for input ('.$x.','.$y.')');
-                }
+                $this->verifyOutput($x, $y, $output);
             }
         }
     }
@@ -151,16 +147,14 @@ class SimplePerceptronTest extends \PHPUnit_Framework_TestCase
         for ($x = 0; $x <= self::MAX_X_Y; ++$x) {
             for ($y = 0; $y <= self::MAX_X_Y; ++$y) {
                 
-                // If point is below the line y = x then output should be -1.
+                // If point is below the line y = x then output should be 0.
                 if ($y < $x) {
-                    $output = -1;
+                    $output = 0;
                 } else {
                     $output = 1;
                 }
                 
-                if ($this->simplePerceptron->feedForward([$x, $y]) != $output) {
-                    throw new \Exception('Failed for ('.$x.','.$y.')');
-                }
+                $this->verifyOutput($x, $y, $output);
             }
         }
     }
@@ -173,16 +167,18 @@ class SimplePerceptronTest extends \PHPUnit_Framework_TestCase
     private function trainAnd($iterations)
     {
         for ($i = 0; $i < $iterations; ++$i) {
-            $x = mt_rand(0, 1);
-            $y = mt_rand(0, 1);
-            
-            if (1 == $x && 1 == $y) {
-                $output = 1;
-            } else {
-                $output = -1;
+            for ($x = 0; $x < 2; ++$x) {
+                for ($y = 0; $y < 2; ++$y) {
+                    
+                    if (1 == $x && 1 == $y) {
+                        $output = 1;
+                    } else {
+                        $output = 0;
+                    }
+
+                    $this->sigmoidNeuron->train([$x, $y], $output);
+                }
             }
-            
-            $this->simplePerceptron->train([$x, $y], $output);
         }
     }
     
@@ -200,10 +196,10 @@ class SimplePerceptronTest extends \PHPUnit_Framework_TestCase
             if (1 == $x || 1 == $y) {
                 $output = 1;
             } else {
-                $output = -1;
+                $output = 0;
             }
             
-            $this->simplePerceptron->train([$x, $y], $output);
+            $this->sigmoidNeuron->train([$x, $y], $output);
         }
     }
     
@@ -216,19 +212,37 @@ class SimplePerceptronTest extends \PHPUnit_Framework_TestCase
     private function trainStraightLine($iterations)
     {
         for ($i = 0; $i < $iterations; ++$i) {
-            
-            // Pick graph co-ordinates.
-            $x = mt_rand(0, self::MAX_X_Y);
-            $y = mt_rand(0, self::MAX_X_Y);
-            
-            // If point is below the line y = x then output should be -1.
-            if ($y < $x) {
-                $output = -1;
-            } else {
-                $output = 1;
+            for ($x = 0; $x < self::MAX_X_Y; ++$x) {
+                for ($y = 0; $y < self::MAX_X_Y; ++$y) {
+                    
+                    if ($y < $x) {
+                        $output = 0;
+                    } else {
+                        $output = 1;
+                    }
+                    
+                    $this->sigmoidNeuron->train([$x, $y], $output);
+                }
             }
-            
-            $this->simplePerceptron->train([$x, $y], $output);
+        }
+    }
+    
+    /**
+     * Verify the output of the perceptron.
+     * 
+     * @throws \Exception
+     */
+    private function verifyOutput($x, $y, $output)
+    {
+        $result = $this->sigmoidNeuron->feedForward([$x, $y]);
+        
+        echo 'Expected: ' . $output . ' / Actual: ' . $result . PHP_EOL;
+        
+        if (!MathUtils::areFloatsEqual($result, $output, 0.01)) {
+            throw new \Exception(
+                'Failed for input ('.$x.','.$y.') => Expected: ' . $output
+                . ' / Actual: ' . $result
+            );
         }
     }
 }

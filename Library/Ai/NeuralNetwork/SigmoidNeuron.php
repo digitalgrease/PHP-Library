@@ -16,13 +16,12 @@ require_once 'Neuron.php';
 use GreasyLab\Library\Utils\MathUtils;
 
 /**
- * Implements a perceptron that uses a sigmoid function for the activation
- * function.
+ * Implements a sigmoid neuron.
  * 
  * @version 1.0
  * @author Tom Gray
  */
-class SigmoidPerceptron extends Neuron
+class SigmoidNeuron extends Neuron
 {
     
     /**
@@ -33,7 +32,7 @@ class SigmoidPerceptron extends Neuron
         $output = MathUtils::sigmoid($input);
         $gradient = MathUtils::sigmoidDerivative($output);
         
-        $this->learningConstant = max([$gradient, self::LEARNING_CONSTANT]);
+        $this->learningRate = max([$gradient, self::DEFAULT_LEARNING_RATE]);
         
         return $output;
     }

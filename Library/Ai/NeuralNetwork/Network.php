@@ -23,8 +23,6 @@ class Network implements NetworkInterface
     
     protected $layerInputs;
     
-    protected $learningConstant;
-    
     /**
      * 
      * 
@@ -37,23 +35,36 @@ class Network implements NetworkInterface
      * 
      * @param array $neurons
      */
-    public function __construct(array $neurons, $learningConstant = 0.05)
+    public function __construct(array $neurons)
     {
         $this->neurons = $neurons;
-        $this->learningConstant = $learningConstant;
     }
     
     /**
-     * Pass a set of inputs through the network and retrieve the result.
+     * Provide a string representation of this network.
      * 
-     * @param array $inputs
-     * 
-     * @return mixed
+     * @return string
+     */
+    public function __toString()
+    {
+        $str = '';
+        
+        foreach ($this->neurons as $layer => $neurons) {
+            $str .= 'Layer #' . $layer . PHP_EOL;
+            foreach ($neurons as $n => $neuron) {
+                $str .= 'Neuron #' . $n . ': ' . $neuron . PHP_EOL;
+            }
+        }
+        
+        return $str;
+    }
+    
+    /**
+     * {@inheritdoc}
      */
     public function feedForward(array $inputs)
     {
         $this->layerInputs = [$inputs];
-        $outputs = $inputs;
         
         //echo 'Hidden layer inputs = '.implode(',', $inputs).PHP_EOL;
         
@@ -77,6 +88,8 @@ class Network implements NetworkInterface
         }
         
         //echo 'Final layer outputs = '.implode(',', $outputs).PHP_EOL;
+//        var_dump($this->layerInputs);
+//        echo PHP_EOL;
         
         return $outputs;
     }
@@ -84,45 +97,57 @@ class Network implements NetworkInterface
     /**
      * {@inheritdoc}
      */
-    public function train(array $inputs, $output)
+    public function train(array $inputs, array $outputs)
     {
         
-        // Compute the overall network error.
+        // Process the inputs for the current guess.
         $guess = $this->feedForward($inputs);
-        $error = $output - $guess[0];
-        $delta = $error * $this->learningConstant;
+//        echo 'Outputs: ' . print_r($this->layerInputs, true) . PHP_EOL;
         
-        // Adjust the weights for the last layer.
-        $lastLayer = count($this->neurons) - 1;
-        foreach ($this->neurons[$lastLayer] as $neuron) {
-            $neuron->updateWeightsAndBias(
-                $this->layerInputs[$lastLayer],
-                $delta
-            );
+        // Initialise storage for the errors and deltas.
+        $layerErrors = [];
+        $layerDeltas = [];
+        for ($l = 1; $l < count($this->layerInputs); ++$l) {
+            foreach ($this->layerInputs[$l] as $inputs) {
+                $layerErrors[$l - 1][] = 0;
+                $layerDeltas[$l - 1][] = 0;
+            }
         }
         
-        // Perform the back propagation across the layers.
-        for ($layer = $lastLayer - 1; $layer > -1; --$layer) {
+        // Compute the errors of the final output.
+        $lastLayer = count($this->neurons) - 1;
+        for ($n = 0; $n < count($this->neurons[$lastLayer]); ++$n) {
+            $layerErrors[$lastLayer][$n] = $outputs[$n] - $guess[$n];
+        }
+//        echo 'Errors: ' . print_r($layerErrors, true) . PHP_EOL;
+        
+        // Loop back through the layers and compute the errors and the deltas.
+        for ($l = $lastLayer; $l > -1; --$l) {
             
-            // Compute the error and delta for the layer.
-            $error = 0;
-            foreach ($this->neurons[$layer + 1] as $neuron) {
-                $error += $neuron->bias() * $delta;
-                foreach ($neuron->weights() as $weight) {
-                    $error += $weight * $delta;
+            // Compute the delta for each neuron.
+            foreach ($this->neurons[$l] as $n => $neuron) {
+                $layerDeltas[$l][$n] = $neuron->computeDelta($layerErrors[$l][$n]);
+                
+                // Feed the deltas back through the weights of each neuron and
+                // sum them to get the errors for the previous layer.
+                if ($l) {
+                    foreach ($neuron->weights() as $w => $weight) {
+                        $layerErrors[$l - 1][$w] = $layerDeltas[$l][$n] * $weight;
+                    }
                 }
             }
-            $delta = $error * $this->learningConstant;
-            
-            // Update the weights of the neurons in the layer.
-            foreach ($this->neurons[$layer] as $neuron) {
+//            echo 'Deltas: ' . print_r($layerDeltas, true) . PHP_EOL;
+//            echo 'Errors: ' . print_r($layerErrors, true) . PHP_EOL;
+        }
+        
+        // Update all the weights in the network.
+        foreach ($this->neurons as $l => $layer) {
+            foreach ($layer as $n => $neuron) {
                 $neuron->updateWeightsAndBias(
-                    $this->layerInputs[$layer],
-                    $delta
+                    $this->layerInputs[$l],
+                    $layerErrors[$l][$n]
                 );
             }
         }
-        
-        return $error == 0;
     }
 }

@@ -3,7 +3,7 @@
 /*
  * Copyright (c) 2016 Greasy Lab.
  * 
- * Wednesday 6th April 2016
+ * Friday 1st April 2016
  * 
  * Tom Gray
  */
@@ -11,26 +11,24 @@
 namespace GreasyLab\Library\Test;
 
 require_once '../Ai/NeuralNetwork/Neuron.php';
-require_once '../Ai/NeuralNetwork/SigmoidPerceptron.php';
-require_once '../Utils/MathUtils.php';
+require_once '../Ai/NeuralNetwork/Perceptron.php';
 
 use GreasyLab\Library\Ai\NeuralNetwork\Neuron;
-use GreasyLab\Library\Ai\NeuralNetwork\SigmoidPerceptron;
-use GreasyLab\Library\Utils\MathUtils;
+use GreasyLab\Library\Ai\NeuralNetwork\Perceptron;
 
 /**
- * Tests for the SigmoidPerceptron.
+ * Tests for the Perceptron.
  *
  * @author Tom Gray
  */
-class SigmoidPerceptronTest extends \PHPUnit_Framework_TestCase
+class PerceptronTest extends \PHPUnit_Framework_TestCase
 {
     
-    const MAX_X_Y = 5;
+    const MAX_X_Y = 100;
     
     const NUM_OF_TRAINING_ITERATIONS = 100000;
     
-    protected $sigmoidPerceptron;
+    protected $perceptron;
     
     /**
      * Create the perceptron with random weights.
@@ -39,9 +37,7 @@ class SigmoidPerceptronTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->sigmoidPerceptron = new SigmoidPerceptron(
-            Neuron::generateWeights(2)
-        );
+        $this->perceptron = new Perceptron(Neuron::generateWeights(2));
     }
     
     /**
@@ -49,7 +45,7 @@ class SigmoidPerceptronTest extends \PHPUnit_Framework_TestCase
      */
     public function correctlyGuessesAllPointLocationsForStraightLine()
     {
-        $this->trainStraightLine(10000);
+        $this->trainStraightLine(self::NUM_OF_TRAINING_ITERATIONS);
         $this->runStraightLine();
     }
     
@@ -115,7 +111,9 @@ class SigmoidPerceptronTest extends \PHPUnit_Framework_TestCase
                     $output = 0;
                 }
                 
-                $this->verifyOutput($x, $y, $output);
+                if ($this->perceptron->feedForward([$x, $y]) != $output) {
+                    throw new \Exception('Failed for input ('.$x.','.$y.')');
+                }
             }
         }
     }
@@ -134,7 +132,9 @@ class SigmoidPerceptronTest extends \PHPUnit_Framework_TestCase
                     $output = 0;
                 }
                 
-                $this->verifyOutput($x, $y, $output);
+                if ($this->perceptron->feedForward([$x, $y]) != $output) {
+                    throw new \Exception('Failed for input ('.$x.','.$y.')');
+                }
             }
         }
     }
@@ -149,14 +149,16 @@ class SigmoidPerceptronTest extends \PHPUnit_Framework_TestCase
         for ($x = 0; $x <= self::MAX_X_Y; ++$x) {
             for ($y = 0; $y <= self::MAX_X_Y; ++$y) {
                 
-                // If point is below the line y = x then output should be 0.
+                // If point is below the line y = x then output should be -1.
                 if ($y < $x) {
                     $output = 0;
                 } else {
                     $output = 1;
                 }
                 
-                $this->verifyOutput($x, $y, $output);
+                if ($this->perceptron->feedForward([$x, $y]) != $output) {
+                    throw new \Exception('Failed for ('.$x.','.$y.')');
+                }
             }
         }
     }
@@ -169,18 +171,16 @@ class SigmoidPerceptronTest extends \PHPUnit_Framework_TestCase
     private function trainAnd($iterations)
     {
         for ($i = 0; $i < $iterations; ++$i) {
-            for ($x = 0; $x < 2; ++$x) {
-                for ($y = 0; $y < 2; ++$y) {
-                    
-                    if (1 == $x && 1 == $y) {
-                        $output = 1;
-                    } else {
-                        $output = 0;
-                    }
-
-                    $this->sigmoidPerceptron->train([$x, $y], $output);
-                }
+            $x = mt_rand(0, 1);
+            $y = mt_rand(0, 1);
+            
+            if (1 == $x && 1 == $y) {
+                $output = 1;
+            } else {
+                $output = 0;
             }
+            
+            $this->perceptron->train([$x, $y], $output);
         }
     }
     
@@ -201,7 +201,7 @@ class SigmoidPerceptronTest extends \PHPUnit_Framework_TestCase
                 $output = 0;
             }
             
-            $this->sigmoidPerceptron->train([$x, $y], $output);
+            $this->perceptron->train([$x, $y], $output);
         }
     }
     
@@ -214,37 +214,19 @@ class SigmoidPerceptronTest extends \PHPUnit_Framework_TestCase
     private function trainStraightLine($iterations)
     {
         for ($i = 0; $i < $iterations; ++$i) {
-            for ($x = 0; $x < self::MAX_X_Y; ++$x) {
-                for ($y = 0; $y < self::MAX_X_Y; ++$y) {
-                    
-                    if ($y < $x) {
-                        $output = 0;
-                    } else {
-                        $output = 1;
-                    }
-                    
-                    $this->sigmoidPerceptron->train([$x, $y], $output);
-                }
+            
+            // Pick graph co-ordinates.
+            $x = mt_rand(0, self::MAX_X_Y);
+            $y = mt_rand(0, self::MAX_X_Y);
+            
+            // If point is below the line y = x then output should be -1.
+            if ($y < $x) {
+                $output = 0;
+            } else {
+                $output = 1;
             }
-        }
-    }
-    
-    /**
-     * Verify the output of the perceptron.
-     * 
-     * @throws \Exception
-     */
-    private function verifyOutput($x, $y, $output)
-    {
-        $result = $this->sigmoidPerceptron->feedForward([$x, $y]);
-        
-        echo 'Expected: ' . $output . ' / Actual: ' . $result . PHP_EOL;
-        
-        if (!MathUtils::areFloatsEqual($result, $output, 0.01)) {
-            throw new \Exception(
-                'Failed for input ('.$x.','.$y.') => Expected: ' . $output
-                . ' / Actual: ' . $result
-            );
+            
+            $this->perceptron->train([$x, $y], $output);
         }
     }
 }

@@ -20,15 +20,15 @@ require_once 'NeuronInterface.php';
  * @version 1.0
  * @author Tom Gray
  */
-abstract class Neuron implements NeuronInterface, NetworkInterface
+abstract class Neuron implements NeuronInterface
 {
     
     /**
-     * Default learning constant for training a neuron.
+     * Default learning rate for training a neuron.
      * 
      * @var float
      */
-    const LEARNING_CONSTANT = 0.05;
+    const DEFAULT_LEARNING_RATE = 0.05;
     
     /**
      * Generate an array of weights between -1 and 1.
@@ -64,7 +64,7 @@ abstract class Neuron implements NeuronInterface, NetworkInterface
      * 
      * @var float
      */
-    protected $learningConstant;
+    protected $learningRate;
     
     /**
      * Multiplying the inputs by these weights gives the strengths of the
@@ -78,21 +78,32 @@ abstract class Neuron implements NeuronInterface, NetworkInterface
      * Construct a neuron with weights.
      * 
      * @param array $weights
-     * @param float $learningConstant
+     * @param float $learningRate
      * @param float $bias
      */
     public function __construct(
         array $weights,
-        $learningConstant = self::LEARNING_CONSTANT,
+        $learningRate = self::DEFAULT_LEARNING_RATE,
         $bias = null
     ) {
         $this->weights = $weights;
-        $this->learningConstant = $learningConstant;
+        $this->learningRate = $learningRate;
         if ($bias) {
             $this->bias = $bias;
         } else {
             $this->bias = mt_rand(-100, 100) / 100;
         }
+    }
+    
+    /**
+     * Provide a string representation of this neuron.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return 'Weights => ' . implode(',', $this->weights)
+            . ' / Bias => ' . $this->bias;
     }
     
     /**
@@ -117,6 +128,14 @@ abstract class Neuron implements NeuronInterface, NetworkInterface
     /**
      * {@inheritdoc}
      */
+    public function computeDelta($error)
+    {
+        return $error * $this->learningRate;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
     public function feedForward(array $inputs)
     {
         if (count($this->weights) == count($inputs)) {
@@ -135,22 +154,21 @@ abstract class Neuron implements NeuronInterface, NetworkInterface
     {
         $guess = $this->feedForward($inputs);
         $error = $output - $guess;
-        $delta = $error * $this->learningConstant;
         
-        $this->updateWeightsAndBias($inputs, $delta);
-        
-        return $error == 0;
+        $this->updateWeightsAndBias($inputs, $error);
     }
     
     /**
      * {@inheritdoc}
      */
-    public function updateWeightsAndBias(array $inputs, $delta)
+    public function updateWeightsAndBias(array $inputs, $error)
     {
+        $delta = $error * $this->learningRate;
         $this->bias += $delta;
         for ($i = 0; $i < count($this->weights); ++$i) {
             $this->weights[$i] += $inputs[$i] * $delta;
         }
+        return $delta;
     }
     
     /**

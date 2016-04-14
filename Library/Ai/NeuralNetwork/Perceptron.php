@@ -13,12 +13,12 @@ namespace GreasyLab\Library\Ai\NeuralNetwork;
 require_once 'Neuron.php';
 
 /**
- * Implements a simple perceptron.
+ * Implements a perceptron.
  * 
  * @version 1.0
  * @author Tom Gray
  */
-class SimplePerceptron extends Neuron
+class Perceptron extends Neuron
 {
     
     /**
@@ -29,7 +29,7 @@ class SimplePerceptron extends Neuron
         if ($input > 0) {
             return 1;
         } else {
-            return -1;
+            return 0;
         }
     }
 }
