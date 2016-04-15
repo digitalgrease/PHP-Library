@@ -236,7 +236,7 @@ class SigmoidNeuronTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->sigmoidNeuron->feedForward([$x, $y]);
         
-        echo 'Expected: ' . $output . ' / Actual: ' . $result . PHP_EOL;
+//        echo 'Expected: ' . $output . ' / Actual: ' . $result . PHP_EOL;
         
         if (!MathUtils::areFloatsEqual($result, $output, 0.01)) {
             throw new \Exception(
