@@ -19,7 +19,6 @@ use GreasyLab\Library\Ai\NeuralNetwork\SigmoidNeuron;
 use GreasyLab\Library\Utils\MathUtils;
 
 /**
- * DO TG * Complete a test class for Network which solves XOR.
  * Tests for the Network class.
  *
  * @author Tom Gray
