@@ -1,5 +1,5 @@
 {
-    "name": "/data/repos/PHP/GreasyLab",
+    "name": "GreasyLab/Library",
     "description": "Greasy Lab library code and utility classes.",
     "keywords": ["utils", "library"],
     "homepage": "http://tomgray.duckdns.org",
