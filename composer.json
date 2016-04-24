@@ -19,7 +19,7 @@
         "phpunit/phpunit": "~4.5"
     },
     "autoload": {
-        "psr-4": {"GreasyLab\\": "GreasyLab"}
+        "psr-4": {"GreasyLab\\Library\\": "Library"}
     },
     "autoload-dev": {
         "psr-4": {"GreasyLab\\": "GreasyLab/Library/Test"}
