@@ -13,6 +13,10 @@ namespace GreasyLab\Library\DateTime;
 /**
  * Represents a time with hour, minutes and seconds.
  * 
+ * DO TG Time: Experiment: Add doctrine annotations and see if they are picked
+ * up when used in a Symfony project. Does mapping need to be specified in the
+ * project config?
+ * 
  * @author Tom Gray
  */
 class Time

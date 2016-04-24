@@ -24,6 +24,7 @@ use GreasyLab\Library\Http\Url;
  */
 class Request
 {
+    
     /**
      * Send request.
      * 
@@ -57,6 +58,7 @@ class Request
         curl_setopt($curl_handle, CURLOPT_URL, trim($url));
         curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl_handle, CURLOPT_HEADER, true);
+        curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 1);
         curl_setopt(
             $curl_handle,
             CURLOPT_USERAGENT,
