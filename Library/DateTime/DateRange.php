@@ -42,10 +42,9 @@ class DateRange
      */
     public function __construct(\DateTime $start, \DateTime $end)
     {
-        if ($start > $end) {
+        if ($end < $start) {
             throw new \Exception(
-                'The start of a date range cannot be before the end of the '
-                . 'range.'
+                'The end of a date range cannot be before the start.'
             );
         }
     }

@@ -10,35 +10,37 @@
 
 namespace GreasyLab\Library\Test\DateTime;
 
-require_once '../DateTime/DateRange.php';
+require_once '../DateTime/Time.php';
+require_once '../DateTime/TimeRange.php';
 
-use GreasyLab\Library\DateTime\DateRange;
+use GreasyLab\Library\DateTime\Time;
+use GreasyLab\Library\DateTime\TimeRange;
 
 /**
- * Tests for the DateRange class.
+ * Tests for the TimeRange class.
  *
  * @author Tom Gray
  */
-class DateRangeTest extends \PHPUnit_Framework_TestCase
+class TimeRangeTest extends \PHPUnit_Framework_TestCase
 {
     
     /**
      *
-     * @var \DateTime
+     * @var Time
      */
-    protected static $now;
+    protected static $startOfDay;
     
     /**
      *
-     * @var \DateTime
+     * @var Time
      */
-    protected static $tomorrow;
+    protected static $midday;
     
     /**
      *
-     * @var \DateTime
+     * @var Time
      */
-    protected static $yesterday;
+    protected static $endOfDay;
     
     /**
      * Create the fixtures used for the tests.
@@ -47,13 +49,9 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
      */
     public static function setUpBeforeClass()
     {
-        self::$now = new \DateTime();
-        
-        self::$tomorrow = new \DateTime();
-        self::$tomorrow->modify('+1 day');
-        
-        self::$yesterday = new \DateTime();
-        self::$yesterday->modify('-1 day');
+        self::$startOfDay = new Time('09');
+        self::$midday = new Time('12');
+        self::$endOfDay = new Time('17');
     }
     
     /**
@@ -65,6 +63,6 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
      */
     public function throwExceptionWhenEndBeforeStart()
     {
-        $dateRange = new DateRange(self::$tomorrow, self::$now);
+        $timeRange = new TimeRange(self::$endOfDay, self::$startOfDay);
     }
 }
