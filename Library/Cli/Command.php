@@ -115,6 +115,48 @@ abstract class Command
     }
     
     /**
+     * Accept input from the user.
+     * 
+     * @param string $prompt A prompt to display to the user.
+     * @param bool $isHidden True does not display the input on the screen.
+     *  False displays the input on screen.
+     * 
+     * @return string
+     */
+    protected function acceptInput($prompt, $isHidden = false)
+    {
+        $this->println($prompt);
+        
+        if ($isHidden) {
+            system('stty -echo');
+        }
+        
+        $input = trim(fgets(STDIN));
+        
+        if ($isHidden) {
+            system('stty echo');
+        }
+        
+        return $input;
+    }
+    
+    /**
+     * Define a flag for this command.
+     * 
+     * @param string $char
+     * @param string $description
+     * 
+     * @return Command This command to allow method chaining.
+     */
+    protected final function addFlag(
+        $char,
+        $description
+    ) {
+        $this->definedFlags->add($char, $description);
+        return $this;
+    }
+    
+    /**
      * Define a parameter for this command.
      * 
      * @param string $name
@@ -140,22 +182,6 @@ abstract class Command
             $defaultValue
         );
         
-        return $this;
-    }
-    
-    /**
-     * Define a flag for this command.
-     * 
-     * @param string $char
-     * @param string $description
-     * 
-     * @return Command This command to allow method chaining.
-     */
-    protected final function addFlag(
-        $char,
-        $description
-    ) {
-        $this->definedFlags->add($char, $description);
         return $this;
     }
     
