@@ -15,6 +15,26 @@ class FileUtils
 {
     
     /**
+     * Delete a directory and all its contents.
+     * 
+     * @param string $dir
+     * 
+     * @return void
+     */
+    public static function deleteDirectory($dir)
+    {
+        foreach (getDirectoryContents($dir) as $file) {
+            $path = rtrim($dir, '/') . '/' . $file;
+            if (is_dir($path)) {
+                delDir($path);
+            } else {
+                unlink($path);
+            }
+        }
+        rmdir($dir);
+    }
+
+    /**
      * Get the contents of a directory without the dots.
      * 
      * @param string $dir
@@ -25,55 +45,6 @@ class FileUtils
     public static function getDirectoryContents($dir)
     {
         return array_splice(scandir($dir), 2);
-    }
-    
-    /**
-     * Get a list of all the files and directories modified between the given
-     * timestamps, inclusive.
-     * DO TG FURTHER DEVELOPMENT: Add a recursive flag.
-     * 
-     * @param string $directory The top level directory to search in.
-     * @param int    $startTime The start of the range to search for files
-     *                          modified between.
-     * @param int    $endTime   The end of the range to search for files
-     *                          modified between.
-     * 
-     * @return array Collection of arrays with the following keys:
-     *               'isFile' => (bool) True if this is a file, false if it is
-     *                                  a directory.
-     *               'path' => (string) Name of the file.
-     *               'timestamp' => (int) The file's last modified time.
-     */
-    public static function getModifiedFiles($directory, $startTime, $endTime)
-    {
-        $files = [];
-
-        $dirListing = glob($directory . '*', GLOB_MARK);
-
-        foreach ($dirListing as $path) {
-            $file['isFile'] = is_file($path);
-            $file['path'] = $path;
-            $file['timestamp'] = filemtime($path);
-            
-            if (
-                $startTime <= $file['timestamp']
-                && $endTime >= $file['timestamp']
-            ) {
-                $files[] = $file;
-            }
-            
-            if (is_dir($path)) {
-                $files = array_merge(
-                    $files,
-                    FileUtils::getModifiedFiles(
-                        $path,
-                        $startTime,
-                        $endTime
-                    )
-                );
-            }
-        }
-        return $files;
     }
     
     /**
@@ -110,6 +81,55 @@ class FileUtils
                     FileUtils::getFiles(
                         $path,
                         true
+                    )
+                );
+            }
+        }
+        return $files;
+    }
+    
+    /**
+     * Get a list of all the files and directories modified between the given
+     * timestamps, inclusive.
+     * DO TG FURTHER DEVELOPMENT: Add a recursive flag.
+     * 
+     * @param string $directory The top level directory to search in.
+     * @param int    $startTime The start of the range to search for files
+     *                          modified between.
+     * @param int    $endTime   The end of the range to search for files
+     *                          modified between.
+     * 
+     * @return array Array of associative arrays with the following keys:
+     *               'isFile' => (bool) True if this is a file, false if it is
+     *                                  a directory.
+     *               'path' => (string) Name of the file.
+     *               'timestamp' => (int) The file's last modified time.
+     */
+    public static function getModifiedFiles($directory, $startTime, $endTime)
+    {
+        $files = [];
+
+        $dirListing = glob($directory . '*', GLOB_MARK);
+
+        foreach ($dirListing as $path) {
+            $file['isFile'] = is_file($path);
+            $file['path'] = $path;
+            $file['timestamp'] = filemtime($path);
+            
+            if (
+                $startTime <= $file['timestamp']
+                && $endTime >= $file['timestamp']
+            ) {
+                $files[] = $file;
+            }
+            
+            if (is_dir($path)) {
+                $files = array_merge(
+                    $files,
+                    FileUtils::getModifiedFiles(
+                        $path,
+                        $startTime,
+                        $endTime
                     )
                 );
             }
