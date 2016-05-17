@@ -80,6 +80,25 @@ class RemoteHost
     protected $password;
     
     /**
+     * Get the elements of a remote host file path.
+     * 
+     * @param string $remotePath
+     * 
+     * @return array
+     */
+    public static function getRemotePathElements($remotePath)
+    {
+        $parts['user'] = strstr($remotePath, '@', true);
+        $parts['host'] = substr(
+            $remotePath,
+            strpos($remotePath, '@') + 1,
+            strpos($remotePath, ':') - strpos($remotePath, '@') - 1
+        );
+        $parts['path'] = substr($remotePath, strpos($remotePath, ':') + 1);
+        return $parts;
+    }
+
+    /**
      * Determine if a string is a remote host path.
      * 
      * @param string $string
