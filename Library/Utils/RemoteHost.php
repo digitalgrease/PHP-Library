@@ -15,6 +15,7 @@ require_once 'Net/SFTP.php';
  */
 class RemoteHost
 {
+    
     /**
      * Denotes the type of a file as a regular file.
      * 
@@ -78,6 +79,18 @@ class RemoteHost
      */
     protected $password;
     
+    /**
+     * Determine if a string is a remote host path.
+     * 
+     * @param string $string
+     * 
+     * @return bool
+     */
+    public static function isRemoteHostPath($string)
+    {
+        return (bool)strstr($string, '@');
+    }
+
     /**
      * Construct the connection.
      * 
