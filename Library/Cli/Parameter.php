@@ -158,7 +158,8 @@ class Parameter
                 $isValid = is_file($value);
                 break;
             case ParameterType::INPUT_DIR:
-                $isValid = is_dir($value);
+                $isValid = is_dir($value)
+                    || RemoteFileSystem::isRemoteHostPath($value);
                 break;
             case ParameterType::URL:
                 // DO TG Feature: URL validation
