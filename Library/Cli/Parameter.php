@@ -228,6 +228,7 @@ class Parameter
     public function setValue($value)
     {
         switch ($this->type) {
+            case ParameterType::INPUT_DIR:
             case ParameterType::OUTPUT_DIR:
                 $value = rtrim($value, '/').'/';
                 break;
