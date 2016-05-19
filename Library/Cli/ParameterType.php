@@ -18,6 +18,7 @@ namespace GreasyLab\Library\Cli;
  */
 class ParameterType
 {
+    
     /**
      * The argument must be a valid file.
      * 

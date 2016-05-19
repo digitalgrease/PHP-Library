@@ -4,45 +4,20 @@
  * Copyright (c) 2015 Greasy Lab.
  */
 
-namespace GreasyLab\Library\Utils;
+namespace GreasyLab\Library\Files;
 
+require_once 'FileSystemInterface.php';
 require_once 'Net/SFTP.php';
 
+use GreasyLab\Library\Files\FileSystemInterface;
+
 /**
- * Connection to a remote host.
+ * Provides access to a remote file system.
  * 
  * @author Tom Gray
  */
-class RemoteHost
+class RemoteFileSystem implements FileSystemInterface
 {
-    
-    /**
-     * Denotes the type of a file as a regular file.
-     * 
-     * @var int
-     */
-    const NET_SFTP_TYPE_REGULAR_FILE = 1;
-    
-    /**
-     * Denotes the type of a file as a directory.
-     * 
-     * @var int
-     */
-    const NET_SFTP_TYPE_DIRECTORY = 2;
-    
-    /**
-     * Denotes the type of a file as a symbolic link.
-     * 
-     * @var int
-     */
-    const NET_SFTP_TYPE_SYMLINK = 3;
-    
-    /**
-     * Denotes the type of file as special???
-     * 
-     * @var int
-     */
-    const NET_SFTP_TYPE_SPECIAL = 4;
     
     /**
      * Denotes to read data from a local file.
@@ -54,7 +29,7 @@ class RemoteHost
     /**
      * The connection to the remote host.
      * 
-     * @var Net_SFTP
+     * @var \Net_SFTP
      */
     protected $connection;
     
@@ -137,23 +112,7 @@ class RemoteHost
     }
     
     /**
-     * Delete a directory and all its contents.
-     * 
-     * @param string $dir
-     * 
-     * @return bool
-     */
-    public function rmdir($dir)
-    {
-        return $this->connection->delete($dir);
-    }
-    
-    /**
-     * Get the modified timestamp of a file.
-     * 
-     * @param string $path
-     * 
-     * @return int|bool Timestamp or false if the path does not exist.
+     * {@inheritdoc}
      */
     public function filemtime($path)
     {
@@ -161,11 +120,7 @@ class RemoteHost
     }
     
     /**
-     * Get the content of a file from the remote host.
-     * 
-     * @param string $path
-     * 
-     * @return string
+     * {@inheritdoc}
      */
     public function getContent($path)
     {
@@ -173,12 +128,7 @@ class RemoteHost
     }
     
     /**
-     * Get a detailed list of information of the files at the given path on the
-     * remote host.
-     * 
-     * @param string $path
-     * 
-     * @return array
+     * {@inheritdoc}
      */
     public function getDetailedFileList($path)
     {
@@ -186,12 +136,7 @@ class RemoteHost
     }
     
     /**
-     * Get a list of files in a directory on the remote host.
-     * 
-     * @param string $path
-     * 
-     * @return array|bool Array of strings which are the names of the files or
-     *                    false if the path is not a directory.
+     * {@inheritdoc}
      */
     public function getFileList($path)
     {
@@ -199,44 +144,37 @@ class RemoteHost
     }
     
     /**
-     * Get whether the given path exists and is a directory.
-     * 
-     * @param string $path
-     * 
-     * @return bool True if the path exists and is a directory, false otherwise.
+     * {@inheritdoc}
+     */
+    public function getModifiedFiles($directory, $startTime, $endTime)
+    {
+        throw new \Exception('To be implemented');
+    }
+    
+    /**
+     * {@inheritdoc}
      */
     public function isDir($path)
     {
         if ($data = $this->connection->stat($path)) {
-            return self::NET_SFTP_TYPE_DIRECTORY === $data['type'];
+            return FileSystemInterface::DIRECTORY === $data['type'];
         }
         return false;
     }
     
     /**
-     * Get whether the given path exists and is a file.
-     * 
-     * @param string $path
-     * 
-     * @return bool True if the path exists and is a file, false otherwise.
+     * {@inheritdoc}
      */
     public function isFile($path)
     {
         if ($data = $this->connection->stat($path)) {
-            return self::NET_SFTP_TYPE_REGULAR_FILE === $data['type'];
+            return FileSystemInterface::REGULAR_FILE === $data['type'];
         }
         return false;
     }
     
     /**
-     * Create a directory on the remote host.
-     * 
-     * @param string $path
-     * @param int    $mode
-     * @param bool   $recursive
-     * 
-     * @return bool True if the directory is created.
-     *              False if the directory could not be created.
+     * {@inheritdoc}
      */
     public function mkdir($path, $mode = -1, $recursive = false)
     {
@@ -244,12 +182,7 @@ class RemoteHost
     }
     
     /**
-     * Put a file with the given content onto the remote host.
-     * 
-     * @param string $dest
-     * @param string $data
-     * 
-     * @return bool True if file created, false otherwise.
+     * {@inheritdoc}
      */
     public function putContent($dest, $data)
     {
@@ -270,14 +203,15 @@ class RemoteHost
     }
     
     /**
-     * Set the modification and access time of a file on the remote host.
-     * Creates the file if it does not exist.
-     * 
-     * @param string $path
-     * @param int    $time
-     * @param int    $atime
-     * 
-     * @return bool True on success, false on failure.
+     * {@inheritdoc}
+     */
+    public function rmdir($dir)
+    {
+        return $this->connection->delete($dir);
+    }
+    
+    /**
+     * {@inheritdoc}
      */
     public function touch($path, $time = null, $atime = null)
     {
@@ -285,11 +219,7 @@ class RemoteHost
     }
     
     /**
-     * Delete a file or link.
-     * 
-     * @param string $path
-     * 
-     * @return bool
+     * {@inheritdoc}
      */
     public function unlink($path)
     {

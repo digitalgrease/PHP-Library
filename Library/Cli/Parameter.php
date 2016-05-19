@@ -10,8 +10,10 @@
 
 namespace GreasyLab\Library\Cli;
 
+require_once 'GreasyLab/Library/Files/RemoteFileSystem.php';
 require_once 'GreasyLab/Library/Utils/StringUtils.php';
 
+use GreasyLab\Library\Files\RemoteFileSystem;
 use GreasyLab\Library\Utils\StringUtils;
 
 /**
@@ -172,7 +174,10 @@ class Parameter
                         'Output directory name is an existing regular file or '
                         . 'link and cannot be created'
                     );
-                } elseif (!is_dir($value)) {
+                } elseif (
+                    !RemoteFileSystem::isRemoteHostPath($value)
+                    && !is_dir($value)
+                ) {
                     if (!mkdir($value, 0744, true)) {
                         throw new \Exception(
                             'Output directory does not exist and cannot be '
