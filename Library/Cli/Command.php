@@ -10,6 +10,7 @@
 
 namespace GreasyLab\Library\Cli;
 
+require_once 'Controller.php';
 require_once 'Flags.php';
 require_once 'Parameters.php';
 require_once 'GreasyLab/Library/Utils/Timer.php';
@@ -22,7 +23,7 @@ use GreasyLab\Library\Utils\Timer;
  * @author Tom Gray
  * @version 1.0 Monday 16th November 2015
  */
-abstract class Command
+abstract class Command extends Controller
 {
     
     /**
@@ -115,32 +116,6 @@ abstract class Command
     }
     
     /**
-     * Accept input from the user.
-     * 
-     * @param string $prompt A prompt to display to the user.
-     * @param bool $isHidden True does not display the input on the screen.
-     *  False displays the input on screen.
-     * 
-     * @return string
-     */
-    protected function acceptInput($prompt, $isHidden = false)
-    {
-        $this->println($prompt);
-        
-        if ($isHidden) {
-            system('stty -echo');
-        }
-        
-        $input = trim(fgets(STDIN));
-        
-        if ($isHidden) {
-            system('stty echo');
-        }
-        
-        return $input;
-    }
-    
-    /**
      * Define a flag for this command.
      * 
      * @param string $char
@@ -208,18 +183,6 @@ abstract class Command
         }
         
         return $areValid;
-    }
-    
-    /**
-     * Display text without a new line.
-     * 
-     * @param string $text
-     * 
-     * @return void
-     */
-    protected function display($text)
-    {
-        fwrite(STDOUT, $text);
     }
     
     /**
@@ -317,23 +280,6 @@ abstract class Command
             ++$maxNumberOfArgs;
         }
         return $maxNumberOfArgs;
-    }
-    
-    /**
-     * Display the given text and start a new line.
-     *
-     * @param string $text
-     * @param bool $log
-     * 
-     * @return void
-     */
-    protected final function println($text = null, $log = false)
-    {
-        fwrite(STDOUT, $text . PHP_EOL);
-        if ($log) {
-            // DO TG Cli: Implement logging here and in a separate method.
-            $logFile = new LogFile(getcwd());
-        }
     }
     
     /**
