@@ -39,13 +39,17 @@ class LocalFileSystem implements FileSystemInterface
      */
     public function getDetailedFileList($path)
     {
+        $path = rtrim($path, '/') . '/';
         $fileList = false;
         $files = scandir($path);
+        
         if ($files) {
+            $files = array_splice($files, 2);
             $fileList = [];
+            
             foreach ($files as $filename) {
-                $file = rtrim($path, '/') . '/' . $filename;
-
+                $file = $path . $filename;
+                
                 if (is_file($file)) {
                     $fileList[$filename] = [
                         'type' => FileSystemInterface::REGULAR_FILE,
@@ -84,7 +88,11 @@ class LocalFileSystem implements FileSystemInterface
      */
     public function getFileList($path)
     {
-        return scandir($path);
+        $fileList = scandir($path);
+        if ($fileList) {
+            $fileList = array_splice($fileList, 2);
+        }
+        return $fileList;
     }
 
     /**
@@ -122,6 +130,14 @@ class LocalFileSystem implements FileSystemInterface
         return $files;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getSize($path)
+    {
+        return filesize($path);
+    }
+    
     /**
      * {@inheritdoc}
      */

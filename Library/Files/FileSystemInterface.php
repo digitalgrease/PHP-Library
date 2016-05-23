@@ -65,17 +65,17 @@ interface FileSystemInterface
     public function getContent($path);
     
     /**
-     * Get a detailed list of information of the files at a path.
+     * Get a detailed list of information of the files in a directory.
      * 
      * @param string $path
      * 
      * @return array|bool Associative array of associative arrays where the keys
-     *  of the outer array are an unordered list of file and directory names
+     *  of the outer array are an unordered list of file and directory names not
      *  including '.' and '..'. Each inner array contains the following keys:
      *      'size' => (int) The size of the file in bytes.
-     *      'uid' => (int) ??? Example value = 1000.
+     *      'uid' => (int) The user ID of the file owner.
      *      'gid' => (int) ??? Example value = 1000.
-     *      'permissions' => (int) ??? Example value = 16832.
+     *      'permissions' => (int) The file permissions.
      *      'mode' => (int) ??? Example value = 16832.
      *      'type' => (int) The type of file as defined by the constants in this
      *                      file.
@@ -91,7 +91,7 @@ interface FileSystemInterface
      * @param string $path
      * 
      * @return array|bool Array of strings which is an unordered list of file
-     *                    and directory names including '.' and '..'.
+     *                    and directory names not including '.' and '..'.
      *                    False if the path does not exist.
      */
     public function getFileList($path);
@@ -114,6 +114,16 @@ interface FileSystemInterface
      *               'timestamp' => (int) The file's last modified time.
      */
     public function getModifiedFiles($directory, $startTime, $endTime);
+    
+    /**
+     * Get the size of a file in bytes.
+     * 
+     * @param string $path
+     * 
+     * @return int|bool The size of the file in bytes. False if the file does
+     *  not exist.
+     */
+    public function getSize($path);
     
     /**
      * Get whether a path exists and is a directory.

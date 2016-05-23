@@ -132,7 +132,12 @@ class RemoteFileSystem implements FileSystemInterface
      */
     public function getDetailedFileList($path)
     {
-        return $this->connection->rawlist($path);
+        $fileList = $this->connection->rawlist($path);
+        if ($fileList) {
+            unset($fileList['.']);
+            unset($fileList['..']);
+        }
+        return $fileList;
     }
     
     /**
@@ -140,7 +145,12 @@ class RemoteFileSystem implements FileSystemInterface
      */
     public function getFileList($path)
     {
-        return $this->connection->nlist($path);
+        $fileList = $this->connection->nlist($path);
+        if ($fileList) {
+            unset($fileList[array_search('.', $fileList)]);
+            unset($fileList[array_search('..', $fileList)]);
+        }
+        return $fileList;
     }
     
     /**
@@ -149,6 +159,20 @@ class RemoteFileSystem implements FileSystemInterface
     public function getModifiedFiles($directory, $startTime, $endTime)
     {
         throw new \Exception('To be implemented');
+    }
+    
+    /**
+     * Get the size of a file in bytes.
+     * Files larger than 4GB will show up as being exactly 4GB.
+     * 
+     * @param string $path
+     * 
+     * @return int|bool The size of the file in bytes. False if the file does
+     *  not exist.
+     */
+    public function getSize($path)
+    {
+        return $this->connection->size($path);
     }
     
     /**
