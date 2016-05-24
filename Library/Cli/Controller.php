@@ -21,7 +21,8 @@ abstract class Controller
     /**
      * To be implemented to run this controller.
      * 
-     * @return DO TG Decide on implementation and comment
+     * @return int Returns 0 if this controller completed successfully.
+     *             Returns 1 if this controller exited with errors.
      */
     abstract protected function run();
     
@@ -30,7 +31,7 @@ abstract class Controller
      * 
      * @param string $prompt A prompt to display to the user.
      * @param bool $isHidden True does not display the input on the screen.
-     *  False displays the input on screen.
+     *                       False displays the input on screen.
      * 
      * @return string
      */

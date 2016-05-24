@@ -66,14 +66,6 @@ abstract class Command extends Controller
     abstract protected function configure();
     
     /**
-     * To be implemented to run this command.
-     * 
-     * @return int Zero if this command completed successfully, one if this
-     *  command exited with errors.
-     */
-    abstract protected function run();
-    
-    /**
      * Display the command line arguments.
      * 
      * @param array $args
