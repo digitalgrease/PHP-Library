@@ -19,6 +19,13 @@ abstract class Controller
 {
     
     /**
+     * Associative array that shares data and objects between the controllers.
+     * 
+     * @var array
+     */
+    protected $container;
+    
+    /**
      * To be implemented to run this controller.
      * 
      * @return int Returns 0 if this controller completed successfully.
