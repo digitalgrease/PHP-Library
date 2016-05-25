@@ -23,7 +23,7 @@ abstract class Controller
      * 
      * @var array
      */
-    protected $container;
+    protected static $container;
     
     /**
      * To be implemented to run this controller.
@@ -42,7 +42,7 @@ abstract class Controller
      * 
      * @return string
      */
-    protected function acceptInput($prompt, $isHidden = false)
+    protected final function acceptInput($prompt, $isHidden = false)
     {
         $this->println($prompt);
         
@@ -60,6 +60,24 @@ abstract class Controller
     }
     
     /**
+     * Get the data associated with a key in the container.
+     * 
+     * @param string $key
+     * 
+     * @return mixed
+     */
+    protected final function get($key)
+    {
+        if (isset(self::$container[$key])) {
+            return self::$container[$key];
+        }
+        throw new \Exception(
+            'There is no data in the container associated with the key "'
+            . $key . '"'
+        );
+    }
+    
+    /**
      * Display text on the screen.
      *
      * @param string $text
@@ -74,5 +92,23 @@ abstract class Controller
         }
         
         fwrite(STDOUT, $text);
+    }
+    
+    /**
+     * Associate some data with a key in the container.
+     * 
+     * @param string $key
+     * @param mixed $data
+     * 
+     * @return void
+     */
+    protected final function set($key, $data)
+    {
+        if (isset(self::$container[$key])) {
+            throw new \Exception(
+                'There is already data associated with the key "' . $key . '"'
+            );
+        }
+        self::$container[$key] = $data;
     }
 }

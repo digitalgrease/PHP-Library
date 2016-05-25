@@ -243,7 +243,7 @@ abstract class Command extends Controller
      * 
      * @return string
      */
-    protected final function get($name)
+    protected final function getArg($name)
     {
         return $this->definedParams->getValue($name);
     }
