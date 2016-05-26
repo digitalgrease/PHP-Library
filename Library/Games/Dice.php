@@ -94,6 +94,16 @@ class Dice
     }
     
     /**
+     * Roll one of the dice and return the value rolled.
+     * 
+     * @return int
+     */
+    public function rollOne()
+    {
+        return mt_rand(1, $this->nSides);
+    }
+    
+    /**
      * Get the single highest value that was last rolled.
      * 
      * @return int
