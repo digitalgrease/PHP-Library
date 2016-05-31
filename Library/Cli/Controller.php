@@ -103,12 +103,13 @@ abstract class Controller
      * 
      * @param string $key
      * @param mixed $data
+     * @param bool $final
      * 
      * @return void
      */
-    protected final function set($key, $data)
+    protected final function set($key, $data, $final = true)
     {
-        if (isset(self::$container[$key])) {
+        if (isset(self::$container[$key]) && $final) {
             throw new \Exception(
                 'There is already data associated with the key "' . $key . '"'
             );
