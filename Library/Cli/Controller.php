@@ -18,6 +18,10 @@ namespace GreasyLab\Library\Cli;
 abstract class Controller
 {
     
+    const SUCCESS = 0;
+    
+    const ERROR = 1;
+    
     /**
      * Associative array that shares data and objects between the controllers.
      * 
@@ -44,7 +48,7 @@ abstract class Controller
      */
     protected final function acceptInput($prompt, $isHidden = false)
     {
-        $this->println($prompt);
+        $this->println($prompt, false);
         
         if ($isHidden) {
             system('stty -echo');
