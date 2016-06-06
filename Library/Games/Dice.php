@@ -124,6 +124,16 @@ class Dice
     }
     
     /**
+     * Get the values last rolled on the dice.
+     * 
+     * @return array
+     */
+    public function values()
+    {
+        return $this->values;
+    }
+    
+    /**
      * Reset the stored values of the last roll.
      * 
      * @return void
