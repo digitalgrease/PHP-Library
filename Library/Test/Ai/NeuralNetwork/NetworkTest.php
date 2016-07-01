@@ -70,6 +70,21 @@ class NetworkTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
+     * Get whether the network is returning the desired outputs.
+     * 
+     * @return boolean
+     */
+    private function areAllOutputsWithinThreshold()
+    {
+        try {
+            $this->runXor();
+        } catch (\Exception $ex) {
+            return false;
+        }
+        return true;
+    }
+    
+    /**
      * 
      * @throws \Exception
      */
@@ -104,7 +119,15 @@ class NetworkTest extends \PHPUnit_Framework_TestCase
      */
     private function trainXor($iterations)
     {
-        for ($i = 0; $i < $iterations; ++$i) {
+        echo 'Starting weights = ' . $this->network . PHP_EOL;
+        $weights = [];
+        
+        $i = 0;
+        while (
+            !$this->areAllOutputsWithinThreshold()
+            && $i < $iterations
+        ) {
+            
             for ($x = 0; $x < 2; ++$x) {
                 for ($y = 0; $y < 2; ++$y) {
 
@@ -119,6 +142,27 @@ class NetworkTest extends \PHPUnit_Framework_TestCase
                     $this->network->train([$x, $y], [$output]);
                 }
             }
+            
+            // Store the weights after the final 10 complete iterations for
+            // comparison and analysis.
+            $weights[$i % 10] = $this->network->__toString();
+            
+            ++$i;
+        }
+        
+        echo 'Total Iterations = ' . $i . PHP_EOL;
+        
+        echo 'Weights after the last 10 iterations:' . PHP_EOL;
+        
+        // Display the end of the array of weights for the oldest recorded.
+        $w = 0;
+        for ($j = $i % 10; $j < 10; ++$j) {
+            echo ++$w . ' => ' . $weights[$j] . PHP_EOL;
+        }
+        
+        // Display the start of the array of weights for the latest recorded.
+        for ($j = 0; $j < $i % 10; ++$j) {
+            echo ++$w . ' => ' . $weights[$j] . PHP_EOL;
         }
     }
 }
