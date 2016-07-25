@@ -29,6 +29,13 @@ use GreasyLab\Library\Data\DataSet;
  */
 class CsvFile
 {
+    
+    const HEADINGS_NONE = 0;
+    
+    const HEADINGS_FIRST_ROW = 1;
+    
+    const HEADINGS_KEY_VALUE_PAIRS = 2;
+    
     /**
      * The file content. This is an array of arrays where the outer array holds
      * the rows in the file and each inner array holds the column values for
@@ -93,9 +100,9 @@ class CsvFile
      *  values.
      */
     public function __construct(
-        array $data,
+        array $data = [],
         $filePath = null,
-        $headings = 0,
+        $headings = self::HEADINGS_NONE,
         $fieldDelimiter = ',',
         $textDelimiter = '"'
     ) {
@@ -340,7 +347,7 @@ class CsvFile
                 );
             }
         }
-//        return new DataSet($this->data);
+        return new DataSet($this->data);
     }
 
     /**
@@ -842,7 +849,6 @@ class CsvFile
                 $iChar < $nChars
                 && $chars[$iChar] == $this->_textDelimiter
             ) {
-                $columnValue[] = $chars[$iChar];
                 $iChar++;
                 while (
                     $iChar < $nChars
@@ -851,7 +857,6 @@ class CsvFile
                     $columnValue[] = $chars[$iChar];
                     $iChar++;
                 }
-                $columnValue[] = $chars[$iChar];
                 $iChar++;
             }
 

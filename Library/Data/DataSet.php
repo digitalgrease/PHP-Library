@@ -421,6 +421,43 @@ class DataSet
     }
     
     /**
+     * 
+     * @param array $columns
+     * 
+     * @return void
+     */
+    public function prioritiseDataLeftToRight(array $columns)
+    {
+        // DO TG Validate columns.
+        $nColumns = count($columns);
+        foreach ($this->data as &$row) {
+            $i = 0;
+            $rowComplete = false;
+            while (!$rowComplete && $i < $nColumns - 1) {
+                if ($row[$columns[$i]]) {
+                    ++$i;
+                } else {
+                    $next = $i + 1;
+                    $noData = true;
+                    while ($noData && $next < $nColumns) {
+                        if ($row[$columns[$next]]) {
+                            $row[$columns[$i]] = $row[$columns[$next]];
+                            $row[$columns[$next]] = '';
+                            $i = $next;
+                            $noData = false;
+                        } else {
+                            ++$next;
+                        }
+                    }
+                    if ($next = $nColumns) {
+                        $rowComplete = true;
+                    }
+                }
+            }
+        }
+    }
+    
+    /**
      * Append all or just occurences of a specified value in the given column
      * with the given suffix.
      * 
@@ -435,8 +472,7 @@ class DataSet
             foreach ($this->data as $iRow => $rowData) {
                 $this->data[$iRow][$iColumn] .= $suffix;
             }
-        }
-        else {
+        } else {
             foreach ($this->data as $iRow => $rowData) {
                 if ($this->data[$iRow][$iColumn] === $value ) {
                     $this->data[$iRow][$iColumn] .= $suffix;
@@ -468,33 +504,36 @@ class DataSet
     
     /**
      * Add a new column of default values.
+     * DO TG Headings on top row?
+     * DO TG Actual 'NULL' value?
      * 
      * @param string $heading Heading for the column of values.
      * @param mixed  $value   Default value(s) to populate the rows with.
      */
-    public function addColumn( $heading = null, $value = null )
+    public function addColumn($heading = null, $value = null)
     {
-        $iColumn = $this->getNumberOfColumns();
+        if (!$heading) {
+            $heading = $this->getNumberOfColumns();
+        }
         
         // Set the default values.
-        if (is_array( $value )) {
+        if (is_array($value)) {
             foreach ($this->data as $iRow => $rowData) {
-                $this->data[$iRow][$iColumn] = $value[$iRow];
+                $this->data[$iRow][$heading] = $value[$iRow];
             }
-        }
-        else {
+        } else {
             if (null == $value) {
                 $value = "";
             }
             foreach ($this->data as $iRow => $rowData) {
-                $this->data[$iRow][$iColumn] = $value;
+                $this->data[$iRow][$heading] = $value;
             }
         }
         
-        // Set the heading.
-        $this->data[0][$iColumn] = (null != $heading)
-                ? $heading
-                : $this->data[0][$iColumn];
+//        // Set the heading.
+//        $this->data[0][$heading] = (null != $heading)
+//                ? $heading
+//                : $this->data[0][$heading];
     }
     
     /**
@@ -508,6 +547,32 @@ class DataSet
         $this->data[$iRow] = $data;
     }
     
+    public function removeEmptyRows()
+    {
+        foreach ($this->data as $iRow => $row) {
+            $isEmpty = true;
+            foreach ($row as $data) {
+                if ($data) {
+                    $isEmpty = false;
+                    break;
+                }
+                if ($isEmpty) {
+                    unset($this->data[$iRow]);
+                }
+            }
+        }
+        $this->data = array_values($this->data);
+    }
+    
+    public function removeWhitespace($column)
+    {
+        if ($this->isValidColumn($column)) {
+            foreach ($this->data as &$row) {
+                $row[$column] = preg_replace('/\s+/', '', $row[$column]);
+            }
+        }
+    }
+
 /**
  * Remove a field from the rows of data.
  * DO TG Feature: Remove multiple rows
@@ -586,6 +651,15 @@ public function getRowValue($field, array $criteria, $default = null)
     }
     return $default;
 }
+
+    public function trimData()
+    {
+        foreach ($this->data as &$row) {
+            foreach ($row as &$data) {
+                $data = trim($data);
+            }
+        }
+    }
 
 /**
  * 

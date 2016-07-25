@@ -10,8 +10,8 @@
 
 namespace GreasyLab\Library\Data;
 
-require 'AbstractDatabase.php';
-require 'DataSet.php';
+require_once 'AbstractDatabase.php';
+require_once 'DataSet.php';
 
 /**
  * Represents a MySQL database for retrieving datasets.

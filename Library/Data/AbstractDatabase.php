@@ -19,6 +19,7 @@ namespace GreasyLab\Library\Data;
  */
 abstract class AbstractDatabase
 {
+    
     /**
      * DO TG Comment
      * 
