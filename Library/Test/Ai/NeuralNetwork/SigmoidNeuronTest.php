@@ -26,14 +26,30 @@ use GreasyLab\Library\Utils\MathUtils;
 class SigmoidNeuronTest extends \PHPUnit_Framework_TestCase
 {
     
+    /**
+     * The maximum values to use for X and Y when training the neuron to guess
+     * the points on a straight line.
+     * 
+     * @var int
+     */
     const MAX_X_Y = 5;
     
+    /**
+     * The number of iterations to perform when training the neuron.
+     * 
+     * @var int
+     */
     const NUM_OF_TRAINING_ITERATIONS = 100000;
     
+    /**
+     * The neuron to be trained and tested.
+     * 
+     * @var SigmoidNeuron
+     */
     protected $sigmoidNeuron;
     
     /**
-     * Create the perceptron with random weights.
+     * Create the neuron with random weights for training and testing.
      * 
      * @before
      */
@@ -160,7 +176,7 @@ class SigmoidNeuronTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * Train the perceptron to learn the outcome of AND.
+     * Train the neuron to learn the outcome of AND.
      * 
      * @param int $iterations
      */
@@ -183,7 +199,7 @@ class SigmoidNeuronTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * Train the perceptron to learn the outcome of OR.
+     * Train the neuron to learn the outcome of OR.
      * 
      * @param int $iterations
      */
@@ -204,8 +220,8 @@ class SigmoidNeuronTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * Train the perceptron to guess whether points are above or below a
-     * straight line.
+     * Train the neuron to guess whether points are above or below a straight
+     * line.
      * 
      * @param int $iterations
      */
@@ -228,15 +244,17 @@ class SigmoidNeuronTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * Verify the output of the perceptron.
+     * Verify the output of the neuron.
+     * 
+     * @param int $x
+     * @param int $y
+     * @param float $output
      * 
      * @throws \Exception
      */
     private function verifyOutput($x, $y, $output)
     {
         $result = $this->sigmoidNeuron->feedForward([$x, $y]);
-        
-//        echo 'Expected: ' . $output . ' / Actual: ' . $result . PHP_EOL;
         
         if (!MathUtils::areFloatsEqual($result, $output, 0.01)) {
             throw new \Exception(

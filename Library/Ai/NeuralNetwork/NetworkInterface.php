@@ -37,4 +37,11 @@ interface NetworkInterface
      * @return void
      */
     public function train(array $inputs, array $outputs);
+    
+    /**
+     * Get all the weights across the network.
+     * 
+     * @return array
+     */
+    public function weights();
 }

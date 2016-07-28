@@ -116,9 +116,7 @@ abstract class Neuron implements NeuronInterface
     abstract protected function activationFunction($input);
     
     /**
-     * Get the bias weight of this neuron.
-     * 
-     * @return float
+     * {@inheritdoc}
      */
     public function bias()
     {
@@ -172,9 +170,7 @@ abstract class Neuron implements NeuronInterface
     }
     
     /**
-     * Get the weights of this neuron.
-     * 
-     * @return array
+     * {@inheritdoc}
      */
     public function weights()
     {

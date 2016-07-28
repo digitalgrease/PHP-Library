@@ -150,4 +150,22 @@ class Network implements NetworkInterface
             }
         }
     }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function weights()
+    {
+        $weights = [];
+        
+        foreach ($this->neurons as $l => $layer) {
+            foreach ($layer as $n => $neuron) {
+                $nw = $neuron->weights();
+                $nw[] = $neuron->bias();
+                $weights[$l][$n] = $nw;
+            }
+        }
+        
+        return $weights;
+    }
 }

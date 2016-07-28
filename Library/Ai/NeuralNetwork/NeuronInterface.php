@@ -19,6 +19,13 @@ interface NeuronInterface
 {
     
     /**
+     * Get the bias weight of this neuron.
+     * 
+     * @return float
+     */
+    public function bias();
+    
+    /**
      * 
      * @param float $error
      * 
@@ -55,4 +62,12 @@ interface NeuronInterface
      *  the learning rate/constant of this neuron.
      */
     public function updateWeightsAndBias(array $inputs, $error);
+    
+    /**
+     * Get the weights of this neuron.
+     * This does not include the bias weight.
+     * 
+     * @return array
+     */
+    public function weights();
 }
