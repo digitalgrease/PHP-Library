@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2014 Greasy Lab.
+ * Copyright (c) 2014 Digital Grease Limited.
  * 
  * Tom Gray
  */

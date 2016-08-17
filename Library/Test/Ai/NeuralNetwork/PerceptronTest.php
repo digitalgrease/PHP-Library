@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2016 Greasy Lab.
+ * Copyright (c) 2016 Digital Grease Limited.
  * 
  * Friday 1st April 2016
  * 

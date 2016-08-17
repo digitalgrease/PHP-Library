@@ -7,7 +7,7 @@
 // DO TG Feature: Data compare/diff for a table row/table/etc.
 
 /*
- * Copyright (c) 2015 Greasy Lab.
+ * Copyright (c) 2015 Digital Grease Limited.
  * 
  * Tom Gray
  * 
@@ -21,7 +21,7 @@ namespace GreasyLab\Library\Data;
  * 
  * @version 1.0 20th September 2015
  * @author Tom Gray
- * @copyright 2015 Greasy Lab
+ * @copyright 2015 Digital Grease Limited
  */
 class DataSet
 {

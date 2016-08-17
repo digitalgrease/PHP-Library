@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2014 Greasy Labs.
+ * Copyright (c) 2014 Digital Grease Limited.
  */
 
 namespace GreasyLab\Library\Utils;

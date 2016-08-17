@@ -10,7 +10,7 @@
 //  duplicated functions.
 
 /*
- * Copyright (c) 2013-2015 Greasy Lab.
+ * Copyright (c) 2013-2015 Digital Grease Limited.
  */
 
 namespace GreasyLab\Library\Data;
@@ -25,7 +25,7 @@ use GreasyLab\Library\Data\DataSet;
  * class follows.
  * 
  * @author Tom Gray
- * @copyright 2013-2015 Greasy Lab
+ * @copyright 2013-2015 Digital Grease Limited
  */
 class CsvFile
 {

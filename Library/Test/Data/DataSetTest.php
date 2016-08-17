@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2015 Greasy Lab.
+ * Copyright (c) 2015 Digital Grease Limited.
  * 
  * Tom Gray
  * 
@@ -19,7 +19,7 @@ use GreasyLab\Library\Data\DataSet;
  *
  * @version 1.0 25th September 2015
  * @author Tom Gray
- * @copyright Greasy Lab
+ * @copyright Digital Grease Limited
  */
 class DataSetTest extends \PHPUnit_Framework_TestCase
 {

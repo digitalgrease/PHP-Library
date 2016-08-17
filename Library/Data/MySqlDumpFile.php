@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2015 Greasy Lab.
+ * Copyright (c) 2015 Digital Grease Limited.
  * 
  * Thursday 3rd December 2015
  * 
@@ -19,7 +19,7 @@ use GreasyLab\Library\Data\DataSet;
  * 
  * @author Tom Gray
  * @version 1.0 Thursday 3rd December 2015
- * @copyright 2015 Greasy Lab.
+ * @copyright 2015 Digital Grease Limited.
  */
 class MySqlTableDumpFile
 {

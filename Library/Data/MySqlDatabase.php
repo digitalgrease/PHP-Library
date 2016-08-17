@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2015 Greasy Lab.
+ * Copyright (c) 2015 Digital Grease Limited.
  * 
  * Tom Gray
  * 
@@ -18,7 +18,7 @@ require_once 'DataSet.php';
  * 
  * @version 1.0 8th October 2015
  * @author Tom Gray
- * @copyright 2015 Greasy Lab
+ * @copyright 2015 Digital Grease Limited
  */
 class MySqlDatabase extends AbstractDatabase
 {

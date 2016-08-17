@@ -1,6 +1,6 @@
 {
     "name": "GreasyLab",
-    "description": "Greasy Lab library code and utility classes.",
+    "description": "Digital Grease Limited library code and utility classes.",
     "keywords": ["utils", "library"],
     "homepage": "http://tomgray.duckdns.org",
     "type": "library",
