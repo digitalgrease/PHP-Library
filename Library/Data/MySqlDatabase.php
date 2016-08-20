@@ -8,7 +8,7 @@
  * Date: 8th October 2015
  */
 
-namespace GreasyLab\Library\Data;
+namespace DigitalGrease\Library\Data;
 
 require_once 'AbstractDatabase.php';
 require_once 'DataSet.php';

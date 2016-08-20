@@ -8,7 +8,7 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\Data;
+namespace DigitalGrease\Library\Data;
 
 /**
  * Value object for representing a primary key.

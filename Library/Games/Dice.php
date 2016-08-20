@@ -8,7 +8,7 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\Games;
+namespace DigitalGrease\Library\Games;
 
 /**
  * Represents a collection of dice to be rolled in a game.

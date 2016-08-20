@@ -8,14 +8,14 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\Cli;
+namespace DigitalGrease\Library\Cli;
 
 require_once 'Controller.php';
 require_once 'Flags.php';
 require_once 'Parameters.php';
-require_once 'GreasyLab/Library/Utils/Timer.php';
+require_once 'DigitalGrease/Library/Utils/Timer.php';
 
-use GreasyLab\Library\Utils\Timer;
+use DigitalGrease\Library\Utils\Timer;
 
 /**
  * Defines an abstract command run from the CLI.

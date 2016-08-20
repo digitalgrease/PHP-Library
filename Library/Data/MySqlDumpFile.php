@@ -8,11 +8,11 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\Data;
+namespace DigitalGrease\Library\Data;
 
 require_once 'DataSet.php';
 
-use GreasyLab\Library\Data\DataSet;
+use DigitalGrease\Library\Data\DataSet;
 
 /**
  * Represents a file produced by the mysqldump command of a single table.

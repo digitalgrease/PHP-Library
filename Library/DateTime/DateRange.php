@@ -8,7 +8,7 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\DateTime;
+namespace DigitalGrease\Library\DateTime;
 
 /**
  * Defines a date range.

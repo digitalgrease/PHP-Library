@@ -4,11 +4,11 @@
  * Copyright (c) 2015 Digital Grease Limited.
  */
 
-namespace GreasyLab\Library\Files;
+namespace DigitalGrease\Library\Files;
 
 require_once 'FileSystemInterface.php';
 
-use GreasyLab\Library\Files\FileSystemInterface;
+use DigitalGrease\Library\Files\FileSystemInterface;
 
 /**
  * Provides methods to work with the local file system.

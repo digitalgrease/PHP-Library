@@ -8,7 +8,7 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\Test\DateTime;
+namespace DigitalGrease\Library\Test\DateTime;
 
 require_once '../DateTime/DaysEnum.php';
 require_once '../DateTime/Hours.php';
@@ -16,11 +16,11 @@ require_once '../DateTime/SetOfHours.php';
 require_once '../DateTime/Time.php';
 require_once '../DateTime/TimeRange.php';
 
-use GreasyLab\Library\DateTime\DaysEnum;
-use GreasyLab\Library\DateTime\Hours;
-use GreasyLab\Library\DateTime\SetOfHours;
-use GreasyLab\Library\DateTime\Time;
-use GreasyLab\Library\DateTime\TimeRange;
+use DigitalGrease\Library\DateTime\DaysEnum;
+use DigitalGrease\Library\DateTime\Hours;
+use DigitalGrease\Library\DateTime\SetOfHours;
+use DigitalGrease\Library\DateTime\Time;
+use DigitalGrease\Library\DateTime\TimeRange;
 
 /**
  * Tests for the SetOfHours class.

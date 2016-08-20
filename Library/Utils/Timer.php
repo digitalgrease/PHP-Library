@@ -6,7 +6,7 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\Utils;
+namespace DigitalGrease\Library\Utils;
 
 /**
  * Timer to calculate intervals.

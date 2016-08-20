@@ -8,7 +8,7 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\Files;
+namespace DigitalGrease\Library\Files;
 
 /**
  * Provides generic methods for parsing files.

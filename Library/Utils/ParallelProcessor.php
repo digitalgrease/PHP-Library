@@ -4,13 +4,13 @@
  * Copyright (c) 2015 Digital Grease Limited.
  */
 
-namespace GreasyLab\Library\Utils;
+namespace DigitalGrease\Library\Utils;
 
 /**
  * Executes a command multiple times in parallel processes with different
  * arguments.
  * 
- * @author The Janitor <thejanitor@greasylabs.com>
+ * @author The Janitor <thejanitor@DigitalGreases.com>
  */
 class ParallelProcessor
 {

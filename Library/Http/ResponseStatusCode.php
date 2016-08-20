@@ -8,7 +8,7 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\Http;
+namespace DigitalGrease\Library\Http;
 
 /**
  * Defines constants for the HTTP response status codes.

@@ -8,7 +8,7 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\Web;
+namespace DigitalGrease\Library\Web;
 
 /**
  * Download all images from a URL.

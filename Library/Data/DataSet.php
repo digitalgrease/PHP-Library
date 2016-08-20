@@ -14,7 +14,7 @@
  * Date: 20th September 2015
  */
 
-namespace GreasyLab\Library\Data;
+namespace DigitalGrease\Library\Data;
 
 /**
  * Represent and manipulate data sets.

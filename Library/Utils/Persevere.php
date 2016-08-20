@@ -4,7 +4,7 @@
  * Copyright (c) 2015 Digital Grease Limited.
  */
 
-namespace GreasyLab\Library\Utils;
+namespace DigitalGrease\Library\Utils;
 
 /**
  * Defines a library function to repeatedly attempt to call a function that

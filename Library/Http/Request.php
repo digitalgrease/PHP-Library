@@ -8,13 +8,13 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\Http;
+namespace DigitalGrease\Library\Http;
 
 require_once 'Response.php';
 require_once 'Url.php';
 
-use GreasyLab\Library\Http\Response;
-use GreasyLab\Library\Http\Url;
+use DigitalGrease\Library\Http\Response;
+use DigitalGrease\Library\Http\Url;
 
 /**
  * Makes an HTTP request.

@@ -8,7 +8,7 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\DateTime;
+namespace DigitalGrease\Library\DateTime;
 
 /**
  * Defines constants for the ISO-8601 numeric representations of the day of the

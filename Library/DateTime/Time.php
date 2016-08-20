@@ -8,7 +8,7 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\DateTime;
+namespace DigitalGrease\Library\DateTime;
 
 /**
  * Represents a time with hour, minutes and seconds.

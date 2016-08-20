@@ -8,7 +8,7 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\Cli;
+namespace DigitalGrease\Library\Cli;
 
 /**
  * Defines an API for a CLI view.

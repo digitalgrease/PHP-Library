@@ -8,11 +8,11 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\Test\DateTime;
+namespace DigitalGrease\Library\Test\DateTime;
 
 require_once '../DateTime/DateRange.php';
 
-use GreasyLab\Library\DateTime\DateRange;
+use DigitalGrease\Library\DateTime\DateRange;
 
 /**
  * Tests for the DateRange class.

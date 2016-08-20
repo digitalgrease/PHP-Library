@@ -8,7 +8,7 @@
  * Date: 9th October 2015
  */
 
-namespace GreasyLab\Library\Data;
+namespace DigitalGrease\Library\Data;
 
 /**
  * Data cleanser that cleans telephone numbers.

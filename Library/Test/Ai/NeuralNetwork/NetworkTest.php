@@ -8,15 +8,15 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\Test;
+namespace DigitalGrease\Library\Test;
 
 require_once '../Ai/NeuralNetwork/Network.php';
 require_once '../Ai/NeuralNetwork/SigmoidNeuron.php';
 require_once '../Utils/MathUtils.php';
 
-use GreasyLab\Library\Ai\NeuralNetwork\Network;
-use GreasyLab\Library\Ai\NeuralNetwork\SigmoidNeuron;
-use GreasyLab\Library\Utils\MathUtils;
+use DigitalGrease\Library\Ai\NeuralNetwork\Network;
+use DigitalGrease\Library\Ai\NeuralNetwork\SigmoidNeuron;
+use DigitalGrease\Library\Utils\MathUtils;
 
 /**
  * Tests for the Network class.

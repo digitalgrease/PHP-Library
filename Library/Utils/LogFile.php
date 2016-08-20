@@ -4,12 +4,12 @@
  * Copyright (c) 2014 Digital Grease Limited.
  */
 
-namespace GreasyLab\Library\Utils;
+namespace DigitalGrease\Library\Utils;
 
 /**
  * Simple log file for logging.
  * 
- * @author The Janitor <thejanitor@greasylabs.com>
+ * @author The Janitor <thejanitor@DigitalGreases.com>
  */
 class LogFile
 {

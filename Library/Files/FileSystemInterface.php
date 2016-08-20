@@ -8,7 +8,7 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\Files;
+namespace DigitalGrease\Library\Files;
 
 /**
  * Defines an API for file systems to implement.

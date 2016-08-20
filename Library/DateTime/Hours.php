@@ -8,9 +8,9 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\DateTime;
+namespace DigitalGrease\Library\DateTime;
 
-use GreasyLab\Library\DateTime\TimeRange;
+use DigitalGrease\Library\DateTime\TimeRange;
 
 /**
  * Defines a day and a time range to define something such as hours of business.

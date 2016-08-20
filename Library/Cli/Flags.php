@@ -8,11 +8,11 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\Cli;
+namespace DigitalGrease\Library\Cli;
 
 require_once 'Flag.php';
 
-use GreasyLab\Library\Cli\Flag;
+use DigitalGrease\Library\Cli\Flag;
 
 /**
  * Defines a collection of command line flags.

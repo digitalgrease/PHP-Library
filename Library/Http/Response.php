@@ -8,13 +8,13 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\Http;
+namespace DigitalGrease\Library\Http;
 
 require_once 'ResponseStatusCode.php';
 require_once 'Url.php';
 
-use GreasyLab\Library\Http\ResponseStatusCode;
-use GreasyLab\Library\Http\Url;
+use DigitalGrease\Library\Http\ResponseStatusCode;
+use DigitalGrease\Library\Http\Url;
 
 /**
  * Represents an HTTP response.

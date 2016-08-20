@@ -8,7 +8,7 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\Http;
+namespace DigitalGrease\Library\Http;
 
 /**
  * Represents a URL.

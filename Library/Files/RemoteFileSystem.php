@@ -4,12 +4,12 @@
  * Copyright (c) 2015 Digital Grease Limited.
  */
 
-namespace GreasyLab\Library\Files;
+namespace DigitalGrease\Library\Files;
 
 require_once 'FileSystemInterface.php';
 require_once 'Net/SFTP.php';
 
-use GreasyLab\Library\Files\FileSystemInterface;
+use DigitalGrease\Library\Files\FileSystemInterface;
 
 /**
  * Provides access to a remote file system.

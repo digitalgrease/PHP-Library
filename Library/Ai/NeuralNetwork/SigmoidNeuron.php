@@ -8,12 +8,12 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\Ai\NeuralNetwork;
+namespace DigitalGrease\Library\Ai\NeuralNetwork;
 
-require_once 'GreasyLab/Library/Utils/MathUtils.php';
+require_once 'DigitalGrease/Library/Utils/MathUtils.php';
 require_once 'Neuron.php';
 
-use GreasyLab\Library\Utils\MathUtils;
+use DigitalGrease\Library\Utils\MathUtils;
 
 /**
  * Implements a sigmoid neuron.

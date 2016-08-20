@@ -4,9 +4,9 @@
  * Copyright (c) 2015 Digital Grease Limited.
  */
 
-namespace GreasyLab\Library\Web;
+namespace DigitalGrease\Library\Web;
 
-use GreasyLab\Library\Utils\StringUtils;
+use DigitalGrease\Library\Utils\StringUtils;
 
 /**
  * Represents a parsed HTML table.

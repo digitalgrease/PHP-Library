@@ -8,7 +8,7 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\Ai\NeuralNetwork;
+namespace DigitalGrease\Library\Ai\NeuralNetwork;
 
 /**
  * API for a neural network.

@@ -8,7 +8,7 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\Utils;
+namespace DigitalGrease\Library\Utils;
 
 /**
  * Collects collections of distinct data and writes them to disk.

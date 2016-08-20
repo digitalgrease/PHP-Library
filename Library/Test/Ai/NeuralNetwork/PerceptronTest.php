@@ -8,13 +8,13 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\Test;
+namespace DigitalGrease\Library\Test;
 
 require_once '../Ai/NeuralNetwork/Neuron.php';
 require_once '../Ai/NeuralNetwork/Perceptron.php';
 
-use GreasyLab\Library\Ai\NeuralNetwork\Neuron;
-use GreasyLab\Library\Ai\NeuralNetwork\Perceptron;
+use DigitalGrease\Library\Ai\NeuralNetwork\Neuron;
+use DigitalGrease\Library\Ai\NeuralNetwork\Perceptron;
 
 /**
  * Tests for the Perceptron.

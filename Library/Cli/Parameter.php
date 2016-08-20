@@ -8,13 +8,13 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\Cli;
+namespace DigitalGrease\Library\Cli;
 
-require_once 'GreasyLab/Library/Files/RemoteFileSystem.php';
-require_once 'GreasyLab/Library/Utils/StringUtils.php';
+require_once 'DigitalGrease/Library/Files/RemoteFileSystem.php';
+require_once 'DigitalGrease/Library/Utils/StringUtils.php';
 
-use GreasyLab\Library\Files\RemoteFileSystem;
-use GreasyLab\Library\Utils\StringUtils;
+use DigitalGrease\Library\Files\RemoteFileSystem;
+use DigitalGrease\Library\Utils\StringUtils;
 
 /**
  * Defines a parameter for a CLI command.

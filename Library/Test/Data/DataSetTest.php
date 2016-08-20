@@ -8,11 +8,11 @@
  * Date: 25th September 2015
  */
 
-namespace GreasyLab\Library\Test;
+namespace DigitalGrease\Library\Test;
 
 require_once '../Data/DataSet.php';
 
-use GreasyLab\Library\Data\DataSet;
+use DigitalGrease\Library\Data\DataSet;
 
 /**
  * Test cases for DataSet.php

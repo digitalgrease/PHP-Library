@@ -4,8 +4,8 @@
 require_once 'MySqlDatabase.php';
 require_once 'MySqlDumpFile.php';
 
-use GreasyLab\Library\MySqlDatabase;
-use GreasyLab\DataLib\MySqlTableDumpFile;
+use DigitalGrease\Library\MySqlDatabase;
+use DigitalGrease\DataLib\MySqlTableDumpFile;
 
 $dev = new MySqlDatabase(
     '134.213.169.18',

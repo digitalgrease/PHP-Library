@@ -13,11 +13,11 @@
  * Copyright (c) 2013-2015 Digital Grease Limited.
  */
 
-namespace GreasyLab\Library\Data;
+namespace DigitalGrease\Library\Data;
 
 require_once 'DataSet.php';
 
-use GreasyLab\Library\Data\DataSet;
+use DigitalGrease\Library\Data\DataSet;
 
 /**
  * Represent, manipulate and create a file of comma-separated values.

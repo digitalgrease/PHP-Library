@@ -8,11 +8,11 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\Cli;
+namespace DigitalGrease\Library\Cli;
 
 require_once 'Parameter.php';
 
-use GreasyLab\Library\Cli\Parameter;
+use DigitalGrease\Library\Cli\Parameter;
 
 /**
  * Defines a collection of command line parameters.

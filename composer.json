@@ -1,5 +1,5 @@
 {
-    "name": "GreasyLab",
+    "name": "DigitalGrease",
     "description": "Digital Grease Limited library code and utility classes.",
     "keywords": ["utils", "library"],
     "homepage": "http://tomgray.duckdns.org",
@@ -19,9 +19,9 @@
         "phpunit/phpunit": "~4.5"
     },
     "autoload": {
-        "psr-4": {"GreasyLab\\Library\\": "Library"}
+        "psr-4": {"DigitalGrease\\Library\\": "Library"}
     },
     "autoload-dev": {
-        "psr-4": {"GreasyLab\\": "GreasyLab/Library/Test"}
+        "psr-4": {"DigitalGrease\\": "DigitalGrease/Library/Test"}
     }
 }

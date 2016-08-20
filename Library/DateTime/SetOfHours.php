@@ -8,7 +8,7 @@
  * Tom Gray
  */
 
-namespace GreasyLab\Library\DateTime;
+namespace DigitalGrease\Library\DateTime;
 
 /**
  * Defines a set of hours for a week for something such as hours of business.
