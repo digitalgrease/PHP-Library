@@ -29,6 +29,8 @@ class DataSet2DatabaseMapping
      *  required.
      * DO TG Feature/Improvement: Insert records in one query where the PK is
      *  not required for subsequent insertions/mappings.
+     * DO TG Feature/Improvement/Bug?: Check a column specified in the mapping
+     *  exists/is valid when retrieveing the value.
      * 
      * @param DataSet $dataSet
      * @param AbstractDatabase $db
@@ -66,12 +68,22 @@ class DataSet2DatabaseMapping
                                 $data[$field] = $row[$value->column()];
                                 $rowContainsData = true;
                             }
+                        } elseif ($value instanceof DataSetColumnConditional) {
+                            if ($row[$value->column()]) {
+                                $data[$field] = $value->mapping()[$row[$value->column()]];
+                                $rowContainsData = true;
+                            }
+                        } elseif ($value instanceof DataSetColumnDate) {
+                            // DO TG Library/DataSet2DataBase Improvement: Create an abstract class and common interface for DataSetColumnMappers!
+                            $rowContainsData = $value->setValue($row, $field, $data);
                         } elseif ($value instanceof PrimaryKey) {
                             if (count($primaryKeys[$value->primaryKey()]) > 1) {
                                 $data[$field] = $primaryKeys[$value->primaryKey()][$iRow];
                             } else {
                                 $data[$field] = $primaryKeys[$value->primaryKey()][0];
                             }
+                        } elseif ($value instanceof RandomData) {
+                            $data[$field] = $value->generateData();
                         } else {
                             $data[$field] = $value;
                         }
@@ -143,7 +155,11 @@ class DataSet2DatabaseMapping
     protected function mappingContainsDataSetColumn($mapping)
     {
         foreach ($mapping as $value) {
-            if ($value instanceof DataSetColumn) {
+            if (
+                $value instanceof DataSetColumn
+                || $value instanceof DataSetColumnConditional
+                || $value instanceof DataSetColumnDate
+            ) {
                 return true;
             }
         }

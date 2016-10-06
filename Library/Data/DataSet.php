@@ -271,8 +271,12 @@ class DataSet
     public function deleteColumn($column)
     {
         if ($this->isValidColumn($column)) {
+            $isIndex = is_int($column);
             foreach ($this->data as &$row) {
                 unset($row[$column]);
+                if ($isIndex) {
+                    $row = array_values($row);
+                }
             }
         }
         return $this;
@@ -371,6 +375,27 @@ class DataSet
     }
     
     /**
+     * Replace all occurences of a value with another value throughout the
+     * entire data set.
+     * 
+     * @param string $oldValue
+     * @param string $newValue
+     * 
+     * @return DataSet This dataset to allow method chaining.
+     * 
+     * @throws \InvalidArgumentException|\Exception
+     */
+    public function replaceAllValues($oldValue, $newValue)
+    {
+        if (!$this->isEmpty()) {
+            foreach (array_keys($this->data[0]) as $column) {
+                $this->replaceValues($column, $oldValue, $newValue);
+            }
+        }
+        return $this;
+    }
+    
+    /**
      * Replace all occurences of a value with another value in a column.
      * 
      * @param int|string $column   Column within which to replace the values.
@@ -389,6 +414,42 @@ class DataSet
                     $row[$column] = $newValue;
                 }
             }
+        }
+        return $this;
+    }
+    
+    /**
+     * DO TG DataSet Improvement: Validate columns.
+     * 
+     * Merge a set of columns into one column in the order provided with the
+     * "glue" provided.
+     * 
+     * @param array $columns
+     * @param string $glue
+     * 
+     * @return DataSet This dataset to allow method chaining.
+     */
+    public function mergeColumns(array $columns, $glue)
+    {
+        foreach ($this->data as &$row) {
+            $isFirstColumn = true;
+            foreach ($columns as $column) {
+                if ($isFirstColumn) {
+                    $isFirstColumn = false;
+                    $firstColumn = $column;
+                } else {
+                    if ($row[$column]) {
+                        if ($row[$firstColumn]) {
+                            $row[$firstColumn] .= $glue . $row[$column];
+                        } else {
+                            $row[$firstColumn] .= $row[$column];
+                        }
+                    }
+                    unset($row[$column]);
+                }
+            }
+            // DO TG DataSet IMPORTANT! Bug/Improvement: This line should only be perfomred if the columns are indexed and not string names.
+            $row = array_values($row);
         }
         return $this;
     }
@@ -556,9 +617,9 @@ class DataSet
                     $isEmpty = false;
                     break;
                 }
-                if ($isEmpty) {
-                    unset($this->data[$iRow]);
-                }
+            }
+            if ($isEmpty) {
+                unset($this->data[$iRow]);
             }
         }
         $this->data = array_values($this->data);
