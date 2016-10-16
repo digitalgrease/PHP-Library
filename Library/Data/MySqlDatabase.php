@@ -596,7 +596,7 @@ class MySqlDatabase extends AbstractDatabase
      * 
      * @throws \Exception
      */
-    protected function execQuery($sql)
+    public function execQuery($sql)
     {
         if ($result = $this->mysqli->query($sql)) {
             return $result;

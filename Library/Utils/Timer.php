@@ -15,6 +15,7 @@ namespace DigitalGrease\Library\Utils;
  */
 class Timer
 {
+    
     /**
      * The start time in seconds since the Unix epoch accurate to the nearest
      * microsecond.

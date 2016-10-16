@@ -11,7 +11,8 @@
 namespace DigitalGrease\Library\Data;
 
 /**
- * Value object for representing a primary key.
+ * Value object for representing a primary key when importing a DataSet into a
+ * database.
  *
  * @author Tom Gray
  */

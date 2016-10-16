@@ -9,6 +9,11 @@
 // DO TG Refactor: Rewrite the class to use a dataset and remove all the
 //  duplicated functions.
 
+// DO TG Library CsvFile Bug: Text delimiter does not work correctly
+//  when opening a CSV containg fields that are quoted with single quotes "'".
+// DO TG Library CsvFile Bug: In addition to the above, test and ensure
+//  working with tabs as delimiters.
+
 /*
  * Copyright (c) 2013-2015 Digital Grease Limited.
  */
