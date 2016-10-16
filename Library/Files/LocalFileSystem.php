@@ -178,7 +178,7 @@ class LocalFileSystem implements FileSystemInterface
      */
     public function rmdir($dir)
     {
-        foreach ($this->getDirectoryContents($dir) as $file) {
+        foreach ($this->getFileList($dir) as $file) {
             $path = rtrim($dir, '/') . '/' . $file;
             if (is_dir($path)) {
                 $this->rmdir($path);
