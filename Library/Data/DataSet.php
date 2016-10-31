@@ -598,6 +598,48 @@ class DataSet
     }
     
     /**
+     * DO TG Complete to work with keys and indexes! Only made to work with
+     *  indexes for use case when created.
+     * 
+     * Crop a set of columns.
+     * 
+     * @param ??? $left
+     * @param ??? $right
+     * 
+     * @return ???
+     */
+    public function cropColumns($left, $right)
+    {
+        
+        // Delete the columns on the left.
+        for ($i = 0; $i < $left; ++$i) {
+            $this->deleteColumn($i);
+        }
+        
+        // Delete the columns on the right.
+        for ($i = $right + 1; $i < $this->getNumberOfColumns();) {
+            $this->deleteColumn($i);
+        }
+    }
+    
+    /**
+     * 
+     * @return ???
+     */
+    public function extractLastString($column, $breakPoint = ' ')
+    {
+        
+        // Adds a column to the end.
+        $this->addColumn();
+        $index = $this->getNumberOfColumns() - 1;
+        
+        foreach ($this->data as $iRow => &$row) {
+            $row[$index] = substr($row[$column], strrpos($row[$column], $breakPoint) + 1);
+            $row[$column] = substr($row[$column], 0, strrpos($row[$column], $breakPoint) - strlen($row[$column]));
+        }
+    }
+    
+    /**
      * Add a new row of data.
      * 
      * @param array $data
