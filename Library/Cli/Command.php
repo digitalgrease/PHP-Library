@@ -13,9 +13,9 @@ namespace DigitalGrease\Library\Cli;
 require_once 'Controller.php';
 require_once 'Flags.php';
 require_once 'Parameters.php';
-require_once 'DigitalGrease/Library/Utils/Timer.php';
+require_once 'DigitalGrease/Library/Utils/Stopwatch.php';
 
-use DigitalGrease\Library\Utils\Timer;
+use DigitalGrease\Library\Utils\Stopwatch;
 
 /**
  * Defines an abstract command run from the CLI.
@@ -29,9 +29,9 @@ abstract class Command extends Controller
     /**
      * Times the total running time of this command.
      * 
-     * @var Timer
+     * @var Stopwatch
      */
-    protected $commandTimer;
+    protected $commandStopwatch;
     
     /**
      * The command line parameters defined for this command.
@@ -99,7 +99,8 @@ abstract class Command extends Controller
         $exitStatus = 1;
         
         try {
-            $this->commandTimer = new Timer();
+            $this->commandStopwatch = new Stopwatch();
+            
             if ($this->areValidArgs(array_slice($args, 1))) {
                 $exitStatus = $this->run();
             } else {
@@ -109,7 +110,7 @@ abstract class Command extends Controller
             $this->println('An exception has been thrown: '.$ex->getMessage());
         }
         
-        $this->println($this->commandTimer->getElapsedTimeFormatted());
+        $this->println($this->elapsedCommandTime());
         
         return $exitStatus;
     }
@@ -244,6 +245,19 @@ abstract class Command extends Controller
     }
     
     /**
+     * Get the current elapsed running time of this command as a human readable
+     * string.
+     * 
+     * @return string
+     */
+    protected final function elapsedCommandTime()
+    {
+        return $this->commandStopwatch->formatSeconds(
+            $this->commandStopwatch->elapsed()
+        );
+    }
+    
+    /**
      * Get the value of a defined parameter by name.
      * 
      * @param string $name
@@ -253,17 +267,6 @@ abstract class Command extends Controller
     protected final function getArg($name)
     {
         return $this->definedParams->getValue($name);
-    }
-    
-    /**
-     * Get the running time of this command that has elapsed to this point as a
-     * human readable string.
-     * 
-     * @return string
-     */
-    protected final function getLapCommandTime()
-    {
-        return $this->commandTimer->lapFormatted();
     }
     
     /**
@@ -303,6 +306,19 @@ abstract class Command extends Controller
     {
         $this->description = $description;
         return $this;
+    }
+    
+    /**
+     * Get the split running time of this command since the last split or start
+     * as a human readable string.
+     * 
+     * @return string
+     */
+    protected final function splitCommandTime()
+    {
+        return $this->commandStopwatch->formatSeconds(
+            $this->commandStopwatch->split()
+        );
     }
     
     /**

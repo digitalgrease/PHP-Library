@@ -8,12 +8,14 @@
 
 namespace DigitalGrease\Library\Utils;
 
+require_once 'Timing.php';
+
 /**
  * Timer to calculate intervals.
  * 
  * @author Tom Gray
  */
-class Timer
+class Timer extends Timing
 {
     
     /**
@@ -49,33 +51,6 @@ class Timer
     public function end()
     {
         return $this->end;
-    }
-    
-    /**
-     * Format the given number of seconds into a human readable string.
-     * 
-     * @param integer|float $seconds The number of seconds to be formatted which
-     *                               may be a float that includes microseconds.
-     * 
-     * @return string
-     */
-    public function formatSeconds($seconds)
-    {
-        $decimalPointIndex = strrpos($seconds, '.');
-        
-        $microseconds = $decimalPointIndex === false
-            ? 0
-            : substr($seconds, $decimalPointIndex + 1);
-        
-        $mins = $seconds / 60;
-        $hours = $mins / 60;
-        $days = floor($hours / 24);
-        
-        return $days . ' days '
-            . $hours % 24 . ' hours '
-            . $mins % 60 . ' mins '
-            . $seconds % 60 . ' secs '
-            . $microseconds . ' ms';
     }
     
     /**
