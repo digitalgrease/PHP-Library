@@ -42,11 +42,13 @@ class Timer
     }
     
     /**
-     * Set the end time of the interval.
+     * Get the end time of the interval.
+     * 
+     * @return float
      */
     public function end()
     {
-        $this->end = microtime(true);
+        return $this->end;
     }
     
     /**
@@ -103,10 +105,59 @@ class Timer
     }
     
     /**
-     * Set the start time of the interval.
+     * Get the time that has elapsed between the start and the end time as a
+     * human readable string.
+     * If the end time has not been set or the timer has been restarted since
+     * the last time the end time was recorded, then this sets the end time and
+     * returns the time elapsed between the start time and now.
+     * 
+     * @param boolean $restart Restart the timer by setting the start time to
+     *                         now if True.
+     * 
+     * @return string
+     */
+    public function getElapsedTimeFormatted($restart = false)
+    {
+        return $this->formatSeconds($this->getElapsedTime($restart));
+    }
+    
+    /**
+     * Get the time elapsed to this point.
+     * 
+     * @return float
+     */
+    public function lap()
+    {
+        return microtime(true) - $this->start;
+    }
+    
+    /**
+     * Get the time elapsed to this point as a human readable string.
+     * 
+     * @return string
+     */
+    public function lapFormatted()
+    {
+        return $this->formatSeconds(microtime(true) - $this->start);
+    }
+    
+    /**
+     * Start the timer and set the start time of the interval.
+     * 
+     * @return float
      */
     public function start()
     {
-        $this->start = microtime(true);
+        return $this->start = microtime(true);
+    }
+    
+    /**
+     * Stop the timer and set the end time of the interval.
+     * 
+     * @return float
+     */
+    public function stop()
+    {
+        return $this->end = microtime(true);
     }
 }

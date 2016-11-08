@@ -27,6 +27,13 @@ abstract class Command extends Controller
 {
     
     /**
+     * Times the total running time of this command.
+     * 
+     * @var Timer
+     */
+    protected $commandTimer;
+    
+    /**
      * The command line parameters defined for this command.
      * 
      * @var Parameters
@@ -92,7 +99,7 @@ abstract class Command extends Controller
         $exitStatus = 1;
         
         try {
-            $timer = new Timer();
+            $this->commandTimer = new Timer();
             if ($this->areValidArgs(array_slice($args, 1))) {
                 $exitStatus = $this->run();
             } else {
@@ -102,7 +109,7 @@ abstract class Command extends Controller
             $this->println('An exception has been thrown: '.$ex->getMessage());
         }
         
-        $this->println($timer->formatSeconds($timer->getElapsedTime()));
+        $this->println($this->commandTimer->getElapsedTimeFormatted());
         
         return $exitStatus;
     }
@@ -246,6 +253,17 @@ abstract class Command extends Controller
     protected final function getArg($name)
     {
         return $this->definedParams->getValue($name);
+    }
+    
+    /**
+     * Get the running time of this command that has elapsed to this point as a
+     * human readable string.
+     * 
+     * @return string
+     */
+    protected final function getLapCommandTime()
+    {
+        return $this->commandTimer->lapFormatted();
     }
     
     /**
