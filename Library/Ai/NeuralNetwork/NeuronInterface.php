@@ -70,4 +70,11 @@ interface NeuronInterface
      * @return array
      */
     public function weights();
+    
+    /**
+     * Get the weights of this neuron including the bias weight.
+     * 
+     * @return array
+     */
+    public function weightsWithBias();
 }

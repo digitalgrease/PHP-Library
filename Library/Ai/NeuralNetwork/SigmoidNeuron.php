@@ -25,7 +25,7 @@ class SigmoidNeuron extends Neuron
 {
     
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function activationFunction($input)
     {

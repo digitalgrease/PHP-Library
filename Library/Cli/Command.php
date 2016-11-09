@@ -110,7 +110,7 @@ abstract class Command extends Controller
             $this->println('An exception has been thrown: '.$ex->getMessage());
         }
         
-        $this->println($this->elapsedCommandTime());
+        $this->println('Total run time: ' . $this->elapsedCommandTime());
         
         return $exitStatus;
     }

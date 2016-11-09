@@ -116,7 +116,7 @@ abstract class Neuron implements NeuronInterface
     abstract protected function activationFunction($input);
     
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function bias()
     {
@@ -124,7 +124,7 @@ abstract class Neuron implements NeuronInterface
     }
     
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function computeDelta($error)
     {
@@ -132,7 +132,7 @@ abstract class Neuron implements NeuronInterface
     }
     
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function feedForward(array $inputs)
     {
@@ -146,7 +146,7 @@ abstract class Neuron implements NeuronInterface
     }
     
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function train(array $inputs, $output)
     {
@@ -157,7 +157,7 @@ abstract class Neuron implements NeuronInterface
     }
     
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function updateWeightsAndBias(array $inputs, $error)
     {
@@ -170,7 +170,7 @@ abstract class Neuron implements NeuronInterface
     }
     
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function weights()
     {
@@ -178,7 +178,17 @@ abstract class Neuron implements NeuronInterface
     }
     
     /**
-     * Sum the weights of the inputs.
+     * @inheritDoc
+     */
+    public function weightsWithBias()
+    {
+        $weights = $this->weights;
+        $weights[] = $this->bias;
+        return $weights;
+    }
+    
+    /**
+     * Sum the weights of the inputs, including the bias.
      * 
      * @param array $inputs
      * 

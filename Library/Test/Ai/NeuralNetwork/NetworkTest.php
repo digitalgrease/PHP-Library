@@ -21,9 +21,6 @@ use DigitalGrease\Library\Utils\MathUtils;
 /**
  * Tests for the Network class.
  * 
- * DO TG * Analyse the data to establish pattern for failing and passing
- *  networks.
- * 
  * @author Tom Gray
  */
 class NetworkTest extends \PHPUnit_Framework_TestCase
@@ -44,18 +41,12 @@ class NetworkTest extends \PHPUnit_Framework_TestCase
      */
     const MAX_X_Y = 5;
     
-    const NUM_OF_WEIGHTS_TO_COMPARE = 10;
-    
     /**
      * Defines the accuracy required for the network to pass the tests.
      * 
      * @var float
      */
     const THRESHOLD = 0.01;
-    
-    const WEIGHTS_DATA_FILENAME = 'weights.dat';
-    
-    const ADJUSTMENTS_DATA_FILENAME = 'adjustments.dat';
     
     protected $network;
     
@@ -84,12 +75,6 @@ class NetworkTest extends \PHPUnit_Framework_TestCase
      */
     public function correctlyGuessesXor()
     {
-//        $this->trainAnd(self::MAX_NUM_OF_TRAINING_ITERATIONS);
-//        $this->runAnd(self::THRESHOLD);
-//        $this->trainOr(self::MAX_NUM_OF_TRAINING_ITERATIONS);
-//        $this->runOr(self::THRESHOLD);
-//        $this->trainStraightLine(self::MAX_NUM_OF_TRAINING_ITERATIONS);
-//        $this->runStraightLine(self::THRESHOLD);
         $this->trainXor(self::MAX_NUM_OF_TRAINING_ITERATIONS);
         $this->runXor(self::THRESHOLD);
     }
@@ -98,11 +83,11 @@ class NetworkTest extends \PHPUnit_Framework_TestCase
      * @test
      * @expectedException \Exception
      */
-//    public function throwsExceptionWhenXorOfTwoInputsIsWrong()
-//    {
-//        $this->trainXor(1);
-//        $this->runXor(self::THRESHOLD);
-//    }
+    public function throwsExceptionWhenXorOfTwoInputsIsWrong()
+    {
+        $this->trainXor(1);
+        $this->runXor(self::THRESHOLD);
+    }
     
     /**
      * Get whether the network is returning the desired outputs to a certain
@@ -118,126 +103,6 @@ class NetworkTest extends \PHPUnit_Framework_TestCase
             return false;
         }
         return true;
-    }
-    
-    /**
-     * Generate the plot of the network adjustments.
-     * 
-     * @return void
-     */
-    private function generateAdjustmentsPlot()
-    {
-        $script = 'set term png' . PHP_EOL
-            . 'set output "adjustments.png"' . PHP_EOL
-            . 'set title "Network Adjustments Over Iterations"' . PHP_EOL
-            . 'set xlabel "Iterations"' . PHP_EOL
-            . 'set ylabel "Adjustments"' . PHP_EOL
-            . 'set grid' . PHP_EOL
-            . 'plot ';
-        foreach ($this->network->weights() as $l => $layer) {
-            foreach ($layer as $n => $neuron) {
-                foreach ($neuron as $w => $weight) {
-                    $script .= '"' . self::ADJUSTMENTS_DATA_FILENAME
-                        . $l . $n . $w . '" with linespoints, ';
-                }
-            }
-        }
-        $script = substr($script, 0, -2);
-        file_put_contents('adjustments.p', $script);
-        exec('gnuplot adjustments.p');
-    }
-    
-    /**
-     * Generate the plot of the network weights.
-     * 
-     * @return void
-     */
-    private function generateWeightsPlot()
-    {
-        $script = 'set term png' . PHP_EOL
-            . 'set output "weights.png"' . PHP_EOL
-            . 'set title "Network Weights Over Iterations"' . PHP_EOL
-            . 'set xlabel "Iterations"' . PHP_EOL
-            . 'set ylabel "Weights"' . PHP_EOL
-            . 'set grid' . PHP_EOL
-            . 'plot ';
-        foreach ($this->network->weights() as $l => $layer) {
-            foreach ($layer as $n => $neuron) {
-                foreach ($neuron as $w => $weight) {
-                    $script .= '"' . self::WEIGHTS_DATA_FILENAME . $l . $n . $w
-                        . '" with linespoints, ';
-                }
-            }
-        }
-        $script = substr($script, 0, -2);
-        file_put_contents('weights.p', $script);
-        exec('gnuplot weights.p');
-    }
-    
-    /**
-     * Write the last weight adjustments of the network to file.
-     * 
-     * @param int $iteration
-     * @param array $oldWeights
-     * @param array $newWeights
-     * 
-     * @return void
-     */
-    private function recordAdjustments(
-        $iteration,
-        array $oldWeights,
-        array $newWeights
-    ) {
-        if ($iteration) {
-            $mode = 'a';
-        } else {
-            $mode = 'w';
-        }
-        
-        $adjustments = $this->compareWeights($oldWeights, $newWeights);
-        foreach ($adjustments as $l => $layer) {
-            foreach ($layer as $n => $neuron) {
-                foreach ($neuron as $a => $adjustment) {
-                    $file = fopen(
-                        self::ADJUSTMENTS_DATA_FILENAME . $l . $n . $a,
-                        $mode
-                    );
-                    fwrite($file, $iteration . ' ' . $adjustment . PHP_EOL);
-                    fclose($file);
-                }
-            }
-        }
-    }
-    
-    /**
-     * Write the current weights of the network to file.
-     * 
-     * @param int $iteration The current training iteration.
-     * 
-     * @return array The weights recorded.
-     */
-    private function recordWeights($iteration)
-    {
-        if ($iteration) {
-            $mode = 'a';
-        } else {
-            $mode = 'w';
-        }
-        
-        foreach ($this->network->weights() as $l => $layer) {
-            foreach ($layer as $n => $neuron) {
-                foreach ($neuron as $w => $weight) {
-                    $file = fopen(
-                        self::WEIGHTS_DATA_FILENAME . $l . $n . $w,
-                        $mode
-                    );
-                    fwrite($file, $iteration . ' ' . $weight . PHP_EOL);
-                    fclose($file);
-                }
-            }
-        }
-        
-        return $this->network->weights();
     }
     
     /**
@@ -349,8 +214,6 @@ class NetworkTest extends \PHPUnit_Framework_TestCase
     private function trainAnd($iterations)
     {
         $i = 0;
-        $oldWeights = $this->recordWeights($i);
-        
         while (
             !$this->areAllOutputsWithinThreshold()
             && $i < $iterations
@@ -368,13 +231,7 @@ class NetworkTest extends \PHPUnit_Framework_TestCase
                     $this->network->train([$x, $y], [$output]);
                 }
             }
-            $newWeights = $this->recordWeights(++$i);
-            $this->recordAdjustments($i, $oldWeights, $newWeights);
-            $oldWeights = $newWeights;
         }
-        
-        $this->generateAdjustmentsPlot();
-        $this->generateWeightsPlot();
     }
     
     /**
@@ -385,8 +242,6 @@ class NetworkTest extends \PHPUnit_Framework_TestCase
     private function trainOr($iterations)
     {
         $i = 0;
-        $oldWeights = $this->recordWeights($i);
-        
         while (
             !$this->areAllOutputsWithinThreshold()
             && $i < $iterations
@@ -404,13 +259,7 @@ class NetworkTest extends \PHPUnit_Framework_TestCase
                     $this->network->train([$x, $y], [$output]);
                 }
             }
-            $newWeights = $this->recordWeights(++$i);
-            $this->recordAdjustments($i, $oldWeights, $newWeights);
-            $oldWeights = $newWeights;
         }
-        
-        $this->generateAdjustmentsPlot();
-        $this->generateWeightsPlot();
     }
     
     /**
@@ -422,8 +271,6 @@ class NetworkTest extends \PHPUnit_Framework_TestCase
     private function trainStraightLine($iterations)
     {
         $i = 0;
-        $oldWeights = $this->recordWeights($i);
-        
         while (
             !$this->areAllOutputsWithinThreshold()
             && $i < $iterations
@@ -441,13 +288,7 @@ class NetworkTest extends \PHPUnit_Framework_TestCase
                     $this->network->train([$x, $y], [$output]);
                 }
             }
-            $newWeights = $this->recordWeights(++$i);
-            $this->recordAdjustments($i, $oldWeights, $newWeights);
-            $oldWeights = $newWeights;
         }
-        
-        $this->generateAdjustmentsPlot();
-        $this->generateWeightsPlot();
     }
     
     /**
@@ -458,8 +299,6 @@ class NetworkTest extends \PHPUnit_Framework_TestCase
     private function trainXor($iterations)
     {
         $i = 0;
-        $oldWeights = $this->recordWeights($i);
-        
         while (
             !$this->areAllOutputsWithinThreshold()
             && $i < $iterations
@@ -479,39 +318,7 @@ class NetworkTest extends \PHPUnit_Framework_TestCase
                     $this->network->train([$x, $y], [$output]);
                 }
             }
-            $newWeights = $this->recordWeights(++$i);
-            $this->recordAdjustments($i, $oldWeights, $newWeights);
-            $oldWeights = $newWeights;
         }
-        
-        $this->generateAdjustmentsPlot();
-        $this->generateWeightsPlot();
-    }
-    
-    /**
-     * Compare two sets of network weights and return the differences.
-     * 
-     * @param array $w1 The first and old network weights.
-     * @param array $w2 The new network weights.
-     * 
-     * @return array
-     */
-    private function compareWeights(array $w1, array $w2)
-    {
-        $differences = [];
-        
-        foreach ($w1 as $l => $neurons) {
-            foreach ($neurons as $n => $weights) {
-                foreach ($weights as $w => $weight) {
-                    
-                    // Deducting the old weight from the new weight gives the
-                    // difference and direction the weight changed in.
-                    $differences[$l][$n][] = $w2[$l][$n][$w] - $weight;
-                }
-            }
-        }
-        
-        return $differences;
     }
     
     /**
