@@ -19,7 +19,7 @@ class LocalFileSystem implements FileSystemInterface
 {
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function filemtime($path)
     {
@@ -27,7 +27,7 @@ class LocalFileSystem implements FileSystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getContent($path)
     {
@@ -35,7 +35,7 @@ class LocalFileSystem implements FileSystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getDetailedFileList($path)
     {
@@ -84,7 +84,7 @@ class LocalFileSystem implements FileSystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getFileList($path)
     {
@@ -96,7 +96,7 @@ class LocalFileSystem implements FileSystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getModifiedFiles($directory, $startTime, $endTime)
     {
@@ -131,7 +131,7 @@ class LocalFileSystem implements FileSystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getSize($path)
     {
@@ -139,7 +139,7 @@ class LocalFileSystem implements FileSystemInterface
     }
     
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function isDir($path)
     {
@@ -147,7 +147,7 @@ class LocalFileSystem implements FileSystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function isFile($path)
     {
@@ -155,15 +155,18 @@ class LocalFileSystem implements FileSystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    public function mkdir($path, $mode = -1, $recursive = false)
+    public function mkdir($path, $mode = 0755, $recursive = false)
     {
-        return mkdir($path, $mode, $recursive);
+        if (is_file($path)) {
+            return false;
+        }
+        return is_dir($path) || mkdir($path, $mode, $recursive);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function putContent($dest, $data)
     {
@@ -174,7 +177,7 @@ class LocalFileSystem implements FileSystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function rmdir($dir)
     {
@@ -190,7 +193,7 @@ class LocalFileSystem implements FileSystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function touch($path, $time = null, $atime = null)
     {
@@ -198,7 +201,7 @@ class LocalFileSystem implements FileSystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function unlink($path)
     {

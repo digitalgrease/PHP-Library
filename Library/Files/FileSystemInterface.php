@@ -150,10 +150,10 @@ interface FileSystemInterface
      * @param int    $mode
      * @param bool   $recursive
      * 
-     * @return bool True if the directory is created.
+     * @return bool True if the directory is created or exists.
      *              False if the directory could not be created.
      */
-    public function mkdir($path, $mode = -1, $recursive = false);
+    public function mkdir($path, $mode = 0755, $recursive = false);
     
     /**
      * Create a file with the given content.
