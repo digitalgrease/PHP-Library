@@ -19,6 +19,11 @@ use DigitalGrease\Library\Utils\Stopwatch;
 
 /**
  * Defines an abstract command run from the CLI.
+ * 
+ * DO TG CliCommand Feature: Add options in the form --dfsdf that can take one
+ *  or more arguments.
+ * DO TG CliCommand Feature: Allow an argument to be more than one type, e.g.
+ *  input file or input directory.
  *
  * @author Tom Gray
  * @version 1.0 Monday 16th November 2015
