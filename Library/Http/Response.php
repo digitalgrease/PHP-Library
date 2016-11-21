@@ -23,6 +23,7 @@ use DigitalGrease\Library\Http\Url;
  */
 class Response
 {
+    
     /**
      * Response body.
      * 

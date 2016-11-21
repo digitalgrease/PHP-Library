@@ -26,6 +26,25 @@ class Request
 {
     
     /**
+     * Send a GET request to a URL.
+     * 
+     * @param Url $url
+     * @param Url $referer
+     * @param bool $redirect Recursively follow any redirects.
+     * 
+     * @return Response The response.
+     */
+    public function get(Url $url, Url $referer = null, $redirect = true)
+    {
+        $response = $this->sendRequest($url, $referer);
+        if ($response->isRedirect() && $redirect) {
+            var_dump('Redirecting to '.$response->redirectUrl());
+            $response = $this->sendRequest($response->redirectUrl(), $url);
+        }
+        return $response;
+    }
+    
+    /**
      * Send request.
      * 
      * @param Url $url

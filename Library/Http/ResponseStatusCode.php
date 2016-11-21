@@ -17,6 +17,8 @@ namespace DigitalGrease\Library\Http;
  */
 interface ResponseStatusCode
 {
-    const REDIRECT = 302;
+    const SUCCESS = 200;
     const PERMANENTLY_MOVED = 301;
+    const REDIRECT = 302;
+    const NOT_FOUND = 404;
 }

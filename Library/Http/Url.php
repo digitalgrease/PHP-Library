@@ -17,6 +17,7 @@ namespace DigitalGrease\Library\Http;
  */
 class Url
 {
+    
     /**
      *
      * @var string
@@ -42,6 +43,7 @@ class Url
      */
     public function __construct($url)
     {
+        
         // Extract and remove any protocol from the URL string.
         preg_match('/^[\w]+\:\/+/', $url, $protocol);
         $this->protocol = $protocol ? $protocol[0] : '';

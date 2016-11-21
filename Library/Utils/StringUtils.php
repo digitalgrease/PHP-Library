@@ -13,6 +13,7 @@ namespace DigitalGrease\Library\Utils;
  */
 class StringUtils
 {
+    
     /**
      * Titles that people may use in their names.
      * 
