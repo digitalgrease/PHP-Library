@@ -85,24 +85,29 @@ class StringUtils
             
             if ($isMatch) {
                 
-                // Skip to the start of the attribute value.
-                while (
-                    $string[$i] == '='
-                    || $string[$i] == '"'
-                    || $string[$i] == ' '
-                ) {
-                    ++$i;
+                // Ensure the attribute is indeed an attribute; the key followed
+                // by '=';
+                $tmp = '';
+                while ($string[$i] == '=' || $string[$i] == ' ') {
+                    $tmp = $string[$i++];
                 }
-                
-                $value = $string[$i++];
-                
-                // Build the value until the end of the value is found.
-                while (
-                    $string[$i] != ' '
-                    && $string[$i] != '"'
-                    && $string[$i] != '>'
-                ) {
-                    $value .= $string[$i++];
+                if ('=' == trim($tmp)) {
+
+                    // Skip to the start of the attribute value.
+                    while ($string[$i] == '"' || $string[$i] == ' ') {
+                        ++$i;
+                    }
+
+                    $value = $string[$i++];
+
+                    // Build the value until the end of the value is found.
+                    while (
+                        $string[$i] != ' '
+                        && $string[$i] != '"'
+                        && $string[$i] != '>'
+                    ) {
+                        $value .= $string[$i++];
+                    }
                 }
             }
         }
