@@ -98,13 +98,12 @@ class StringUtils
                         ++$i;
                     }
 
-                    $value = $string[$i++];
-
                     // Build the value until the end of the value is found.
                     while (
                         $string[$i] != ' '
                         && $string[$i] != '"'
                         && $string[$i] != '>'
+                        && $string[$i] != ';'
                     ) {
                         $value .= $string[$i++];
                     }

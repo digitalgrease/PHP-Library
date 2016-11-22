@@ -44,21 +44,41 @@ class Timing
         
         $string = '';
         if ($days) {
-            $string = $days . ' days ';
+            $string = $days . ' day';
+            $string = $this->pluralise($string, $days);
         }
         if ($totalHours) {
-            $string .= $totalHours . ' hours ';
+            $string .= $totalHours . ' hour';
+            $string = $this->pluralise($string, $totalHours);
         }
         if ($totalMins) {
-            $string .= $totalMins . ' mins ';
+            $string .= $totalMins . ' min';
+            $string = $this->pluralise($string, $totalMins);
         }
         if ($totalSeconds) {
-            $string .= $totalSeconds . ' secs ';
+            $string .= $totalSeconds . ' sec';
+            $string = $this->pluralise($string, $totalSeconds);
         }
         if ($microseconds) {
             $string .= $microseconds . ' ms';
         }
         
         return rtrim($string);
+    }
+    
+    /**
+     * Make a component plural where the value is higher than 1.
+     * 
+     * @param string $string
+     * @param int $value
+     * 
+     * @return string
+     */
+    protected function pluralise($string, $value)
+    {
+        if ($value > 1) {
+            return $string .= 's ';
+        }
+        return $string .= ' ';
     }
 }

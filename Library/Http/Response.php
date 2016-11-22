@@ -12,9 +12,11 @@ namespace DigitalGrease\Library\Http;
 
 require_once 'ResponseStatusCode.php';
 require_once 'Url.php';
+require_once __DIR__ . '/../Utils/StringUtils.php';
 
 use DigitalGrease\Library\Http\ResponseStatusCode;
 use DigitalGrease\Library\Http\Url;
+use DigitalGrease\Library\Utils\StringUtils;
 
 /**
  * Represents an HTTP response.
@@ -32,11 +34,23 @@ class Response
     protected $body;
     
     /**
+     *
+     * @var string[]
+     */
+    protected $cookies;
+    
+    /**
      * Response header.
      * 
      * @var string
      */
     protected $header;
+    
+    /**
+     *
+     * @var string[]
+     */
+    protected $headers;
     
     /**
      * URL to redirect to if included in the response.
@@ -67,6 +81,14 @@ class Response
         Url $redirectUrl
     ) {
         $this->header = $header;
+        foreach (explode(PHP_EOL, $header) as $header) {
+            if ($h = trim($header)) {
+                $this->headers[] = $h;
+                if (strtolower(substr($h, 0, 11)) == 'set-cookie:') {
+                    $this->cookies[] = $h;
+                }
+            }
+        }
         $this->body = $body;
         $this->status = $status;
         $this->redirectUrl = $redirectUrl;
@@ -81,6 +103,28 @@ class Response
         return $this->body;
     }
     
+    public function cookie($key)
+    {
+        $value = '';
+        foreach ($this->cookies as $cookie) {
+            $value = StringUtils::getAttributeValue($key, $cookie);
+            if ($value) {
+                break;
+            }
+        }
+        return $value;
+    }
+    
+    /**
+     * 
+     * 
+     * @return string[]
+     */
+    public function cookies()
+    {
+        return $this->cookies;
+    }
+    
     /**
      * 
      * @return string
@@ -88,6 +132,15 @@ class Response
     public function header()
     {
         return $this->header;
+    }
+    
+    /**
+     * 
+     * @return string[]
+     */
+    public function headers()
+    {
+        return $this->headers;
     }
     
     /**
