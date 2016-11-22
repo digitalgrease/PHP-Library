@@ -84,13 +84,24 @@ class StringUtils
             }
             
             if ($isMatch) {
-                // DO TG Implement: Add proper search and error checking here.
-                // Assume that there is a value for the attribute and that there
-                // are no spaces between the attribute, the '=' and the quoted
-                // value.
-                $i = $i + 2;
+                
+                // Skip to the start of the attribute value.
+                while (
+                    $string[$i] == '='
+                    || $string[$i] == '"'
+                    || $string[$i] == ' '
+                ) {
+                    ++$i;
+                }
+                
                 $value = $string[$i++];
-                while ($string[$i] != ' ' && $string[$i] != '"') {
+                
+                // Build the value until the end of the value is found.
+                while (
+                    $string[$i] != ' '
+                    && $string[$i] != '"'
+                    && $string[$i] != '>'
+                ) {
                     $value .= $string[$i++];
                 }
             }
