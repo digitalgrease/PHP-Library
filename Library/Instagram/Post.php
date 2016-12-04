@@ -30,13 +30,19 @@ class Post
     
     protected $isVideo;
     
+    protected $height;
+    
+    protected $width;
+    
     public function __construct(
         $id,
         $date,
         $caption,
         $thumbnailUrl,
         $mediaUrl,
-        $isVideo
+        $isVideo,
+        $width,
+        $height
     ) {
         $this->id = $id;
         $this->date = $date;
@@ -44,6 +50,8 @@ class Post
         $this->thumbnailUrl = $thumbnailUrl;
         $this->mediaUrl = $mediaUrl;
         $this->isVideo = $isVideo;
+        $this->height = $height;
+        $this->width = $width;
     }
     
     public function caption()
@@ -51,8 +59,23 @@ class Post
         return $this->caption;
     }
     
+    public function height()
+    {
+        return $this->height;
+    }
+    
+    public function thumbnailUrl()
+    {
+        return $this->thumbnailUrl;
+    }
+    
     public function url()
     {
         return $this->mediaUrl;
+    }
+    
+    public function width()
+    {
+        return $this->width;
     }
 }

@@ -138,7 +138,9 @@ class InstagramDownloader
                     isset($post->caption) ? $post->caption : '',
                     $post->thumbnail_src,
                     $post->display_src,
-                    $post->is_video
+                    $post->is_video,
+                    $post->dimensions->width,
+                    $post->dimensions->height
                 )
             );
         }
@@ -151,7 +153,9 @@ class InstagramDownloader
                         isset($post->caption) ? $post->caption : '',
                         $post->thumbnail_src,
                         $post->display_src,
-                        $post->is_video
+                        $post->is_video,
+                        $post->dimensions->width,
+                        $post->dimensions->height
                     )
                 );
             }
