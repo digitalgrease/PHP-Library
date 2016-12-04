@@ -46,6 +46,11 @@ class Post
         $this->isVideo = $isVideo;
     }
     
+    public function caption()
+    {
+        return $this->caption;
+    }
+    
     public function url()
     {
         return $this->mediaUrl;
