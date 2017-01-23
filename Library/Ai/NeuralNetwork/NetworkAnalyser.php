@@ -20,5 +20,53 @@ require_once 'AbstractAnalyser.php';
  */
 class NetworkAnalyser extends AbstractAnalyser
 {
-    // DO TG *1 AI: Complete the NetworkAnalyser
+    
+    /**
+     * The network being analysed.
+     * 
+     * @var NetworkInterface
+     */
+    protected $network;
+    
+    /**
+     * The last weights of the network that were recorded.
+     * 
+     * @var array
+     */
+    protected $previousWeights;
+    
+    /**
+     * Construct a network analyser.
+     * 
+     * @param NetworkInterface $network
+     * @param string $outputDir
+     */
+    public function __construct(NetworkInterface $network, $outputDir)
+    {
+        parent::__construct($outputDir);
+        $this->network = $network;
+        $this->previousWeights = $network->weights();
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function generatePlots()
+    {
+        $this->generateAdjustmentsPlot($this->network->weights());
+        $this->generateWeightsPlot($this->network->weights());
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function record($iteration)
+    {
+        $adjustments = $this->compareWeights(
+            $this->previousWeights,
+            $this->network->weights()
+        );
+        $this->recordAdjustments($iteration, $adjustments);
+        $this->recordWeights($iteration, $this->network->weights());
+    }
 }
