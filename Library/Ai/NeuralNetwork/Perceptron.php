@@ -22,14 +22,14 @@ class Perceptron extends Neuron
 {
     
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function activationFunction($input)
     {
         if ($input > 0) {
-            return 1;
+            return [1];
         } else {
-            return 0;
+            return [0];
         }
     }
 }

@@ -3,7 +3,8 @@
 /*
  * Copyright (c) 2016 Digital Grease Limited.
  * 
- * Saturday 2nd April 2016
+ * Version 1.0 Saturday 2nd April 2016
+ * Version 2.0 Tuesday 24th January 2017
  * 
  * Tom Gray
  */
@@ -13,9 +14,10 @@ namespace DigitalGrease\Library\Ai\NeuralNetwork;
 /**
  * API for a neuron in a neural network.
  * 
+ * @version 2.0 Tuesday 24th January 2017
  * @author Tom Gray
  */
-interface NeuronInterface
+interface NeuronInterface extends NetworkInterface
 {
     
     /**
@@ -34,25 +36,6 @@ interface NeuronInterface
     public function computeDelta($error);
     
     /**
-     * Pass inputs through the network and obtain the output.
-     * 
-     * @param array $inputs
-     * 
-     * @return float
-     */
-    public function feedForward(array $inputs);
-    
-    /**
-     * Train this network.
-     * 
-     * @param array $inputs
-     * @param float $output The desired output.
-     * 
-     * @return void
-     */
-    public function train(array $inputs, $output);
-    
-    /**
      * 
      * 
      * @param array $inputs
@@ -64,17 +47,9 @@ interface NeuronInterface
     public function updateWeightsAndBias(array $inputs, $error);
     
     /**
-     * Get the weights of this neuron.
-     * This does not include the bias weight.
+     * Get the weights of this neuron excluding the bias weight.
      * 
      * @return array
      */
-    public function weights();
-    
-    /**
-     * Get the weights of this neuron including the bias weight.
-     * 
-     * @return array
-     */
-    public function weightsWithBias();
+    public function weightsWithoutBias();
 }

@@ -3,7 +3,7 @@
 /*
  * Copyright (c) 2016 Digital Grease Limited.
  * 
- * Thursday 17th March 2016
+ * Version 1.0 Thursday 17th March 2016
  * 
  * Tom Gray
  */
@@ -15,7 +15,7 @@ require_once 'NetworkInterface.php';
 /**
  * An artificial neural network.
  *
- * @version 1.0
+ * @version 1.0 Thursday 17th March 2016
  * @author Tom Gray
  */
 class Network implements NetworkInterface
@@ -60,7 +60,7 @@ class Network implements NetworkInterface
     }
     
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function feedForward(array $inputs)
     {
@@ -77,8 +77,7 @@ class Network implements NetworkInterface
             foreach ($this->neurons[$layer] as $neuron) {
                 
                 //echo 'Firing neuron '.$n.PHP_EOL;
-                
-                $outputs[] = $neuron->feedForward($inputs);
+                $outputs[] = $neuron->feedForward($inputs)[0];
             }
             
             //echo 'Hidden layer #' .$i . ' outputs = '
@@ -95,7 +94,7 @@ class Network implements NetworkInterface
     }
     
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function train(array $inputs, array $outputs)
     {
@@ -131,7 +130,7 @@ class Network implements NetworkInterface
                 // Feed the deltas back through the weights of each neuron and
                 // sum them to get the errors for the previous layer.
                 if ($l) {
-                    foreach ($neuron->weights() as $w => $weight) {
+                    foreach ($neuron->weightsWithoutBias() as $w => $weight) {
                         $layerErrors[$l - 1][$w] = $layerDeltas[$l][$n] * $weight;
                     }
                 }
@@ -152,7 +151,7 @@ class Network implements NetworkInterface
     }
     
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function weights()
     {
@@ -160,9 +159,7 @@ class Network implements NetworkInterface
         
         foreach ($this->neurons as $l => $layer) {
             foreach ($layer as $n => $neuron) {
-                $nw = $neuron->weights();
-                $nw[] = $neuron->bias();
-                $weights[$l][$n] = $nw;
+                $weights[$l][$n] = $neuron->weights();
             }
         }
         

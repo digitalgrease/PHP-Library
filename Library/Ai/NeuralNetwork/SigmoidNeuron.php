@@ -10,8 +10,8 @@
 
 namespace DigitalGrease\Library\Ai\NeuralNetwork;
 
-require_once 'DigitalGrease/Library/Utils/MathUtils.php';
 require_once 'Neuron.php';
+require_once 'DigitalGrease/Library/Utils/MathUtils.php';
 
 use DigitalGrease\Library\Utils\MathUtils;
 
@@ -34,6 +34,6 @@ class SigmoidNeuron extends Neuron
         
         $this->learningRate = max([$gradient, self::DEFAULT_LEARNING_RATE]);
         
-        return $output;
+        return [$output];
     }
 }

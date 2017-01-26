@@ -3,7 +3,8 @@
 /*
  * Copyright (c) 2016 Digital Grease Limited.
  * 
- * Tuesday 5th April 2016
+ * Version 1.0 Tuesday 5th April 2016
+ * Version 2.0 Tuesday 24th January 2017
  * 
  * Tom Gray
  */
@@ -17,7 +18,7 @@ require_once 'NeuronInterface.php';
  * Provides shared functionality for a single neuron in an artificial neural
  * network.
  * 
- * @version 1.0
+ * @version 2.0 Tuesday 24th January 2017
  * @author Tom Gray
  */
 abstract class Neuron implements NeuronInterface
@@ -111,7 +112,7 @@ abstract class Neuron implements NeuronInterface
      * 
      * @param float $input
      * 
-     * @return mixed
+     * @return array
      */
     abstract protected function activationFunction($input);
     
@@ -148,10 +149,10 @@ abstract class Neuron implements NeuronInterface
     /**
      * @inheritDoc
      */
-    public function train(array $inputs, $output)
+    public function train(array $inputs, array $outputs)
     {
         $guess = $this->feedForward($inputs);
-        $error = $output - $guess;
+        $error = $outputs[0] - $guess[0];
         
         $this->updateWeightsAndBias($inputs, $error);
     }
@@ -174,17 +175,17 @@ abstract class Neuron implements NeuronInterface
      */
     public function weights()
     {
-        return $this->weights;
+        $weights = $this->weights;
+        $weights[] = $this->bias;
+        return $weights;
     }
     
     /**
      * @inheritDoc
      */
-    public function weightsWithBias()
+    public function weightsWithoutBias()
     {
-        $weights = $this->weights;
-        $weights[] = $this->bias;
-        return $weights;
+        return $this->weights;
     }
     
     /**

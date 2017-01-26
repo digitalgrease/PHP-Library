@@ -3,7 +3,7 @@
 /*
  * Copyright (c) 2016 Digital Grease Limited.
  * 
- * Thursday 31st March 2016
+ * Version 1.0 Thursday 31st March 2016
  * 
  * Tom Gray
  */
@@ -13,7 +13,7 @@ namespace DigitalGrease\Library\Ai\NeuralNetwork;
 /**
  * API for a neural network.
  * 
- * @version 1.0
+ * @version 1.0 Thursday 31st March 2016
  * @author Tom Gray
  */
 interface NetworkInterface
