@@ -79,13 +79,13 @@ abstract class Neuron implements NeuronInterface
      * Construct a neuron with weights.
      * 
      * @param array $weights
-     * @param float $learningRate
      * @param float $bias
+     * @param float $learningRate
      */
     public function __construct(
         array $weights,
-        $learningRate = self::DEFAULT_LEARNING_RATE,
-        $bias = null
+        $bias = null,
+        $learningRate = self::DEFAULT_LEARNING_RATE
     ) {
         $this->weights = $weights;
         $this->learningRate = $learningRate;

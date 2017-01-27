@@ -164,6 +164,17 @@ interface FileSystemInterface
     public function putContent($dest, $data);
     
     /**
+     * Read a string from the end of a file up to the marker or start of the
+     * file. Excludes the marker.
+     * 
+     * @param string $filePath
+     * @param char $marker
+     * 
+     * @return string
+     */
+    public function readFromEof($filePath, $marker = PHP_EOL);
+    
+    /**
      * Delete a directory and all its contents.
      * 
      * @param string $dir

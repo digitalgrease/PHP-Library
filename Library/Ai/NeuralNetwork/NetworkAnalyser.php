@@ -10,6 +10,10 @@
 
 namespace DigitalGrease\Library\Ai\NeuralNetwork;
 
+require_once 'DigitalGrease/Library/Files/LocalFileSystem.php';
+
+use DigitalGrease\Library\Files\LocalFileSystem;
+
 /**
  * Provides methods to record the state and changes of neural networks as they
  * undergo training and methods to analyse the data to try and determine if they
@@ -28,7 +32,7 @@ class NetworkAnalyser
     const WEIGHTS_DATA_FILENAME = 'weights.dat';
     
     const WEIGHTS_PLOT_FILENAME = 'weights.p';
-    
+
     /**
      * The neural network being analysed.
      * 
@@ -59,6 +63,32 @@ class NetworkAnalyser
     protected $weightsPlotFilePath;
     
     /**
+     * DO TG Comment
+     * 
+     * @param string $inputDir
+     * 
+     * @return array
+     */
+    public static function readWeightsFromData($inputDir)
+    {
+        $fileSystem = new LocalFileSystem();
+        
+        $weights = [];
+        
+        $weightFilenameLength = strlen(self::WEIGHTS_DATA_FILENAME);
+        
+        foreach ($fileSystem->getFileList($inputDir) as $fileName) {
+            if (strstr($fileName, self::WEIGHTS_DATA_FILENAME)) {
+                $i = substr($fileName, $weightFilenameLength);
+                $weight = $fileSystem->readFromEof($inputDir . $fileName, ' ');
+                $weights[$i[0]][$i[1]][$i[2]] = $weight;
+            }
+        }
+        
+        return $weights;
+    }
+    
+    /**
      * Construct a network analyser.
      * 
      * @param NetworkInterface $network
@@ -80,6 +110,8 @@ class NetworkAnalyser
     
     /**
      * Analyse the gradients of the recorded adjustments and weights.
+     * 
+     * @return boolean True if the network is deemed as accurate, false if not.
      */
     public function analyseGradients()
     {

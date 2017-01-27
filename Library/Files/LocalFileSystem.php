@@ -181,6 +181,37 @@ class LocalFileSystem implements FileSystemInterface
     /**
      * @inheritDoc
      */
+    public function readFromEof($filePath, $marker = PHP_EOL)
+    {
+        $string = '';
+        
+        // Open the file at the last character.
+        $fp = fopen($filePath, 'r');
+        $offset = -1;
+        fseek($fp, $offset--, SEEK_END);
+
+        // Remove the trailing newline characters of the file.
+        $char = fgetc($fp);
+        while ($char == PHP_EOL || $char == '\r') {
+            fseek($fp, $offset--, SEEK_END);
+            $char = fgetc($fp);
+        }
+
+        // Read the characters until the start of the file or the marker.
+        while ($char !== false && $char != $marker) {
+            $string = $char . $string;
+            fseek($fp, $offset--, SEEK_END);
+            $char = fgetc($fp);
+        }
+        
+        fclose($fp);
+        
+        return $string;
+    }
+    
+    /**
+     * @inheritDoc
+     */
     public function rmdir($dir)
     {
         foreach ($this->getFileList($dir) as $file) {

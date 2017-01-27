@@ -31,9 +31,33 @@ class Network implements NetworkInterface
     protected $neurons;
     
     /**
+     * Create a network of SigmoidNeurons from an array of weights.
+     * 
+     * @param float[] $weights
+     * 
+     * @return Network
+     */
+    public static function createFromWeights(array $weights)
+    {
+        $network = [];
+        
+        foreach ($weights as $l => $layer) {
+            foreach ($layer as $n => $neuron) {
+                $nWeights = count($neuron) - 1;
+                $network[$l][$n] = new SigmoidNeuron(
+                    array_slice($neuron, 0, $nWeights),
+                    $neuron[$nWeights]
+                );
+            }
+        }
+        
+        return new Network($network);
+    }
+    
+    /**
      * Construct the network.
      * 
-     * @param array $neurons
+     * @param NeuronInterface[] $neurons
      */
     public function __construct(array $neurons)
     {

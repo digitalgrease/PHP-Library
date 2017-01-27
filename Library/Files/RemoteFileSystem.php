@@ -128,33 +128,41 @@ class RemoteFileSystem implements FileSystemInterface
     }
     
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getDetailedFileList($path)
     {
-        $fileList = $this->connection->rawlist($path);
-        if ($fileList) {
-            unset($fileList['.']);
-            unset($fileList['..']);
+        $fileList = [];
+        
+        $files = $this->connection->rawlist($path);
+        if ($files) {
+            unset($files['.']);
+            unset($files['..']);
+            $fileList = $files;
         }
+        
         return $fileList;
     }
     
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getFileList($path)
     {
-        $fileList = $this->connection->nlist($path);
-        if ($fileList) {
-            unset($fileList[array_search('.', $fileList)]);
-            unset($fileList[array_search('..', $fileList)]);
+        $fileList = [];
+        
+        $files = $this->connection->nlist($path);
+        if ($files) {
+            unset($files[array_search('.', $files)]);
+            unset($files[array_search('..', $files)]);
+            $fileList = $files;
         }
+        
         return $fileList;
     }
     
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getModifiedFiles($directory, $startTime, $endTime)
     {
@@ -224,6 +232,14 @@ class RemoteFileSystem implements FileSystemInterface
     public function putFile($src, $dest)
     {
         return $this->connection->put($dest, $src, self::NET_SFTP_LOCAL_FILE);
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function readFromEof($filePath, $marker = PHP_EOL)
+    {
+        throw new \Exception('To be implemented!');
     }
     
     /**
