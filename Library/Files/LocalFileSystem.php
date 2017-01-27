@@ -39,10 +39,10 @@ class LocalFileSystem implements FileSystemInterface
      */
     public function getDetailedFileList($path)
     {
-        $files = $this->getFileList($path);
+        $fileList = [];
         
+        $files = $this->getFileList($path);
         if ($files) {
-            $fileList = [];
             
             foreach ($files as $filename) {
                 $file = $path . $filename;
@@ -85,11 +85,15 @@ class LocalFileSystem implements FileSystemInterface
      */
     public function getFileList($path)
     {
+        $fileList = [];
+        
         $path = rtrim($path, '/') . '/';
-        $fileList = scandir($path);
-        if ($fileList) {
-            $fileList = array_diff($fileList, ['.', '..']);
+        
+        $files = scandir($path);
+        if ($files) {
+            $fileList = array_diff($files, ['.', '..']);
         }
+        
         return $fileList;
     }
 

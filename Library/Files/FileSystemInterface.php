@@ -69,8 +69,8 @@ interface FileSystemInterface
      * 
      * @param string $path
      * 
-     * @return array|bool Associative array of associative arrays where the keys
-     *  of the outer array are an unordered list of file and directory names not
+     * @return array Associative array of associative arrays where the keys of
+     *  the outer array are an unordered list of file and directory names not
      *  including '.' and '..'. Each inner array contains the following keys:
      *      'size' => (int) The size of the file in bytes.
      *      'uid' => (int) The user ID of the file owner.
@@ -81,7 +81,6 @@ interface FileSystemInterface
      *                      file.
      *      'atime' => (int) The time the file was last accessed.
      *      'mtime' => (int) The time the file was last modified.
-     *  False if the path does not exist.
      */
     public function getDetailedFileList($path);
     
@@ -90,9 +89,8 @@ interface FileSystemInterface
      * 
      * @param string $path
      * 
-     * @return array|bool Array of strings which is an unordered list of file
-     *                    and directory names not including '.' and '..'.
-     *                    False if the path does not exist.
+     * @return array Array of strings which is an unordered list of file and
+     *  directory names not including '.' and '..'.
      */
     public function getFileList($path);
     
