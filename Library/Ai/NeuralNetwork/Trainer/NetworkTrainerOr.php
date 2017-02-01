@@ -93,7 +93,7 @@ class NetworkTrainerOr extends AbstractBinaryNetworkTrainer
                 }
             }
             
-            if ($analyser) $analyser->record($i);
+            if ($analyser) $analyser->record();
         }
     }
 }

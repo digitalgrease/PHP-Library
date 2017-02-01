@@ -11,6 +11,7 @@
 namespace DigitalGrease\Library\Ai\NeuralNetwork;
 
 require_once 'NetworkInterface.php';
+require_once 'SigmoidNeuron.php';
 
 /**
  * An artificial neural network.

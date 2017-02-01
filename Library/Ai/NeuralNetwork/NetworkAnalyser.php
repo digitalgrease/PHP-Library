@@ -32,6 +32,13 @@ class NetworkAnalyser
     const WEIGHTS_DATA_FILENAME = 'weights.dat';
     
     const WEIGHTS_PLOT_FILENAME = 'weights.p';
+    
+    /**
+     * 
+     *
+     * @var FileSystemInterface
+     */
+    protected $fileSystem;
 
     /**
      * The neural network being analysed.
@@ -41,18 +48,33 @@ class NetworkAnalyser
     protected $network;
     
     /**
-     * The last weights of the network that were recorded.
-     * 
-     * @var array
-     */
-    protected $previousWeights;
-    
-    /**
      * Directory to store the output in.
      * 
      * @var string
      */
     protected $outputDir;
+    
+    /**
+     * Flag that defines whether to overwrite existing data in the output
+     * directory or append to it.
+     * 
+     * @var boolean
+     */
+    protected $overwrite;
+    
+    /**
+     * 
+     * 
+     * @var int
+     */
+    protected $currentIteration = 0;
+    
+    /**
+     * The last weights of the network that were recorded.
+     * 
+     * @var array
+     */
+    protected $previousWeights;
     
     protected $adjustmentsDataFilePath;
     
@@ -61,6 +83,26 @@ class NetworkAnalyser
     protected $weightsDataFilePath;
     
     protected $weightsPlotFilePath;
+    
+    /**
+     * DO TG Comment
+     * 
+     * @param string $inputDir
+     * 
+     * @return NetworkAnalyser|null
+     */
+    public static function createFromData($inputDir, $overwrite = false)
+    {
+        $analyser = null;
+        $weights = self::readWeightsFromData($inputDir);
+        
+        if ($weights) {
+            $network = Network::createFromWeights($weights);
+            $analyser = new NetworkAnalyser($network, $inputDir, $overwrite);
+        }
+        
+        return $analyser;
+    }
     
     /**
      * DO TG Comment
@@ -93,29 +135,49 @@ class NetworkAnalyser
      * 
      * @param NetworkInterface $network
      * @param string $outputDir
+     * @param boolean $overwrite
      */
-    public function __construct(NetworkInterface $network, $outputDir)
-    {
+    public function __construct(
+        NetworkInterface $network,
+        $outputDir,
+        $overwrite = true
+    ) {
         $this->network = $network;
         $this->previousWeights = $network->weights();
         
+        $this->fileSystem = new LocalFileSystem();
         $this->outputDir = $outputDir;
+        $this->overwrite = $overwrite;
+        
         $this->adjustmentsDataFilePath = $outputDir
             . self::ADJUSTMENTS_DATA_FILENAME;
         $this->adjustmentsPlotFilePath = $outputDir
             . self::ADJUSTMENTS_PLOT_FILENAME;
         $this->weightsDataFilePath = $outputDir . self::WEIGHTS_DATA_FILENAME;
         $this->weightsPlotFilePath = $outputDir . self::WEIGHTS_PLOT_FILENAME;
+        
+        $this->initialiseCurrentIteration();
+        
+        // Record starting weights.
+        if (0 == $this->currentIteration) {
+            $this->removeDataFiles();
+            $this->recordData(
+                $this->network->weights(),
+                $this->weightsDataFilePath
+            );
+        }
     }
     
     /**
      * Analyse the gradients of the recorded adjustments and weights.
      * 
-     * @return boolean True if the network is deemed as accurate, false if not.
+     * @return boolean True if the network is deemed as accurate, false if not?
      */
     public function analyseGradients()
     {
         // DO TG 1 Implement: Create this method to analyse the gradients.
+        // Analyse gradients from the beginning to see how training is
+        // progressing?
     }
     
     /**
@@ -130,20 +192,34 @@ class NetworkAnalyser
     }
     
     /**
-     * Record the current state of the network for analysis.
+     * Get the network being analysed.
      * 
-     * @param int $iteration
+     * @return NetworkInterface
+     */
+    public function getNetwork()
+    {
+        return $this->network;
+    }
+    
+    /**
+     * Record the current state of the network for analysis.
      * 
      * @return void
      */
-    public function record($iteration)
+    public function record()
     {
+        ++$this->currentIteration;
+        
         $adjustments = $this->compareWeights(
             $this->previousWeights,
             $this->network->weights()
         );
-        $this->recordAdjustments($iteration, $adjustments);
-        $this->recordWeights($iteration, $this->network->weights());
+        
+        $this->recordData($adjustments, $this->adjustmentsDataFilePath);
+        $this->recordData(
+            $this->network->weights(),
+            $this->weightsDataFilePath
+        );
     }
     
     /**
@@ -266,92 +342,67 @@ class NetworkAnalyser
     }
     
     /**
-     * Write the last weight adjustments to file.
+     * DO TG Comment
+     */
+    protected final function initialiseCurrentIteration()
+    {
+        $filePath = $this->weightsDataFilePath . '000';
+        if (!$this->overwrite && $this->fileSystem->isFile($filePath)) {
+            $lastLine = $this->fileSystem->readFromEof($filePath);
+            $this->currentIteration = strstr(
+                $lastLine, ' ',
+                $before_needle = true
+            );
+        }
+    }
+    
+    /**
+     * DO TG Comment
      * 
-     * @param int $iteration The current training iteration.
-     * @param array $adjustments
+     * @param array $data
+     * @param string $filePath
      * 
      * @return void
      */
-    protected function recordAdjustments($iteration, array $adjustments)
+    protected function recordData(array $data, $filePath)
     {
-        if ($iteration) {
-            $mode = 'a';
-        } else {
-            $mode = 'w';
-        }
-        
-        foreach ($adjustments as $l => $layer) {
+        foreach ($data as $l => $layer) {
             
             if (is_array($layer)) {
                 
-                // Record adjustments of a network.
+                // Record weights of a multiple neuron network.
                 foreach ($layer as $n => $neuron) {
-                    foreach ($neuron as $a => $adjustment) {
-                        $file = fopen(
-                            $this->adjustmentsDataFilePath . $l . $n . $a,
-                            $mode
+                    foreach ($neuron as $w => $weight) {
+                        $file = fopen($filePath . $l . $n . $w, 'a');
+                        fwrite(
+                            $file,
+                            $this->currentIteration . ' ' . $weight . PHP_EOL
                         );
-                        fwrite($file, $iteration . ' ' . $adjustment . PHP_EOL);
                         fclose($file);
                     }
                 }
             } else {
                 
-                // Record adjustments of a neuron.
-                $file = fopen(
-                    $this->adjustmentsDataFilePath . $l,
-                    $mode
-                );
-                fwrite($file, $iteration . ' ' . $layer . PHP_EOL);
+                // Record weights of a single neuron network.
+                $file = fopen($filePath . $l, 'a');
+                fwrite($file, $this->currentIteration . ' ' . $layer . PHP_EOL);
                 fclose($file);
             }
         }
     }
     
     /**
-     * Write the current weights to file.
+     * DO TG Comment
      * 
-     * @param int $iteration The current training iteration.
-     * @param array $weights
-     * 
-     * @return array The weights recorded.
+     * @return void
      */
-    protected function recordWeights($iteration, array $weights)
+    protected function removeDataFiles()
     {
-        if ($iteration) {
-            $mode = 'a';
-        } else {
-            $mode = 'w';
+        if ($this->fileSystem->isFile($this->adjustmentsDataFilePath)) {
+            $this->fileSystem->unlink($this->adjustmentsDataFilePath);
         }
-        
-        foreach ($weights as $l => $layer) {
-            
-            if (is_array($layer)) {
-                
-                // Record weights of a network.
-                foreach ($layer as $n => $neuron) {
-                    foreach ($neuron as $w => $weight) {
-                        $file = fopen(
-                            $this->weightsDataFilePath . $l . $n . $w,
-                            $mode
-                        );
-                        fwrite($file, $iteration . ' ' . $weight . PHP_EOL);
-                        fclose($file);
-                    }
-                }
-            } else {
-                
-                // Record weights of a neuron.
-                $file = fopen(
-                    $this->weightsDataFilePath . $l,
-                    $mode
-                );
-                fwrite($file, $iteration . ' ' . $layer . PHP_EOL);
-                fclose($file);
-            }
+        if ($this->fileSystem->isFile($this->weightsDataFilePath)) {
+            $this->fileSystem->unlink($this->weightsDataFilePath);
         }
-        
-        return $weights;
     }
 }

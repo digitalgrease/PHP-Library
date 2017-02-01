@@ -30,6 +30,13 @@ interface NetworkTrainerInterface
     const MAX_NUM_OF_TRAINING_ITERATIONS = 100000;
     
     /**
+     * Get log messages from the trainer.
+     * 
+     * @return string[]
+     */
+    public function getLog();
+    
+    /**
      * Test the accuracy of a network at guessing output.
      * 
      * @param NetworkInterface $network
