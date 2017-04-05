@@ -336,6 +336,9 @@ class StringUtils
      */
     public function isDigits($str, $length = null)
     {
+        // DO TG StringUtils: Improvement? Compare regexes.
+//        if (!preg_match('/^\d+$/', $year) || strlen($year) != 4) {
+        
         $regex = '/^[0-9]';
         if ($length) {
             $regex .= '{'.$length.'}';
