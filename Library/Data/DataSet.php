@@ -455,6 +455,32 @@ class DataSet
     }
     
     /** DO TG DataSet: Complete and create tests.
+     * Remove any rows where a column contains a value.
+     * 
+     * DO TG Feature: Remove rows on multiple criteria.
+     * DO TG Improvement: Trim comparisons?
+     * DO TG Improvement: Ignore case on comparisons?
+     * 
+     * @param int|string $column
+     * @param mixed $value
+     * 
+     * @return DataSet This dataset to allow method chaining.
+     * 
+     * @throws \InvalidArgumentException|\Exception
+     */
+    public function removeRows($column, $value)
+    {
+        if ($this->isValidColumn($column)) {
+            foreach ($this->data as $index => &$row) {
+                if ($row[$column] === $value) {
+                    unset($this->data[$index]);
+                }
+            }
+        }
+        return $this;
+    }
+
+    /** DO TG DataSet: Complete and create tests.
      * Add a prefix to all values, or just occurrences of a specified value, in
      * a column.
      * 
@@ -691,26 +717,6 @@ function removeField(array $data, $field)
         unset($row[$field]);
     }
     return $data;
-}
-
-/**
- * Remove any rows where the field contains the value.
- * DO TG Feature: Remove rows on multiple criteria
- * 
- * @param array  $data
- * @param string $field
- * @param mixed  $value
- * 
- * @return array
- */
-function removeRows(array $data, $field, $value)
-{
-    foreach ($data as $index => &$row) {
-        if ($row[$field] == $value) {
-            unset($data[$index]);
-        }
-    }
-    return array_values($data);
 }
 
 /**
