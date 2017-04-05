@@ -91,7 +91,7 @@ class DataSet2DatabaseMapping
                     
                     if ($rowContainsData) {
                         $primaryKeys[$mapping['reference']][$iRow] =
-                            $db->insert($mapping['table'], [$data]);
+                            $db->insertUpdate($mapping['table'], [$data]);
                     } else {
                         $primaryKeys[$mapping['reference']][$iRow] = null;
                     }
@@ -127,7 +127,7 @@ class DataSet2DatabaseMapping
                     
                     if ($rowContainsData) {
                         $primaryKeys[$mapping['reference']][$iRow] =
-                            $db->insert($mapping['table'], [$data]);
+                            $db->insertUpdate($mapping['table'], [$data]);
                     } else {
                         $primaryKeys[$mapping['reference']][$iRow] = null;
                     }
@@ -140,7 +140,7 @@ class DataSet2DatabaseMapping
                 foreach ($mapping['fields'] as $field => $value) {
                     $data[$field] = $value;
                 }
-                $primaryKeys[$mapping['reference']][0] = $db->insert($mapping['table'], [$data]);
+                $primaryKeys[$mapping['reference']][0] = $db->insertUpdate($mapping['table'], [$data]);
             }
         }
         
