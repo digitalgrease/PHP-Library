@@ -455,6 +455,26 @@ class DataSet
     }
     
     /** DO TG DataSet: Complete and create tests.
+     * Multiply all the values in a column by a multiplier.
+     * 
+     * @param int|string $column
+     * @param int|float $multiplier
+     * 
+     * @return DataSet
+     * 
+     * @throws \InvalidArgumentException|\Exception
+     */
+    public function multiplyValues($column, $multiplier)
+    {
+        if ($this->isValidColumn($column)) {
+            foreach ($this->data as $index => &$row) {
+                $row[$column] *= $multiplier;
+            }
+        }
+        return $this;
+    }
+    
+    /** DO TG DataSet: Complete and create tests.
      * Remove any rows where a column contains a value.
      * 
      * DO TG Feature: Remove rows on multiple criteria.
