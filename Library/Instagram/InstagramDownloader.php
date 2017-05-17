@@ -78,7 +78,14 @@ class InstagramDownloader
             '<script',
             '</script>'
         );
-        $data = json_decode(substr(substr($scriptTags[7], 52), 0, -10));
+        
+//        foreach ($scriptTags as $index => $block) {
+//            echo 'BLOCK ' . $index . PHP_EOL;
+//            echo $block . PHP_EOL . PHP_EOL;
+//        }
+//        die;
+        
+        $data = json_decode(substr(substr($scriptTags[4], 52), 0, -10));
 //        file_put_contents(
 //            $this->outputDirectory . '01-data.txt',
 //            print_r($data, true)
@@ -114,6 +121,8 @@ class InstagramDownloader
     
     protected function getUserData(Response $response)
     {
+//        echo $response->body() . PHP_EOL . PHP_EOL;
+        
         $data = $this->extractJsonData($response->body());
         $additionalPosts = $this->getAdditionalPosts($response, $data);
         
