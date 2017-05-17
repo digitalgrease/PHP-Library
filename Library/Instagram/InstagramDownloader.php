@@ -5,7 +5,7 @@
  * 
  * Tuesday 25th October 2016
  * 
- * @author Tom Gray
+ * Tom Gray
  */
 
 namespace DigitalGrease\Library\Instagram;
@@ -26,6 +26,10 @@ use DigitalGrease\Library\Utils\StringUtils;
 
 /**
  * Download an Instagram user's profile data and images.
+ * 
+ * DO TG Bug Fix: The last 12 image links are downloaded twice!
+ * DO TG Improvement: Ensure that the data has been acquired correctly before
+ *  overwriting any existing data to ensure no data loss.
  * 
  * @author Tom Gray
  */
