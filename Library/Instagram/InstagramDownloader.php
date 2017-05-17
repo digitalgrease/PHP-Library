@@ -28,6 +28,8 @@ use DigitalGrease\Library\Utils\StringUtils;
  * Download an Instagram user's profile data and images.
  * 
  * DO TG Bug Fix: The last 12 image links are downloaded twice!
+ * DO TG Improvement: Select the correct javascript block with the required JSON
+ *  programmatically.
  * DO TG Improvement: Ensure that the data has been acquired correctly before
  *  overwriting any existing data to ensure no data loss.
  * 
