@@ -31,6 +31,8 @@ use DigitalGrease\Library\Utils\Stopwatch;
 abstract class Command extends Controller
 {
     
+    const LOCK_FILE_NAME = 'lock.tmp';
+    
     /**
      * Times the total running time of this command.
      * 
@@ -191,6 +193,25 @@ abstract class Command extends Controller
     }
     
     /**
+     * Create a lock file that controls execution.
+     * 
+     * @return void
+     * 
+     * @throws \Exception
+     */
+    protected function createLockFile()
+    {
+        $this->println('Creating lock file...', false);
+        
+        if (touch(self::LOCK_FILE_NAME)) {
+            $this->println('done');
+        } else {
+            $this->println('error');
+            throw new \Exception('Could not create lock file!');
+        }
+    }
+    
+    /**
      * Display the command help.
      * 
      * @param string $commandPath The first command line argument that is the
@@ -287,6 +308,24 @@ abstract class Command extends Controller
     }
     
     /**
+     * Check whether a lock file exists.
+     * 
+     * @return boolean
+     */
+    protected function lockFileExists()
+    {
+        $isLockFile = is_file(self::LOCK_FILE_NAME);
+        
+        if ($isLockFile) {
+            $this->println('Lock file exists');
+        } else {
+            $this->println('Lock file removed');
+        }
+        
+        return $isLockFile;
+    }
+    
+    /**
      * Get the maximum number of arguments this command accepts.
      * 
      * @return int
@@ -298,6 +337,19 @@ abstract class Command extends Controller
             ++$maxNumberOfArgs;
         }
         return $maxNumberOfArgs;
+    }
+    
+    /**
+     * Remove the lock file if it exists.
+     * 
+     * @return void
+     */
+    protected function removeLockFile()
+    {
+        if (is_file(self::LOCK_FILE_NAME)) {
+            unlink(self::LOCK_FILE_NAME);
+            $this->println('Lock file removed');
+        }
     }
     
     /**

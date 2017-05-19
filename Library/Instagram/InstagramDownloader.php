@@ -5,7 +5,7 @@
  * 
  * Tuesday 25th October 2016
  * 
- * @author Tom Gray
+ * Tom Gray
  */
 
 namespace DigitalGrease\Library\Instagram;
@@ -26,6 +26,12 @@ use DigitalGrease\Library\Utils\StringUtils;
 
 /**
  * Download an Instagram user's profile data and images.
+ * 
+ * DO TG Bug Fix: The last 12 image links are downloaded twice!
+ * DO TG Improvement: Select the correct javascript block with the required JSON
+ *  programmatically.
+ * DO TG Improvement: Ensure that the data has been acquired correctly before
+ *  overwriting any existing data to ensure no data loss.
  * 
  * @author Tom Gray
  */
@@ -78,7 +84,14 @@ class InstagramDownloader
             '<script',
             '</script>'
         );
-        $data = json_decode(substr(substr($scriptTags[7], 52), 0, -10));
+        
+//        foreach ($scriptTags as $index => $block) {
+//            echo 'BLOCK ' . $index . PHP_EOL;
+//            echo $block . PHP_EOL . PHP_EOL;
+//        }
+//        die;
+        
+        $data = json_decode(substr(substr($scriptTags[4], 52), 0, -10));
 //        file_put_contents(
 //            $this->outputDirectory . '01-data.txt',
 //            print_r($data, true)
@@ -114,6 +127,8 @@ class InstagramDownloader
     
     protected function getUserData(Response $response)
     {
+//        echo $response->body() . PHP_EOL . PHP_EOL;
+        
         $data = $this->extractJsonData($response->body());
         $additionalPosts = $this->getAdditionalPosts($response, $data);
         
