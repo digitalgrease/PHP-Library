@@ -158,8 +158,7 @@ class Parameter
                 $isValid = is_file($value);
                 break;
             case ParameterType::INPUT_DIR:
-                $isValid = is_dir($value)
-                    || RemoteFileSystem::isRemoteHostPath($value);
+                $isValid = $this->isValidInputDir($value);
                 break;
             case ParameterType::URL:
                 // DO TG Feature: URL validation
@@ -209,6 +208,9 @@ class Parameter
                     $isValid = true;
                 }
                 break;
+            case ParameterType::INPUT_FILE_DIR:
+                $isValid = is_file($value) || $this->isValidInputDir($value);
+                break;
             default:
                 throw new \Exception(
                     'Unrecognised parameter type in Parameter.php.'
@@ -236,5 +238,17 @@ class Parameter
         
         $this->value = $value;
         return $this;
+    }
+    
+    /**
+     * Get whether an argument is a valid input directory.
+     * 
+     * @param string $value
+     * 
+     * @return boolean
+     */
+    protected function isValidInputDir($value)
+    {
+        return is_dir($value) || RemoteFileSystem::isRemoteHostPath($value);
     }
 }

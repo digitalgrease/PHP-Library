@@ -96,4 +96,11 @@ class ParameterType
      * @var int
      */
     const DATE_TIME = 11;
+    
+    /**
+     * The argument must be a valid file or directory.
+     * 
+     * @var int
+     */
+    const INPUT_FILE_DIR = 12;
 }
