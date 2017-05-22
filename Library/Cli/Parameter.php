@@ -96,7 +96,8 @@ class Parameter
                 . $name . '" is invalid'
             );
         } else {
-            $this->value = $this->defaultValue = $defaultValue;
+            $this->setValue($defaultValue);
+            $this->defaultValue = $this->value;
         }
     }
     
@@ -233,6 +234,11 @@ class Parameter
             case ParameterType::INPUT_DIR:
             case ParameterType::OUTPUT_DIR:
                 $value = rtrim($value, '/').'/';
+                break;
+            case ParameterType::INPUT_FILE_DIR:
+                if ($this->isValidInputDir($value)) {
+                    $value = rtrim($value, '/').'/';
+                }
                 break;
         }
         
