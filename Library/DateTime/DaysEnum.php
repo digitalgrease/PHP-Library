@@ -17,7 +17,7 @@ namespace DigitalGrease\Library\DateTime;
  * 
  * @author Tom Gray
  */
-interface DaysEnum
+class DaysEnum
 {
     
     /**
@@ -68,4 +68,29 @@ interface DaysEnum
      * @var int
      */
     const SUN = 7;
+    
+    /**
+     * The days of the week.
+     *
+     * @var string[]
+     */
+    protected static $names = [
+        self::MON => 'Monday',
+        self::TUE => 'Tuesday',
+        self::WED => 'Wednesday',
+        self::THU => 'Thursday',
+        self::FRI => 'Friday',
+        self::SAT => 'Saturday',
+        self::SUN => 'Sunday'
+    ];
+    
+    /**
+     * Get the names of the days of the week.
+     * 
+     * @return string[]
+     */
+    public static function getNames()
+    {
+        return self::$names;
+    }
 }
