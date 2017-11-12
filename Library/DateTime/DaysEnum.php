@@ -85,6 +85,21 @@ class DaysEnum
     ];
     
     /**
+     * The ISO-8601 numeric values that represent the days of the week.
+     *
+     * @var int[]
+     */
+    protected static $values = [
+        'Monday' => self::MON,
+        'Tuesday' => self::TUE,
+        'Wednesday' => self::WED,
+        'Thursday' => self::THU,
+        'Friday' => self::FRI,
+        'Saturday' => self::SAT,
+        'Sunday' => self::SUN
+    ];
+    
+    /**
      * Get the names of the days of the week.
      * 
      * @return string[]
@@ -92,5 +107,15 @@ class DaysEnum
     public static function getNames()
     {
         return self::$names;
+    }
+    
+    /**
+     * Get the ISO-8601 numeric values that represent the days of the week.
+     * 
+     * @return int[]
+     */
+    public static function getValues()
+    {
+        return self::$values;
     }
 }
