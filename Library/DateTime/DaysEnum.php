@@ -118,4 +118,17 @@ class DaysEnum
     {
         return self::$values;
     }
+    
+    /**
+     * Get whether a date is a week day.
+     * 
+     * @param \DateTime $date
+     * 
+     * @return boolean
+     */
+    public static function isWeekDay(\DateTime $date)
+    {
+        return $date->format('N') >= self::MON
+            && $date->format('N') <= self::FRI;
+    }
 }
