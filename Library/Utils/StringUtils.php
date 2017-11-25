@@ -366,6 +366,40 @@ class StringUtils
     }
     
     /**
+     * Converts a string (sentence) that contains a web address into an HTML
+     * anchor. If there is no web address then this just returns the original
+     * string.
+     * 
+     * @param string $string
+     * 
+     * @return string
+     */
+    public static function toLink($string)
+    {
+        $words = [];
+        $href = '';
+        foreach (explode(' ', $string) as $word) {
+            if (substr($word, 0, 4) == 'http') {
+                $href = $word;
+            } else {
+                $words[] = $word;
+            }
+        }
+        
+        if ($href && $words) {
+            $link = '<a href="' . $href . '" target="_blank">'
+                . implode(' ', $words) . '</a>';
+        } elseif ($href) {
+            $link = '<a href="' . $href . '" target="_blank">'
+                . $href . '</a>';
+        } else {
+            $link = $string;
+        }
+        
+        return $link;
+    }
+    
+    /**
      * Format the given date time as a UK date string.
      * 
      * @param \DateTime $dateTime
