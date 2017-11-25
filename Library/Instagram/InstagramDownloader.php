@@ -26,38 +26,72 @@ use DigitalGrease\Library\Utils\StringUtils;
 
 /**
  * Download an Instagram user's profile data and images.
- * 
+ *
  * DO TG Bug Fix: The last 12 image links are downloaded twice!
- * DO TG Improvement: Select the correct javascript block with the required JSON
- *  programmatically.
- * DO TG Improvement: Ensure that the data has been acquired correctly before
- *  overwriting any existing data to ensure no data loss.
- * 
+ *
  * @author Tom Gray
  */
 class InstagramDownloader
 {
     
+    /**
+     * 
+     * @var string
+     */
     const URL = 'https://www.instagram.com/';
     
+    /**
+     * 
+     * @var string
+     */
     const QUERY_URL = 'https://www.instagram.com/query/';
     
+    /**
+     * The Instagram profile downloaded.
+     *
+     * @var Profile
+     */
     protected $profile;
     
+    /**
+     *
+     * @var string
+     */
     protected $error;
     
+    /**
+     * The username of the profile being downloaded.
+     *
+     * @var string
+     */
     protected $username;
     
+    /**
+     * Construct the downloader.
+     */
     public function __construct()
     {
         $this->error = '';
     }
     
+    /**
+     * Get the last error message.
+     * 
+     * @return string
+     */
     public function error()
     {
         return $this->error;
     }
     
+    /**
+     * Get the Instagram profile for a username.
+     * The main method to run the downloader.
+     * 
+     * @param string $username
+     * 
+     * @return Profile|null
+     */
     public function getProfile($username)
     {
         $this->username = $username;
@@ -66,6 +100,8 @@ class InstagramDownloader
         $url = new Url(self::URL . $this->username . '/');
         $request = new Request();
         $response = $request->get($url);
+        
+//        echo $response->body() . PHP_EOL . PHP_EOL;die;
         
         if ($response->status() == ResponseStatusCode::SUCCESS) {
             $this->profile = $this->getUserData($response);
@@ -77,6 +113,15 @@ class InstagramDownloader
         return $this->profile;
     }
     
+    /**
+     * Helper method to extract the JSON profile information from the profile
+     * page HTML.
+     * 
+     * @param string $html
+     * 
+     * @return stdClass|null Returns null if the JSON data cannot be found or
+     *  decoded correctly.
+     */
     protected function extractJsonData($html)
     {
         $scriptTags = StringUtils::getBlocks(
@@ -85,28 +130,45 @@ class InstagramDownloader
             '</script>'
         );
         
-//        foreach ($scriptTags as $index => $block) {
-//            echo 'BLOCK ' . $index . PHP_EOL;
-//            echo $block . PHP_EOL . PHP_EOL;
-//        }
-//        die;
+        foreach ($scriptTags as $index => $block) {
+            $jsonString = substr(substr($block, 52), 0, -10);
+            $data = json_decode($jsonString);
+            
+            // Output data for debugging.
+//            echo PHP_EOL . 'BLOCK ' . $index . PHP_EOL . $block . PHP_EOL;
+//            echo $jsonString;
+//            var_dump($data);
+            
+            if ($data) {
+                return $data;
+            }
+        }
         
-        $data = json_decode(substr(substr($scriptTags[4], 52), 0, -10));
-//        file_put_contents(
-//            $this->outputDirectory . '01-data.txt',
-//            print_r($data, true)
-//        );
-        return $data;
+        $this->error = 'JSON profile data could not be extracted';
+        return null;
     }
     
-    protected function getAdditionalPosts(Response $response, $data)
-    {
+    /**
+     * Only the most recent posts are provided on page load. Remaining posts
+     * have to be queried for. This method makes a call to retrieve all
+     * additional posts.
+     *
+     * @param Response $response
+     * @param stdClass $data
+     * @param Profile $profile
+     * 
+     * @return Profile
+     */
+    protected function getAdditionalPosts(
+        Response $response,
+        $data,
+        Profile $profile
+    ) {
         $totalPosts = $data->entry_data->ProfilePage[0]->user->media->count;
         $nCurrentPosts = count(
             $data->entry_data->ProfilePage[0]->user->media->nodes
         );
         
-        $posts = null;
         if ($nCurrentPosts < $totalPosts) {
             $posts = $this->queryForPosts(
                 $data->entry_data->ProfilePage[0]->user->id,
@@ -117,50 +179,55 @@ class InstagramDownloader
                 $response->cookie('csrftoken'),
                 $response->cookie('s_network')
             );
-//            file_put_contents(
-//                $this->outputDirectory . '02-additional-posts.txt',
-//                print_r($posts, true)
-//            );
+            
+            if ($posts) {
+                foreach ($posts->media->nodes as $post) {
+                    $profile->addPost(
+                        new Post(
+                            $post->id,
+                            $post->date,
+                            isset($post->caption) ? $post->caption : '',
+                            $post->thumbnail_src,
+                            $post->display_src,
+                            $post->is_video,
+                            $post->dimensions->width,
+                            $post->dimensions->height
+                        )
+                    );
+                }
+            }
         }
-        return $posts;
+        
+        return $profile;
     }
     
+    /**
+     * Helper method to extract the profile data from a valid response.
+     *
+     * @param Response $response
+     * 
+     * @return Profile|null Returns null if the data could not be extracted and
+     *  a profile object constructed.
+     */
     protected function getUserData(Response $response)
     {
-//        echo $response->body() . PHP_EOL . PHP_EOL;
-        
         $data = $this->extractJsonData($response->body());
-        $additionalPosts = $this->getAdditionalPosts($response, $data);
         
-        $userData = $data->entry_data->ProfilePage[0]->user;
-        $profile = new Profile(
-            $userData->id,
-            $userData->username,
-            $userData->full_name,
-            $userData->biography,
-            $userData->connected_fb_page,
-            $userData->follows,
-            $userData->followed_by,
-            $userData->external_url,
-            isset($userData->profile_pic_url_hd) ? $userData->profile_pic_url_hd : ''
-        );
-        
-        foreach ($userData->media->nodes as $post) {
-            $profile->addPost(
-                new Post(
-                    $post->id,
-                    $post->date,
-                    isset($post->caption) ? $post->caption : '',
-                    $post->thumbnail_src,
-                    $post->display_src,
-                    $post->is_video,
-                    $post->dimensions->width,
-                    $post->dimensions->height
-                )
+        if ($data) {
+            $userData = $data->entry_data->ProfilePage[0]->user;
+            $profile = new Profile(
+                $userData->id,
+                $userData->username,
+                $userData->full_name,
+                $userData->biography,
+                $userData->connected_fb_page,
+                $userData->follows,
+                $userData->followed_by,
+                $userData->external_url,
+                isset($userData->profile_pic_url_hd) ? $userData->profile_pic_url_hd : ''
             );
-        }
-        if ($additionalPosts) {
-            foreach ($additionalPosts->media->nodes as $post) {
+
+            foreach ($userData->media->nodes as $post) {
                 $profile->addPost(
                     new Post(
                         $post->id,
@@ -174,11 +241,26 @@ class InstagramDownloader
                     )
                 );
             }
+            
+            return $this->getAdditionalPosts($response, $data, $profile);
         }
         
-        return $profile;
+        return null;
     }
 
+    /**
+     * Perform a web request to obtain additional user posts.
+     *
+     * @param type $userId
+     * @param type $lastCurrentPostId
+     * @param type $numberOfPosts
+     * @param type $mid
+     * @param type $sessionid
+     * @param type $csrftoken
+     * @param type $s_network
+     * 
+     * @return stdClass
+     */
     protected function queryForPosts(
         $userId,
         $lastCurrentPostId,
@@ -204,7 +286,7 @@ class InstagramDownloader
         $data = http_build_query($post);
         $context_options = [
             'http' => [
-                'method' => 'POST',
+                'method' => 'GET',
                 'header'=> 'content-type: application/x-www-form-urlencoded' . PHP_EOL
                     . 'accept: */*' . PHP_EOL
                     . 'accept-encoding:gzip, deflate, br' . PHP_EOL
