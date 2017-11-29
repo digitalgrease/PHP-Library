@@ -166,8 +166,7 @@ class Parameter
                 $isValid = true;
                 break;
             case ParameterType::OUTPUT_FILE:
-                // DO TG Feature: File path validation
-                $isValid = true;
+                $isValid = $this->isValidOutputFile($value);
                 break;
             case ParameterType::OUTPUT_DIR:
                 if (is_file($value) || is_link($value)) {
@@ -256,5 +255,18 @@ class Parameter
     protected function isValidInputDir($value)
     {
         return is_dir($value) || RemoteFileSystem::isRemoteHostPath($value);
+    }
+    
+    /**
+     * Get whether an argument is a valid path for an output file that does not
+     * already exist.
+     * 
+     * @param string $value
+     * 
+     * @return boolean
+     */
+    protected function isValidOutputFile($value)
+    {
+        return !is_dir($value) && !is_file($value) && !is_link($value);
     }
 }
