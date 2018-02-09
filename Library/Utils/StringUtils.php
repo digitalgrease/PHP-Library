@@ -277,6 +277,32 @@ class StringUtils
     }
     
     /**
+     * Get the value of this key with HTML br tags replacing line breaks.
+     * 
+     * @param string $text
+     * 
+     * @return string
+     */
+    public static function getHtmlLineBreaks($text)
+    {
+        $html = '';
+        
+        $i = 0;
+        $n = strlen($text);
+        
+        while ($i < $n) {
+            if ($text[$i] == PHP_EOL) {
+                $html .= '<br/>';
+            } else {
+                $html .= $text[$i];
+            }
+            ++$i;
+        }
+        
+        return $html;
+    }
+    
+    /**
      * Get the value of this key with HTML p tags surrounding text that is
      * separated with two new line breaks.
      * 
