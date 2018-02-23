@@ -320,10 +320,10 @@ class StringUtils
         while ($i < $n) {
             if (
                 // This is the case when loaded from file.
-                ($text[$i] == PHP_EOL && $text[$i + 1] == PHP_EOL)
+                ($i + 1 < $n && $text[$i] == PHP_EOL && $text[$i + 1] == PHP_EOL)
                 
                 // This is the case when the data has been saved in the database from a textarea on a form.
-                || ($text[$i] == chr(0x0D) && $text[$i + 1] == chr(0x0A)
+                || ($i + 3 < $n && $text[$i] == chr(0x0D) && $text[$i + 1] == chr(0x0A)
                 && $text[$i + 2] == chr(0x0D) && $text[$i + 3] == chr(0x0A))
             ) {
                 $html .= '</p><p>';
