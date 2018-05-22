@@ -340,6 +340,17 @@ abstract class Command extends Controller
     }
     
     /**
+     * Get the current amount of memory that is being allocated to
+     * this PHP script as a human readable string.
+     * 
+     * @return string
+     */
+    protected final function memoryUsage()
+    {
+        return memory_get_usage();
+    }
+    
+    /**
      * Remove the lock file if it exists.
      * 
      * @return void
