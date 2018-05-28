@@ -161,8 +161,15 @@ class Parameter
             case ParameterType::INPUT_DIR:
                 $isValid = $this->isValidInputDir($value);
                 break;
+            case ParameterType::INPUT_FILE_DIR:
+                $isValid = is_file($value) || $this->isValidInputDir($value);
+                break;
+            case ParameterType::INPUT_URI:
+                // DO TG Digital Grease: CLI: Dev: Input URI validation.
+                $isValid = true;
+                break;
             case ParameterType::URL:
-                // DO TG Feature: URL validation
+                // DO TG Digital Grease: CLI: Dev: URL validation.
                 $isValid = true;
                 break;
             case ParameterType::OUTPUT_FILE:
@@ -207,9 +214,6 @@ class Parameter
                 if (\DateTime::createFromFormat('Y-m-d H:i', $value)) {
                     $isValid = true;
                 }
-                break;
-            case ParameterType::INPUT_FILE_DIR:
-                $isValid = is_file($value) || $this->isValidInputDir($value);
                 break;
             default:
                 throw new \Exception(

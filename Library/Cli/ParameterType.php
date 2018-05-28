@@ -103,4 +103,11 @@ class ParameterType
      * @var int
      */
     const INPUT_FILE_DIR = 12;
+    
+    /**
+     * The argument must be a valid URI to provide input.
+     * 
+     * @var int
+     */
+    const INPUT_URI = 13;
 }
