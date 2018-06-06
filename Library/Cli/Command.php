@@ -20,10 +20,10 @@ use DigitalGrease\Library\Utils\Stopwatch;
 /**
  * Defines an abstract command run from the CLI.
  * 
- * DO TG CliCommand Feature: Add options in the form --dfsdf that can take one
- *  or more arguments.
- * DO TG CliCommand Feature: Allow an argument to be more than one type, e.g.
- *  input file or input directory.
+ * DO TG Digital Grease: CLI: Feature: Add options in the form --dfsdf that can
+ *  take one or more arguments.
+ * DO TG Digital Grease: CLI: Feature: Allow an argument to be more than one
+ *  type, e.g. input file or input directory.
  *
  * @author Tom Gray
  * @version 1.0 Monday 16th November 2015
@@ -201,12 +201,7 @@ abstract class Command extends Controller
      */
     protected function createLockFile()
     {
-        $this->println('Creating lock file...', false);
-        
-        if (touch(self::LOCK_FILE_NAME)) {
-            $this->println('done');
-        } else {
-            $this->println('error');
+        if (!touch(self::LOCK_FILE_NAME)) {
             throw new \Exception('Could not create lock file!');
         }
     }
@@ -316,11 +311,11 @@ abstract class Command extends Controller
     {
         $isLockFile = is_file(self::LOCK_FILE_NAME);
         
-        if ($isLockFile) {
-            $this->println('Lock file exists');
-        } else {
-            $this->println('Lock file removed');
-        }
+//        if ($isLockFile) {
+//            $this->println('Lock file exists');
+//        } else {
+//            $this->println('Lock file removed');
+//        }
         
         return $isLockFile;
     }
