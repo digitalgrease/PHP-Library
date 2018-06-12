@@ -95,6 +95,13 @@ abstract class AbstractDatabase
     abstract public function getTableMetaData($table);
     
     /**
+     * Gets a list of the tables in the database.
+     * 
+     * @return DataSet
+     */
+    abstract public function getTables();
+    
+    /**
      * 
      * 
      * @param string $table

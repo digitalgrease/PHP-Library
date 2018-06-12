@@ -186,6 +186,15 @@ class MySqlDatabase extends AbstractDatabase
         $sql = 'show columns from `'.$table.'`;';
         return new DataSet($this->processResult($this->execQuery($sql)));
     }
+    
+    /**
+     * @inheritDoc
+     */
+    public function getTables()
+    {
+        $sql = 'show tables;';
+        return new DataSet($this->processResult($this->execQuery($sql)));
+    }
 
     /**
      * {@inheritdoc}
