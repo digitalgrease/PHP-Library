@@ -277,6 +277,66 @@ class StringUtils
     }
     
     /**
+     * Get the value of this key with HTML br tags replacing line breaks.
+     * 
+     * @param string $text
+     * 
+     * @return string
+     */
+    public static function getHtmlLineBreaks($text)
+    {
+        $html = '';
+        
+        $i = 0;
+        $n = strlen($text);
+        
+        while ($i < $n) {
+            if ($text[$i] == PHP_EOL) {
+                $html .= '<br/>';
+            } else {
+                $html .= $text[$i];
+            }
+            ++$i;
+        }
+        
+        return $html;
+    }
+    
+    /**
+     * Get the value of this key with HTML p tags surrounding text that is
+     * separated with two new line breaks.
+     * 
+     * @param string $text
+     * 
+     * @return string
+     */
+    public static function getHtmlParagraphs($text)
+    {
+        $html = '<p>';
+        
+        $i = 0;
+        $n = strlen($text);
+        
+        while ($i < $n) {
+            if (
+                // This is the case when loaded from file.
+                ($i + 1 < $n && $text[$i] == PHP_EOL && $text[$i + 1] == PHP_EOL)
+                
+                // This is the case when the data has been saved in the database from a textarea on a form.
+                || ($i + 3 < $n && $text[$i] == chr(0x0D) && $text[$i + 1] == chr(0x0A)
+                && $text[$i + 2] == chr(0x0D) && $text[$i + 3] == chr(0x0A))
+            ) {
+                $html .= '</p><p>';
+            } else {
+                $html .= $text[$i];
+            }
+            ++$i;
+        }
+        
+        return $html . '</p>';
+    }
+    
+    /**
      * Get a title from the given name if it starts with one.
      * 
      * @param string $name
