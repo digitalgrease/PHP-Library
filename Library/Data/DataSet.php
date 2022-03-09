@@ -504,6 +504,54 @@ class DataSet
     // DO TG DataSet: Add pregmatch.
     // DO TG DataSet: Add insertColumn($location)
     
+    /**
+     * Extract matches from a column into new columns.
+     *
+     * @param string $pattern
+     * @param int $column DO TG DataSet: Allow string heading which is converted to integer column ID.
+     * @param int $limit DO TG DataSet: Implement the limit.
+     *
+     * @return self
+     */
+    public function regexExtract(string $pattern, int $column, ?int $limit = null): self
+    {
+        if ($this->isValidColumn($column)) {
+            
+            // Get the maximum number of matches for a single row.
+            $maxMatchCount = 0;
+            foreach ($this->data as $row) {
+                preg_match_all($pattern, $row[$column], $matches);
+                if ($matches) {
+                    $matchCount = 0;
+                    foreach ($matches as $set) {
+                        $matchCount += count($set);
+                    }
+                    $maxMatchCount = max($maxMatchCount, $matchCount);
+                }
+            }
+            
+            // Add the columns.
+            for ($i = 0; $i < $maxMatchCount; ++$i) {
+                $this->addColumn();
+            }
+            
+            // Add the extracted matches.
+            foreach ($this->data as &$row) {
+                preg_match_all($pattern, $row[$column], $matches);
+                if ($matches) {
+                    $iMatch = 1;
+                    foreach ($matches as $set) {
+                        foreach ($set as $match) {
+                            $row[$column + $iMatch++] = $match;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return $this;
+    }
+
     /** DO TG DataSet: Complete and create tests.
      * Add a prefix to all values, or just occurrences of a specified value, in
      * a column.
