@@ -499,17 +499,21 @@ class DataSet
         }
         return $this;
     }
-
+    
+    // DO TG DataSet: Add pregreplace.
+    // DO TG DataSet: Add pregmatch.
+    // DO TG DataSet: Add insertColumn($location)
+    
     /** DO TG DataSet: Complete and create tests.
      * Add a prefix to all values, or just occurrences of a specified value, in
      * a column.
-     * 
+     *
      * @param int|string $column The column containing the values to prepend.
      * @param string     $prefix The prefix to add to the values.
      * @param mixed      $value  The value to attach the prefix to.
-     * 
+     *
      * @return DataSet This dataset to allow method chaining.
-     * 
+     *
      * @throws \InvalidArgumentException|\Exception
      */
     public function prependValues($column, $prefix, $value = null)
