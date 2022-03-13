@@ -1,0 +1,260 @@
+#!/usr/bin/env php
+<?php
+
+$filename = validate($argv);
+$data = loadDataFromCsv($filename);
+
+$projectColumn = getColumnIndex($data, "Project");
+$taskColumn = getColumnIndex($data, "Task");
+$timeColumn = getColumnIndex($data, "Time");
+$activityColumn = getColumnIndex($data, "Activity");
+
+$data = removeRow($data, 0);
+$data = convertTimestampsToSeconds($data, $timeColumn);
+$data = removeCharacters($data, $activityColumn, "%");
+
+$totalTime = sumColumn($data, $timeColumn);
+
+// Create the data grouped by project.
+$groupedByProject = groupByColumn($data, $projectColumn);
+$projectTimes = sumGroupedColumn($groupedByProject, $timeColumn);
+$projectActivity = averageGroupedColumn($groupedByProject, $activityColumn);
+$projectData = [];
+foreach ($groupedByProject as $project => $rows) {
+    $time = $projectTimes[$project];
+    $projectData[] = [$project, $time, calculateTimestampFromSeconds($time), number_format($time / $totalTime * 100)."%", "$projectActivity[$project]%"];
+}
+usort($projectData, fn ($a, $b) => $a[1] < $b[1]);
+
+// Create the data grouped by task.
+$groupedByTask = groupByColumn($data, $taskColumn);
+$taskTimes = sumGroupedColumn($groupedByTask, $timeColumn);
+$taskActivity = averageGroupedColumn($groupedByTask, $activityColumn);
+$taskData = [];
+foreach ($groupedByTask as $task => $rows) {
+    $time = $taskTimes[$task];
+    $taskData[] = [$task, $time, calculateTimestampFromSeconds($time), number_format($time / $totalTime * 100)."%", "$taskActivity[$task]%"];
+}
+usort($taskData, fn ($a, $b) => $a[1] < $b[1]);
+
+// Create the data grouped by parent task.
+$groupedByParentTask = groupByColumn(
+    $data,
+    $taskColumn,
+    function ($column) {
+        if ($group = stristr($column, "|", true)) {
+            return trim($group);
+        }
+        return $column;
+    }
+);
+$parentTaskTimes = sumGroupedColumn($groupedByParentTask, $timeColumn);
+$parentTaskActivity = averageGroupedColumn($groupedByParentTask, $activityColumn);
+$parentTaskData = [];
+foreach ($groupedByParentTask as $parentTask => $rows) {
+    $time = $parentTaskTimes[$parentTask];
+    $parentTaskData[] = [$parentTask, $time, calculateTimestampFromSeconds($time), number_format($time / $totalTime * 100)."%", "$parentTaskActivity[$parentTask]%"];
+}
+usort($parentTaskData, fn ($a, $b) => $a[1] < $b[1]);
+
+// Add grouped by project data to the output.
+$data[] = [];
+$data[] = ["Project", "Seconds", "Time", "Percentage", "Activity"];
+$data = array_merge($data, $projectData);
+
+// Add grouped by task data to the output.
+$data[] = [];
+$data[] = ["Task", "Seconds", "Time", "Percentage", "Activity"];
+$data = array_merge($data, $taskData);
+
+// Add grouped by parent task data to the output.
+$data[] = [];
+$data[] = ["Parent Task", "Seconds", "Time", "Percentage", "Activity"];
+$data = array_merge($data, $parentTaskData);
+
+$data[] = [];
+$data[] = ["Total Time:", calculateTimestampFromSeconds($totalTime)];
+
+saveFile($data, "NEW_$filename");
+
+/**********************************************************************************************************************/
+
+function validate($argv): string
+{
+    if (!isset($argv[1])) {
+        throw new \Exception("CSV filename parameter required.");
+    }
+    $filename = $argv[1];
+    if (!is_file($filename)) {
+        throw new \Exception("$filename is not a file.");
+    }
+    return $filename;
+}
+
+function loadDataFromCsv(string $filename): array
+{
+    $handle = fopen($filename, 'r');
+    $data = [];
+    while ($line = fgetcsv($handle)) {
+        $data[] = $line;
+    }
+    fclose($handle);
+    return $data;
+}
+
+function getColumnIndex(array $data, string $column): int
+{
+    foreach ($data[0] as $index => $heading) {
+        if (strtolower($heading) === strtolower($column)) {
+            return $index;
+        }
+    }
+    throw new \Exception("Column $column not found.");
+}
+
+function removeRow(array $data, int $row): array
+{
+    $removed = [];
+    for ($row = 1; $row < count($data); ++$row) {
+        $removed[] = $data[$row];
+    }
+    return $removed;
+}
+
+function convertTimestampsToSeconds(array $data, int $column): array
+{
+    for ($row = 0; $row < count($data); ++$row) {
+        $data[$row][$column] = calculateSecondsFromTimestamp($data[$row][$column]);
+    }
+    return $data;
+}
+
+function removeCharacters(array $data, int $column, string $characters): array
+{
+    for ($row = 0; $row < count($data); ++$row) {
+        $data[$row][$column] = str_replace($characters, "", $data[$row][$column]);
+    }
+    return $data;
+}
+
+function averageColumn(array $data, int $column): int
+{
+    $sum = 0;
+    for ($row = 0; $row < count($data); ++$row) {
+        $sum += $data[$row][$column];
+    }
+    return $sum / count($data);
+}
+
+function sumColumn(array $data, int $column): int
+{
+    $sum = 0;
+    for ($row = 0; $row < count($data); ++$row) {
+        $sum += $data[$row][$column];
+    }
+    return $sum;
+}
+
+function groupByColumn(array $data, int $column, ?callable $callback = null): array
+{
+    $grouped = [];
+    for ($row = 0; $row < count($data); ++$row) {
+        $group = $callback ? $callback($data[$row][$column]) : $data[$row][$column];
+        $grouped[$group][] = $data[$row];
+    }
+    return $grouped;
+}
+
+function averageGroupedColumn(array $groupedRows, int $column): array
+{
+    $averages = [];
+    foreach ($groupedRows as $group => $rows) {
+        $averages[$group] = averageColumn($rows, $column);
+    }
+    return $averages;
+}
+
+function sumGroupedColumn(array $groupedRows, int $column): array
+{
+    $sums = [];
+    foreach ($groupedRows as $group => $rows) {
+        $sums[$group] = sumColumn($rows, $column);
+    }
+    return $sums;
+}
+
+/**
+ * Parses a timestamp string in the format 00:00 or 00:00:00 and converts it into the number of seconds it represents.
+ *
+ * @param string $timestamp String in the format 00:00 or 00:00:00.
+ *
+ * @return int
+ */
+function calculateSecondsFromTimestamp(string $timestamp): int
+{
+    $duration = 0;
+
+    // Break up the units of time and reverse so they are ordered seconds, minutes and hours.
+    $values = array_reverse(explode(':', $timestamp));
+
+    // Assign the seconds.
+    if (isset($values[0])) {
+        $duration = $values[0];
+    }
+
+    // Compute and assign the minutes.
+    if (isset($values[1])) {
+        $duration += $values[1] * 60;
+    }
+
+    // Compute and assign any hour value.
+    if (isset($values[2])) {
+        $duration += $values[2] * 60 * 60;
+    }
+
+    return (int)$duration;
+}
+
+function calculateTimestampFromSeconds(int $seconds): string
+{
+    $mins = $seconds / 60;
+    $hours = (int)($mins / 60);
+
+    $totalMins = $mins % 60;
+    $totalSeconds = $seconds % 60;
+
+    $string = '';
+    if ($hours) {
+        $string .= padWithLeadingZero($hours);
+    } else {
+        $string .= '00';
+    }
+    
+    if ($totalMins) {
+        $string .= ":".padWithLeadingZero($totalMins);
+    } else {
+        $string .= ':00';
+    }
+    
+    if ($totalSeconds) {
+        $string .= ":".padWithLeadingZero($totalSeconds);
+    } else {
+        $string .= ':00';
+    }
+    
+    return $string;
+}
+
+function padWithLeadingZero(string $number): string
+{
+    return strlen($number) === 1 ? "0$number" : $number;
+}
+
+function saveFile(array $data, string $filename): void
+{
+    $handle = fopen($filename, 'w');
+    foreach ($data as $row) {
+        fputcsv($handle, $row);
+    }
+    fclose($handle);
+}
