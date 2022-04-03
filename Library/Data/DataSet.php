@@ -25,13 +25,24 @@ namespace DigitalGrease\Library\Data;
  */
 class DataSet
 {
-    
     /**
      * The matrix of data that makes up the dataset.
      * 
      * @var array $data
      */
     protected $data;
+    
+    /**
+     * Create a DataSet from a CSV file.
+     *
+     * @param string $filename
+     *
+     * @return DataSet
+     */
+    public static function fromCsv(string $filename): DataSet
+    {
+        return new DataSet((new CsvFile())->readFromFile($filename)->getData());
+    }
     
 //    /**
 //     * The name of the field or the number of the column or row that is the
@@ -84,6 +95,10 @@ class DataSet
                     .print_r($data[$iRow], true)
                 );
             } elseif ($iRow > 0 && count($row) < count($fields)) {
+                
+                // DO TG: If there is a newline character in the column this can occur. Check the next line for the missing columns?
+                // Example is 81renshaw/res/discogs-exports/81Renshaw-inventory-20220401-0331.csv.zip
+                
                 throw new \InvalidArgumentException(
                     'Row index '.$iRow.' has less fields than the first row.'
                     .PHP_EOL.'First row: '
