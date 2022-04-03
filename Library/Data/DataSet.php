@@ -44,6 +44,19 @@ class DataSet
         return new DataSet((new CsvFile())->readFromFile($filename)->getData());
     }
     
+    /**
+     * Create a CSV from a DataSet.
+     *
+     * @param DataSet $dataSet
+     * @param string $filename
+     *
+     * @return void
+     */
+    public static function toCsv(DataSet $dataSet, string $filename): void
+    {
+        (new CsvFile($dataSet->getData()))->toFile($filename);
+    }
+    
 //    /**
 //     * The name of the field or the number of the column or row that is the
 //     * primary key?
