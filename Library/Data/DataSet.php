@@ -446,6 +446,19 @@ class DataSet
         return $this;
     }
     
+    public function sortBy($column, $direction = 'asc'): self
+    {
+        usort($this->data, function ($a, $b) use ($column, $direction) {
+            if ($a[$column] === $b[$column]) {
+                return 0;
+            }
+            return $a[$column] < $b[$column]
+                ? ($direction === 'asc' ? -1 : 1)
+                : ($direction === 'asc' ? 1 : -1);
+        });
+        return $this;
+    }
+    
     /**
      * DO TG DataSet Improvement: Validate columns.
      * 
