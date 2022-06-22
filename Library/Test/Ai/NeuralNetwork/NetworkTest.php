@@ -10,22 +10,18 @@
 
 namespace DigitalGrease\Library\Test;
 
-require_once '../Ai/NeuralNetwork/Network.php';
-require_once '../Ai/NeuralNetwork/SigmoidNeuron.php';
-require_once '../Utils/MathUtils.php';
-
 use DigitalGrease\Library\Ai\NeuralNetwork\Network;
 use DigitalGrease\Library\Ai\NeuralNetwork\SigmoidNeuron;
 use DigitalGrease\Library\Utils\MathUtils;
+use Tests\TestCase;
 
 /**
  * Tests for the Network class.
  * 
  * @author Tom Gray
  */
-class NetworkTest extends \PHPUnit_Framework_TestCase
+class NetworkTest extends TestCase
 {
-    
     /**
      * The maximum number of iterations to perform when training the network.
      * 
@@ -55,7 +51,7 @@ class NetworkTest extends \PHPUnit_Framework_TestCase
      * 
      * @before
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->network = new Network(
             [

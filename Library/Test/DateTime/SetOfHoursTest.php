@@ -10,32 +10,26 @@
 
 namespace DigitalGrease\Library\Test\DateTime;
 
-require_once '../DateTime/DaysEnum.php';
-require_once '../DateTime/Hours.php';
-require_once '../DateTime/SetOfHours.php';
-require_once '../DateTime/Time.php';
-require_once '../DateTime/TimeRange.php';
-
 use DigitalGrease\Library\DateTime\DaysEnum;
 use DigitalGrease\Library\DateTime\Hours;
 use DigitalGrease\Library\DateTime\SetOfHours;
 use DigitalGrease\Library\DateTime\Time;
 use DigitalGrease\Library\DateTime\TimeRange;
+use Tests\TestCase;
 
 /**
  * Tests for the SetOfHours class.
  *
  * @author Tom Gray
  */
-class SetOfHoursTest extends \PHPUnit_Framework_TestCase
+class SetOfHoursTest extends TestCase
 {
-    
     /**
      * Create the fixtures used for the tests.
      * 
      * @return void
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         
     }

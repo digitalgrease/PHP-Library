@@ -10,20 +10,17 @@
 
 namespace DigitalGrease\Library\Test;
 
-require_once '../Ai/NeuralNetwork/Neuron.php';
-require_once '../Ai/NeuralNetwork/Perceptron.php';
-
 use DigitalGrease\Library\Ai\NeuralNetwork\Neuron;
 use DigitalGrease\Library\Ai\NeuralNetwork\Perceptron;
+use Tests\TestCase;
 
 /**
  * Tests for the Perceptron.
  *
  * @author Tom Gray
  */
-class PerceptronTest extends \PHPUnit_Framework_TestCase
+class PerceptronTest extends TestCase
 {
-    
     const MAX_X_Y = 100;
     
     const NUM_OF_TRAINING_ITERATIONS = 100000;
@@ -35,7 +32,7 @@ class PerceptronTest extends \PHPUnit_Framework_TestCase
      * 
      * @before
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->perceptron = new Perceptron(Neuron::generateWeights(2));
     }

@@ -10,18 +10,16 @@
 
 namespace DigitalGrease\Library\Test\DateTime;
 
-require_once '../DateTime/DateRange.php';
-
 use DigitalGrease\Library\DateTime\DateRange;
+use Tests\TestCase;
 
 /**
  * Tests for the DateRange class.
  *
  * @author Tom Gray
  */
-class DateRangeTest extends \PHPUnit_Framework_TestCase
+class DateRangeTest extends TestCase
 {
-    
     /**
      *
      * @var \DateTime
@@ -45,7 +43,7 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
      * 
      * @return void
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$now = new \DateTime();
         

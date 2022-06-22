@@ -87,6 +87,8 @@ class DataSet
     /**
      * Construct a dataset.
      * 
+     * TODO: Make this work with single dimension arrays!
+     * 
      * @param array Matrix of data that makes up the dataset.
      * 
      * @throws \InvalidArgumentException
@@ -300,10 +302,10 @@ class DataSet
     {
         if ($this->isValidColumn($column)) {
             $isIndex = is_int($column);
-            foreach ($this->data as &$row) {
+            foreach ($this->data as $i => &$row) {
                 unset($row[$column]);
                 if ($isIndex) {
-                    $row = array_values($row);
+                    $this->data[$i] = array_values($row);
                 }
             }
         }
@@ -326,6 +328,24 @@ class DataSet
             $this->deleteColumn($column);
         }
         return $this;
+    }
+    
+    public function diff(DataSet $dataSet): array
+    {
+        // Convert passed dataset into a simple map in one pass for easy lookup.
+        $map = [];
+        foreach ($dataSet->getRows() as $i => $row) {
+            $map[$row[0]] = true;
+        }
+        
+        $diff = [];
+        foreach ($this->data as $i => $row) {
+            if (!isset($map[$row[0]])) {
+                $diff[] = $row[0];
+            }
+        }
+        
+        return $diff;
     }
     
     /**
@@ -456,6 +476,12 @@ class DataSet
                 ? ($direction === 'asc' ? -1 : 1)
                 : ($direction === 'asc' ? 1 : -1);
         });
+        return $this;
+    }
+    
+    public function splice($offset, $length): self
+    {
+        $this->data = array_splice($this->data, $offset, $length);
         return $this;
     }
     
@@ -767,7 +793,6 @@ class DataSet
      */
     public function extractLastString($column, $breakPoint = ' ')
     {
-        
         // Adds a column to the end.
         $this->addColumn();
         $index = $this->getNumberOfColumns() - 1;
@@ -776,6 +801,20 @@ class DataSet
             $row[$index] = substr($row[$column], strrpos($row[$column], $breakPoint) + 1);
             $row[$column] = substr($row[$column], 0, strrpos($row[$column], $breakPoint) - strlen($row[$column]));
         }
+    }
+    
+    public function flatten(): self
+    {
+        $total = $this->getNumberOfRows();
+        
+        for ($i = 1; $i < $total; ++$i) {
+            foreach ($this->data[$i] as $column) {
+                $this->data[0][] = $column;
+            }
+            unset($this->data[$i]);
+        }
+        
+        return $this;
     }
     
     /**

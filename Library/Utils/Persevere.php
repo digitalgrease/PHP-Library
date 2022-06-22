@@ -1,65 +1,65 @@
 <?php
 
-/*
- * Copyright (c) 2015 Digital Grease Limited.
- */
-
 namespace DigitalGrease\Library\Utils;
 
 /**
- * Defines a library function to repeatedly attempt to call a function that
- * throws an exception until it no longer throws the exception or a pre-defined
- * number of attempts has been reached.
- * 
+ * This should be expanded and improved to:
+ *  include an exponential backoff
+ *  include a circuit breaker element
+ *
  * @author Tom Gray
  */
 class Persevere
 {
+    /**
+     * The default maximum number of times to call the function in case of an
+     * exception.
+     *
+     * @var int
+     */
     const NUMBER_OF_ATTEMPTS = 10;
+    
+    /**
+     * Flag that defines the default setting for whether to throw exceptions.
+     * This can be overriden on any individual method call.
+     *
+     * @var bool
+     */
+    const THROW_EXCEPTIONS = true;
     
     /**
      * Persevere with calling the given function repeatedly if it throws an
      * exception.
-     * 
-     * @param string  $functionName
-     * @param array   $args
-     * @param object  $object
-     * @param integer $nAttempts
-     * 
+     * If exceptions are not to be thrown and the number of attempts is
+     * exhausted then null will be returned.
+     *
+     * @param callable $function
+     * @param bool $throwException
+     * @param int $nAttempts
+     *
      * @return mixed
-     * 
-     * @throws Exception
+     *
+     * @throws \Exception
      */
     public static function persevere(
-        $functionName,
-        array $args = [],
-        object $object = null,
-        $nAttempts = self::NUMBER_OF_ATTEMPTS
+        callable $function,
+        bool $throwException = self::THROW_EXCEPTIONS,
+        int $nAttempts = self::NUMBER_OF_ATTEMPTS
     ) {
-        // Build the complete function call.
-        $functionCall = empty($object) ? '' : $object . '->';
-        $functionCall .= $functionName . '(';
-        if (empty($args)) {
-            $functionCall .= ')';
-        } else {
-            foreach ($args as $arg) {
-                $functionCall .= $arg . ', ';
-            }
-            $functionCall = substr($functionCall, 0, -2) . ')';
-        }
-        
-        echo $functionCall;die;
-        
-        // Attempt to call the function repeatedly.
-        $ex = null;
-        $iAttempts = 0;
-        while ($iAttempts < $nAttempts) {
+        $exception = null;
+        $iAttempt = 0;
+        while ($iAttempt < $nAttempts) {
             try {
-                return true; // call the full function here
-            } catch (Exception $ex) {
-                ++$iAttempts;
+                return call_user_func($function);
+            } catch (\Exception $exception) {
+                ++$iAttempt;
             }
         }
-        throw $ex;
+        
+        if ($throwException) {
+            throw $exception;
+        }
+        
+        return null;
     }
 }

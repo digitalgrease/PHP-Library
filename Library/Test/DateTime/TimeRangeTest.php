@@ -10,20 +10,17 @@
 
 namespace DigitalGrease\Library\Test\DateTime;
 
-require_once '../DateTime/Time.php';
-require_once '../DateTime/TimeRange.php';
-
 use DigitalGrease\Library\DateTime\Time;
 use DigitalGrease\Library\DateTime\TimeRange;
+use Tests\TestCase;
 
 /**
  * Tests for the TimeRange class.
  *
  * @author Tom Gray
  */
-class TimeRangeTest extends \PHPUnit_Framework_TestCase
+class TimeRangeTest extends TestCase
 {
-    
     /**
      *
      * @var Time
@@ -47,7 +44,7 @@ class TimeRangeTest extends \PHPUnit_Framework_TestCase
      * 
      * @return void
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$startOfDay = new Time('09');
         self::$midday = new Time('12');

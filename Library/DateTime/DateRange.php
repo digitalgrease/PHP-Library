@@ -17,7 +17,6 @@ namespace DigitalGrease\Library\DateTime;
  */
 class DateRange
 {
-    
     /**
      * The start of the date range.
      * 

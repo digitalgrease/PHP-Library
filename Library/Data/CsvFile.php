@@ -494,11 +494,12 @@ class CsvFile
         // If specific columns are not specified then include all columns in
         // the data set.
         if (null == $columns) {
-            $columns = array();
-            $nCols = $this->getNumberOfColumns();
-            for ($iCol = 0; $iCol < $nCols; $iCol++) {
-                $columns[] = $iCol;
-            }
+            $columns = array_keys($this->data[0]);
+//            $columns = array();
+//            $nCols = $this->getNumberOfColumns();
+//            for ($iCol = 0; $iCol < $nCols; $iCol++) {
+//                $columns[] = $iCol;
+//            }
         }
         
         // Build the data to write to file.

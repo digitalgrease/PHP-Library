@@ -10,22 +10,18 @@
 
 namespace DigitalGrease\Library\Test;
 
-require_once '../Ai/NeuralNetwork/Neuron.php';
-require_once '../Ai/NeuralNetwork/SigmoidNeuron.php';
-require_once '../Utils/MathUtils.php';
-
 use DigitalGrease\Library\Ai\NeuralNetwork\Neuron;
 use DigitalGrease\Library\Ai\NeuralNetwork\SigmoidNeuron;
 use DigitalGrease\Library\Utils\MathUtils;
+use Tests\TestCase;
 
 /**
  * Tests for the SigmoidNeuron.
  *
  * @author Tom Gray
  */
-class SigmoidNeuronTest extends \PHPUnit_Framework_TestCase
+class SigmoidNeuronTest extends TestCase
 {
-    
     /**
      * The maximum values to use for X and Y when training the neuron to guess
      * the points on a straight line.
@@ -53,7 +49,7 @@ class SigmoidNeuronTest extends \PHPUnit_Framework_TestCase
      * 
      * @before
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->sigmoidNeuron = new SigmoidNeuron(Neuron::generateWeights(2));
     }

@@ -10,9 +10,8 @@
 
 namespace DigitalGrease\Library\Test;
 
-require_once '../Data/DataSet.php';
-
 use DigitalGrease\Library\Data\DataSet;
+use Tests\TestCase;
 
 /**
  * Test cases for DataSet.php
@@ -21,7 +20,7 @@ use DigitalGrease\Library\Data\DataSet;
  * @author Tom Gray
  * @copyright Digital Grease Limited
  */
-class DataSetTest extends \PHPUnit_Framework_TestCase
+class DataSetTest extends TestCase
 {
     /**
      * An empty dataset to perform tests on.
@@ -50,7 +49,7 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
      * 
      * @before
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->emptyDataSet = new DataSet([]);
         
