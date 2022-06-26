@@ -330,6 +330,11 @@ class DataSet
         return $this;
     }
     
+    /**
+     * DO TG: Library: DataSet: Diff feature: Map smallest set and loop largest for most efficient and always accurate result.
+     * @param DataSet $dataSet
+     * @return array
+     */
     public function diff(DataSet $dataSet): array
     {
         // Convert passed dataset into a simple map in one pass for easy lookup.
