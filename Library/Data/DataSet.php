@@ -332,7 +332,9 @@ class DataSet
     
     /**
      * DO TG: Library: DataSet: Diff feature: Map smallest set and loop largest for most efficient and always accurate result.
+     *
      * @param DataSet $dataSet
+     *
      * @return array
      */
     public function diff(DataSet $dataSet): array
@@ -1115,5 +1117,30 @@ function updateField(array $data, $field, $oldValue, $newValue)
             }
         }
         throw new \InvalidArgumentException('$row must be an integer');
+    }
+    
+    /**
+     * DO TG: Library: DataSet: Union feature: Map largest set and loop smallest for most efficient and always accurate result.
+     *
+     * @param DataSet $dataSet
+     *
+     * @return array
+     */
+    public function union(DataSet $dataSet): array
+    {
+        // Convert passed dataset into a simple map in one pass for easy lookup.
+        $map = [];
+        foreach ($dataSet->getRows() as $i => $row) {
+            $map[$row[0]] = true;
+        }
+        
+        $union = [];
+        foreach ($this->data as $i => $row) {
+            if (isset($map[$row[0]])) {
+                $union[] = $row[0];
+            }
+        }
+        
+        return $union;
     }
 }
