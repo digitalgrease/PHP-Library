@@ -13,6 +13,20 @@ namespace DigitalGrease\Library\Utils;
  */
 class StringUtils
 {
+    public static function getTypes(): Collection
+    {
+        // DO TG: Be Incredible: Dev Value: Move directory reader method into a utility class.
+        return collect(scandir(__DIR__.'/Types'))
+            ->filter(fn ($f) => !in_array($f, ['.', '..']))
+            ->map(fn ($f) => strstr($f, '.php', true))
+            ->mapWithKeys(fn ($f) => [$f => preg_replace(
+                // DO TG: Be Incredible: Dev Value: Move into a utility class.
+                '/(?<!^)((?<![[:upper:]])[[:upper:]]|[[:upper:]](?![[:upper:]]))/',
+                ' $1',
+                $f
+            )])
+        ;
+    }
     
     /**
      * Titles that people may use in their names.
