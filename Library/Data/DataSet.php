@@ -337,23 +337,37 @@ class DataSet
      *
      * @return array
      */
-    public function diff(DataSet $dataSet): array
+    public function diff(DataSet $dataSet, bool $strict = true): array
     {
         // Convert passed dataset into a simple map in one pass for easy lookup.
         $map = [];
         foreach ($dataSet->getRows() as $i => $row) {
-            $map[$row[0]] = true;
+            
+            $value = $strict ? $row[0] : strtolower($row[0]);
+            
+            $map[$value] = true;
         }
         
         $diff = [];
         foreach ($this->data as $i => $row) {
-            if (!isset($map[$row[0]])) {
+            
+            $value = $strict ? $row[0] : strtolower($row[0]);
+            
+            if (!isset($map[$value])) {
                 $diff[] = $row[0];
             }
         }
         
         return $diff;
     }
+    
+    // DO TG Feature: Dump rows method.
+//        foreach ($dataSet->getRows() as $index => $row) {
+//            var_dump($row);
+//            if ($index === 5) {
+//                die;
+//            }
+//        }
     
     /**
      * Get an array of all the different column values.
@@ -574,6 +588,22 @@ class DataSet
         return $this;
     }
     
+    // DO TG Improvement: Add strict flag for case sensitivity.
+    public function removeRowsLike($column, $value)
+    {
+        if ($this->isValidColumn($column)) {
+            foreach ($this->data as $index => &$row) {
+                if (stristr($row[$column], $value)) {
+                    unset($this->data[$index]);
+                }
+            }
+        }
+        
+        $this->data = array_values($this->data);
+        
+        return $this;
+    }
+    
     // DO TG DataSet: Add pregreplace.
     // DO TG DataSet: Add pregmatch.
     // DO TG DataSet: Add insertColumn($location)
@@ -733,6 +763,22 @@ class DataSet
                             $this->data[$iRow][$iColumn]
                     );
         }
+    }
+    
+    public function addCalculation(\Closure $calculation): self
+    {
+        $column = count($this->data[0]);
+        
+        foreach ($this->data as &$row) {
+            
+            // Perform the calculation.
+            $value = $calculation($row);
+            
+            // Add calculation to the column.
+            $row[$column] = $value;
+        }
+        
+        return $this;
     }
     
     /**
@@ -1120,25 +1166,60 @@ function updateField(array $data, $field, $oldValue, $newValue)
     }
     
     /**
-     * DO TG: Library: DataSet: Union feature: Map largest set and loop smallest for most efficient and always accurate result.
+     * DO TG: Library: DataSet: Intersection feature: Map largest set and loop smallest for most efficient and always accurate result.
      *
      * @param DataSet $dataSet
      *
      * @return array
      */
-    public function union(DataSet $dataSet): array
+    public function intersection(DataSet $dataSet, bool $strict = true): array
     {
         // Convert passed dataset into a simple map in one pass for easy lookup.
         $map = [];
         foreach ($dataSet->getRows() as $i => $row) {
-            $map[$row[0]] = true;
+            
+            $value = $strict ? $row[0] : strtolower($row[0]);
+            
+            $map[$value] = true;
         }
         
-        $union = [];
+        $intersection = [];
         foreach ($this->data as $i => $row) {
-            if (isset($map[$row[0]])) {
-                $union[] = $row[0];
+            
+            $value = $strict ? $row[0] : strtolower($row[0]);
+            
+            if (isset($map[$value])) {
+                $intersection[] = $value;
             }
+        }
+        
+        return $intersection;
+    }
+    
+    /**
+     * DO TG: Library: DataSet: Union feature.
+     *
+     * @param DataSet $dataSet
+     *
+     * @return array
+     */
+    public function union(DataSet $dataSet, bool $strict = true): array
+    {
+        // Collect all items of the passed dataset.
+        $union = [];
+        foreach ($dataSet->getRows() as $i => $row) {
+            
+            $value = $strict ? $row[0] : strtolower($row[0]);
+            
+            $union[$value] = $value;
+        }
+        
+        // Add all items of this dataset.
+        foreach ($this->data as $i => $row) {
+            
+            $value = $strict ? $row[0] : strtolower($row[0]);
+            
+            $union[$value] = $value;
         }
         
         return $union;
