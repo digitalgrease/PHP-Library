@@ -354,7 +354,7 @@ class DataSet
             $value = $strict ? $row[0] : strtolower($row[0]);
             
             if (!isset($map[$value])) {
-                $diff[] = $row[0];
+                $diff[] = $row;
             }
         }
         
